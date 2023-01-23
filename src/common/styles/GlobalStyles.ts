@@ -1,19 +1,36 @@
 import {StyleSheet} from 'react-native';
 import Colors from '../../Themes/Colors';
 
-export const textPrimary = {
-  fontSize: 24,
-  color: Colors.black,
-};
+export default StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.white,
+  },
+  textPrimary: {
+    fontSize: 24,
+    color: Colors.black,
+  },
+  titleHeader: {
+    fontSize: 24,
+    color: Colors.headerColor,
+    fontWeight: '500',
+  },
+  textError: {
+    fontSize: 14,
+    color: Colors.red,
+    fontWeight: '400',
+  },
+  rememberText: {
+    fontSize: 14,
+    color: Colors.headerColor,
+  },
 
-export const container = {
-  backgroundColor: Colors.primary,
-  justifyContent: 'center',
-  alignItems: 'center',
-};
-export const inputStyle = {
-  borderWidth: 1,
-  borderColor: '#4e4e4e',
-  padding: 12,
-  marginBottom: 5,
-};
+  flexEnd: {
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+  },
+  centerView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
