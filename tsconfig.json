@@ -9,9 +9,11 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "types": ["jest"],
+    "types": [],
     "moduleResolution": "node",
     "allowJs": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "noEmit": true,
+    "forceConsistentCasingInFileNames": true,
   },
 }

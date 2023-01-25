@@ -19,9 +19,8 @@ import {Formik, FormikErrors, FormikProps, withFormik} from 'formik';
 import {responsiveHeight, responsiveWidth} from '../../utilities/sizeScreen';
 import ButtonView from '../../common/ButtonView';
 import GlobalStyles from '../../common/styles/GlobalStyles';
-import InputView from '../../common/InputView';
 
-const Login: React.FC<{}> = () => {
+const Register: React.FC<{}> = () => {
   const navigation = useNavigation();
   // Shape of form values
   interface FormValues {
@@ -57,8 +56,7 @@ const Login: React.FC<{}> = () => {
           <>
             <TextInput
               onChangeText={handleChange('name')}
-              onBlur={handleBlur('name')}
-              placeholder={'Tên đăng nhập'}
+              onBlur={handleBlur('email')}
               value={values.name}
               style={styles.input}
             />
@@ -68,7 +66,6 @@ const Login: React.FC<{}> = () => {
 
             <TextInput
               onChangeText={handleChange('password')}
-              placeholder={'Mật khẩu'}
               onBlur={handleBlur('password')}
               value={values.password}
               style={styles.input}
@@ -77,15 +74,9 @@ const Login: React.FC<{}> = () => {
               <Text style={GlobalStyles.textError}>{errors.password}</Text>
             )}
 
-            <View style={[GlobalStyles.flexEnd]}>
-              <TouchableOpacity style={[styles.btnPass]}>
-                <Text style={GlobalStyles.rememberText}>Quên mật khẩu?</Text>
-              </TouchableOpacity>
-            </View>
-
             <ButtonView
               onPress={handleSubmit}
-              title="Đăng nhập"
+              title="Đăng ký"
               disabled={false}
               textStyle={Colors.rosyBrown}
             />
@@ -97,7 +88,7 @@ const Login: React.FC<{}> = () => {
 
   const handleSubmitForm = (value: any) => {
     console.log('>>>Login value', value);
-    navigation.navigate('Home');
+    // navigation.navigate('Register');
   };
 
   const MyForm = withFormik<MyFormProps, FormValues>({
@@ -129,23 +120,21 @@ const Login: React.FC<{}> = () => {
   return (
     <View style={GlobalStyles.container}>
       <StatusBar barStyle={'dark-content'} backgroundColor={Colors.primary} />
-      <Header title="Đăng nhập"></Header>
+      <Header title="Tạo tài khoản"></Header>
 
       <View style={styles.formView}>
         <MyForm />
       </View>
 
       <View style={GlobalStyles.centerView}>
-        <TouchableOpacity
-          style={[styles.buttonRegister]}
-          onPress={() => navigation.navigate('Register')}>
+        <TouchableOpacity style={[styles.buttonRegister]}>
           <Text style={GlobalStyles.textPrimary}>Tạo tài khoản</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
-export default Login;
+export default Register;
 
 const styles = StyleSheet.create({
   formView: {

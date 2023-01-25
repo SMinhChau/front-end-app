@@ -7,11 +7,12 @@ export default StyleSheet.create({
     backgroundColor: Colors.white,
   },
   textPrimary: {
-    fontSize: 24,
-    color: Colors.black,
+    fontSize: 14,
+    color: Colors.headerColor,
   },
+
   titleHeader: {
-    fontSize: 24,
+    fontSize: 20,
     color: Colors.headerColor,
     fontWeight: '500',
   },

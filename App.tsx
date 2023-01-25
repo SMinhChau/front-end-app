@@ -12,9 +12,10 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
-import Colors from './src/Themes/Colors';
+
 import Login from './src/Components/Login/Login';
-import Login01 from './src/Components/Login/Login01';
+import Register from './src/Components/Login/Register';
+import Home from './src/Components/Home/Home';
 
 const App = () => {
   return (
@@ -28,7 +29,8 @@ const App = () => {
           component={Login}
           options={{title: 'Login'}}
         />
-        <Stack.Screen name="Login01" component={Login01} />
+        <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="Home" component={Home} />
       </Stack.Navigator>
     </NavigationContainer>
   );
