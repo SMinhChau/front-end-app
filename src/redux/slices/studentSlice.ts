@@ -1,6 +1,4 @@
 import {createSlice} from '@reduxjs/toolkit';
-// import authAPI from "../apis/auth";
-// import tokenService from "../../services/token";
 
 interface User {
   username: string;

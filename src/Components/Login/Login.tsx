@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary,
     paddingHorizontal: responsiveWidth(15),
     marginTop: responsiveHeight(25),
-    fontSize: 18,
+    fontSize: 16,
   },
 
   buttonRegister: {

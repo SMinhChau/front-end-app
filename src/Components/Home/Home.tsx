@@ -7,7 +7,11 @@ const Home: React.FC<{}> = () => {
   return (
     <View style={GlobalStyles.container}>
       <StatusBar barStyle={'dark-content'} backgroundColor={Colors.primary} />
-      <Header title="Trang chủ" icon={true}></Header>
+      <Header
+        title="Trang chủ"
+        iconLeft={true}
+        home={true}
+        iconRight={true}></Header>
     </View>
   );
 };
