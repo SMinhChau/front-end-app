@@ -30,8 +30,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     borderColor: Colors.primary,
-    paddingHorizontal: responsiveWidth(15),
-    marginTop: responsiveHeight(25),
+    paddingHorizontal: 15,
+    marginTop: 25,
     fontSize: 18,
   },
 });

@@ -3,7 +3,7 @@ import {axiosNotAuth} from '../utilities/axiosConfig';
 class AuthService {
   login(data: {username: string; password: string}) {
     return axiosNotAuth({
-      url: '/user/login',
+      url: '/api/student/auth/login',
       method: 'post',
       data,
     });

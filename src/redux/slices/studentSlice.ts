@@ -1,6 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit';
+import tokenService from '../../services/token';
+import authAPI from '../apis/studentApi';
 
-interface User {
+interface Student {
   username: string;
   avatar: string;
   fullName: string;
@@ -10,7 +12,7 @@ interface User {
 }
 
 interface StateType {
-  user: User;
+  user: Student;
   isloading: boolean;
   error: boolean;
   is_login: boolean;
@@ -28,11 +30,22 @@ const initialState = {
   isloading: false,
 } as StateType;
 
-export const userSlice = createSlice({
-  name: 'user',
+export const studentSlice = createSlice({
+  name: 'student',
   initialState,
   reducers: {
     //
   },
-  extraReducers: builder => {},
+  extraReducers: builder => {
+    builder.addCase(authAPI.login().fulfilled, (state, action) => {
+      tokenService.setAccessToken(action.payload.access_token);
+      tokenService.setRefreshToken(action.payload.refresh_token);
+      state.error = false;
+      state.is_login = true;
+    });
+    builder.addCase(authAPI.login().rejected, state => {
+      state.is_login = false;
+      state.error = true;
+    });
+  },
 });

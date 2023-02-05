@@ -16,7 +16,6 @@ import Header from '../../common/Header';
 import React from 'react';
 import {Formik, FormikErrors, FormikProps, withFormik} from 'formik';
 
-import {responsiveHeight, responsiveWidth} from '../../utilities/sizeScreen';
 import ButtonView from '../../common/ButtonView';
 import GlobalStyles from '../../common/styles/GlobalStyles';
 
@@ -138,21 +137,21 @@ export default Register;
 
 const styles = StyleSheet.create({
   formView: {
-    paddingTop: responsiveHeight(150),
-    paddingHorizontal: responsiveWidth(20),
+    paddingTop: 150,
+    paddingHorizontal: 20,
     backgroundColor: Colors.white,
   },
   input: {
     borderRadius: 10,
     borderWidth: 2,
     borderColor: Colors.primary,
-    paddingHorizontal: responsiveWidth(15),
-    marginTop: responsiveHeight(25),
+    paddingHorizontal: 15,
+    marginTop: 25,
     fontSize: 18,
   },
 
   buttonRegister: {
-    marginTop: responsiveWidth(5),
+    marginTop: 5,
   },
   btnPass: {
     marginTop: 5,

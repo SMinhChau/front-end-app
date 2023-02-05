@@ -34,4 +34,13 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  borderRadius10: {
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: Colors.primary,
+  },
+  margin20: {
+    marginHorizontal: 20,
+    marginTop: 20,
+  },
 });

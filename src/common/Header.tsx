@@ -1,13 +1,11 @@
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import Colors from '../Themes/Colors';
-import {responsiveHeight, responsiveWidth} from '../utilities/sizeScreen';
+import IconView from './IconView';
+
 import GlobalStyles from './styles/GlobalStyles';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Home from '../Components/Home/Home';
 
 interface Props {
   title: string;
-
   iconLeft?: boolean;
   iconRight?: boolean;
   home?: boolean;
@@ -18,17 +16,13 @@ const Header: React.FC<Props> = ({title, back, iconLeft, home, iconRight}) => {
     <View style={[styles.sectionContainer]}>
       {iconLeft && home && (
         <TouchableOpacity style={styles.contentIcon}>
-          <Ionicons name="home-outline" color={Colors.headerColor} size={24} />
+          <IconView name="home-outline" color={Colors.black} size={24} />
         </TouchableOpacity>
       )}
 
       {iconLeft && back && (
         <TouchableOpacity style={styles.contentIcon}>
-          <Ionicons
-            name="arrow-back-outline"
-            color={Colors.headerColor}
-            size={24}
-          />
+          <IconView name="arrow-back-outline" color={Colors.black} size={24} />
         </TouchableOpacity>
       )}
 
@@ -36,9 +30,9 @@ const Header: React.FC<Props> = ({title, back, iconLeft, home, iconRight}) => {
 
       {iconRight && (
         <TouchableOpacity style={styles.contentIcon}>
-          <Ionicons
+          <IconView
             name="notifications-outline"
-            color={Colors.headerColor}
+            color={Colors.black}
             size={24}
           />
         </TouchableOpacity>
@@ -51,16 +45,20 @@ export default Header;
 const styles = StyleSheet.create({
   sectionContainer: {
     width: '100%',
-    paddingHorizontal: responsiveWidth(10),
+    paddingHorizontal: 10,
     backgroundColor: Colors.primary,
-    paddingVertical: responsiveHeight(20),
+    paddingVertical: 20,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
   },
 
   textView: {
-    paddingHorizontal: responsiveWidth(110),
+    paddingHorizontal: 110,
   },
-  contentIcon: {},
+  contentIcon: {
+    backgroundColor: Colors.white,
+    padding: 5,
+    borderRadius: 20,
+  },
 });

@@ -7,8 +7,6 @@ import React from 'react';
 
 import Colors from '../Themes/Colors';
 
-import {responsiveHeight, responsiveWidth} from '../utilities/sizeScreen';
-
 interface Props {
   title: string;
   style: any;
@@ -37,21 +35,21 @@ export default ButtonView;
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: responsiveWidth(12),
-    height: responsiveHeight(50),
+    paddingHorizontal: 12,
+    height: 50,
     minHeight: 40,
     marginBottom: 5,
-    marginTop: responsiveHeight(30),
+    marginTop: 30,
     borderColor: Colors.primary,
     borderWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.rosyBrown,
+    backgroundColor: Colors.primaryButton,
   },
   textStyle: {
-    color: Colors.black,
+    color: Colors.white,
     fontSize: 14,
     flex: 1,
     textAlign: 'center',
