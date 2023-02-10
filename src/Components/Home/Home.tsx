@@ -1,4 +1,11 @@
-import {StatusBar, StyleSheet, View, TouchableOpacity} from 'react-native';
+import {
+  StatusBar,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Alert,
+  ToastAndroid,
+} from 'react-native';
 import GlobalStyles from '../../common/styles/GlobalStyles';
 import Colors from '../../Themes/Colors';
 import Header from '../../common/Header';

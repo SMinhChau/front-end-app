@@ -12,14 +12,14 @@ interface Student {
 }
 
 interface StateType {
-  user: Student;
+  student: Student;
   isloading: boolean;
   error: boolean;
   is_login: boolean;
 }
 
 const initialState = {
-  user: {
+  student: {
     username: '',
     avatar: '',
     fullName: '',

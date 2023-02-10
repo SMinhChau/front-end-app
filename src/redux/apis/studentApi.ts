@@ -4,10 +4,14 @@ import authService from '../../services/auth';
 class AuthAPI {
   login() {
     return createAsyncThunk(
-      'student/login',
+      'api/student/login',
       async (data: {username: string; password: string}, thunkAPI) => {
         const result = await authService.login(data);
-        if (result.status === 200) return result.data;
+        if (result.status === 200) {
+          console.log('Login success', result.status);
+
+          return result.data;
+        }
         return thunkAPI.rejectWithValue('login fail');
       },
     );

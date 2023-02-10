@@ -7,33 +7,42 @@ import {
   View,
   StyleSheet,
   Alert,
+  ToastAndroid,
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 import Colors from '../../Themes/Colors';
 import Header from '../../common/Header';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Formik, FormikErrors, FormikProps, withFormik} from 'formik';
 import ButtonView from '../../common/ButtonView';
 import GlobalStyles from '../../common/styles/GlobalStyles';
 
-import {useAppDispatch} from '../../redux/hooks';
+import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 import {navigateAndSimpleReset} from '../utils';
 import RouteNames from '../RouteNames';
+import authAPI from '../../redux/apis/studentApi';
+import {DRAFTABLE} from 'immer/dist/internal';
 
 const Login: React.FC<{}> = () => {
+  const userState = useAppSelector(state => state.student);
+
+  const [userNameData, setUserName] = useState('');
+  const [passwordData, setPassWord] = useState('');
+
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
+
   // Shape of form values
   interface FormValues {
-    name: string;
+    username: string;
     password: string;
   }
 
   interface OtherProps {}
 
   interface MyFormProps {
-    initialName?: string;
+    initialUserName?: string;
     initialPassword?: string;
     login?: any;
   }
@@ -52,19 +61,19 @@ const Login: React.FC<{}> = () => {
     } = props;
     return (
       <Formik
-        initialValues={{email: ''}}
+        initialValues={{username: ''}}
         onSubmit={values => console.log(values)}>
         {() => (
           <>
             <TextInput
-              onChangeText={handleChange('name')}
-              onBlur={handleBlur('name')}
+              onChangeText={handleChange('username')}
+              onBlur={handleBlur('username')}
               placeholder={'Tên đăng nhập'}
-              value={values.name}
+              value={values.username}
               style={styles.input}
             />
-            {touched.name && errors.name && (
-              <Text style={GlobalStyles.textError}>{errors.name}</Text>
+            {touched.username && errors.username && (
+              <Text style={GlobalStyles.textError}>{errors.username}</Text>
             )}
 
             <TextInput
@@ -97,8 +106,15 @@ const Login: React.FC<{}> = () => {
   };
 
   const handleSubmitForm = (value: any) => {
-    console.log('>>>Login value', value);
+    console.log('>>>Login value ', value.username, value.password);
     // dispatch(authAPI.login()(value));
+    // value.username
+    // value.password
+    // const data = [value.username, value.password];
+    console.log(authAPI.login());
+    setUserName(value.username);
+    setPassWord(value.password);
+    dispatch(authAPI.login()({username: userNameData, password: passwordData}));
     navigation.navigate('TabNavigation');
   };
 
@@ -106,7 +122,7 @@ const Login: React.FC<{}> = () => {
     // Transform outer props into form values
     mapPropsToValues: props => {
       return {
-        name: props.initialName || '',
+        username: props.initialUserName || '',
         password: '',
       };
     },
@@ -114,8 +130,8 @@ const Login: React.FC<{}> = () => {
     // Add a custom validation function (this can be async too!)
     validate: (values: FormValues) => {
       let errors: FormikErrors<FormValues> = {};
-      if (!values.name) {
-        errors.name = 'Vui lòng nhập tên đăng nhập!';
+      if (!values.username) {
+        errors.username = 'Vui lòng nhập tên đăng nhập!';
       }
       if (!values.password) {
         errors.password = 'Vui lòng nhập mật khẩu!';
