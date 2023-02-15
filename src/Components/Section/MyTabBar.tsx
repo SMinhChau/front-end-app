@@ -19,7 +19,7 @@ const MyTabBar = ({state, descriptors, navigation}: any) => {
 
         const isFocused = state.index === index;
 
-        if (route.name === languages['vi'].login) {
+        if (route.name === languages['vi'].home) {
           iconName = isFocused ? 'home' : 'home-outline';
         } else if (route.name === languages['vi'].group) {
           iconName = isFocused ? 'people' : 'people-outline';

@@ -19,10 +19,6 @@ import ButtonView from '../../common/ButtonView';
 import GlobalStyles from '../../common/styles/GlobalStyles';
 
 import {useAppDispatch, useAppSelector} from '../../redux/hooks';
-import {navigateAndSimpleReset} from '../utils';
-import RouteNames from '../RouteNames';
-import authAPI from '../../redux/apis/studentApi';
-import {DRAFTABLE} from 'immer/dist/internal';
 
 const Login: React.FC<{}> = () => {
   const userState = useAppSelector(state => state.student);
@@ -111,10 +107,10 @@ const Login: React.FC<{}> = () => {
     // value.username
     // value.password
     // const data = [value.username, value.password];
-    console.log(authAPI.login());
+
     setUserName(value.username);
     setPassWord(value.password);
-    dispatch(authAPI.login()({username: userNameData, password: passwordData}));
+
     navigation.navigate('TabNavigation');
   };
 
@@ -156,7 +152,7 @@ const Login: React.FC<{}> = () => {
       <View style={GlobalStyles.centerView}>
         <TouchableOpacity
           style={[styles.buttonRegister]}
-          onPress={() => navigation.navigate('Register')}>
+          onPress={() => navigation.navigate('TabNavigation')}>
           <Text style={GlobalStyles.textPrimary}>Tạo tài khoản</Text>
         </TouchableOpacity>
       </View>

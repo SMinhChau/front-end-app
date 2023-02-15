@@ -11,16 +11,17 @@ type Props = {
   height?: number | string;
   width?: number | string;
   tintColor?: string;
+  source: any;
 };
 
-const Logo = ({height, width, tintColor}: Props) => {
+const Logo = ({height, width, tintColor, source}: Props) => {
   return (
     <View style={[styles.content]}>
       <FastImage
-        source={Images.logo}
+        source={source}
         style={[{width: 200, height: 200} || {height, width}]}
         resizeMode={'contain'}
-        tintColor={tintColor}
+        tintColor={tintColor || Colors.primary}
       />
     </View>
   );

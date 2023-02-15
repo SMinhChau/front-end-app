@@ -1,8 +1,10 @@
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+
 import Colors from '../Themes/Colors';
 import IconView from './IconView';
-
+import {useNavigation} from '@react-navigation/native';
 import GlobalStyles from './styles/GlobalStyles';
+import RouteNames from '../Components/RouteNames';
 
 interface Props {
   title: string;
@@ -12,31 +14,38 @@ interface Props {
   back?: boolean;
 }
 const Header: React.FC<Props> = ({title, back, iconLeft, home, iconRight}) => {
+  const navigation = useNavigation();
   return (
     <View style={[styles.sectionContainer]}>
       {iconLeft && home && (
-        <TouchableOpacity style={styles.contentIcon}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate(RouteNames.homeTab)}
+          style={[styles.contentIcon, styles.contentIconLeft]}>
           <IconView name="home-outline" color={Colors.black} size={24} />
         </TouchableOpacity>
       )}
 
       {iconLeft && back && (
-        <TouchableOpacity style={styles.contentIcon}>
+        <TouchableOpacity style={[styles.contentIcon, styles.contentIconLeft]}>
           <IconView name="arrow-back-outline" color={Colors.black} size={24} />
         </TouchableOpacity>
       )}
 
-      <Text style={[GlobalStyles.titleHeader, styles.textView]}>{title}</Text>
+      <View style={styles.contentText}>
+        <Text style={[GlobalStyles.titleHeader, styles.textView]}>{title}</Text>
+      </View>
 
-      {iconRight && (
-        <TouchableOpacity style={styles.contentIcon}>
-          <IconView
-            name="notifications-outline"
-            color={Colors.black}
-            size={24}
-          />
-        </TouchableOpacity>
-      )}
+      <View style={styles.contentIconRight}>
+        {iconRight && (
+          <TouchableOpacity style={[styles.contentIcon]}>
+            <IconView
+              name="notifications-outline"
+              color={Colors.black}
+              size={24}
+            />
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 };
@@ -48,17 +57,33 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: Colors.primary,
     paddingVertical: 20,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'row',
+    borderColor: Colors.blueBoder,
+    borderEndWidth: 1,
+    elevation: 5,
+    shadowOpacity: 0.02,
+    shadowOffset: {width: 2, height: 3},
   },
-
+  contentText: {
+    paddingLeft: 120,
+    paddingRight: 120,
+  },
   textView: {
-    paddingHorizontal: 110,
+    textAlign: 'center',
   },
   contentIcon: {
     backgroundColor: Colors.white,
-    padding: 5,
+
     borderRadius: 20,
+  },
+  contentIconLeft: {
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+  },
+  contentIconRight: {
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
   },
 });

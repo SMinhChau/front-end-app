@@ -7,4 +7,6 @@ export default {
   red: '#FF0000',
   primaryButton: '#0D0D99',
   headerColor: '#838690',
+  drakCyonBoder: '#1E90FF',
+  blueBoder: '#87CEFA',
 };

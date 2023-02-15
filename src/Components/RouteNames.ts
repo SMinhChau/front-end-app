@@ -8,7 +8,7 @@ export default {
   accountStack: 'Account',
   notificationStack: 'Notification',
 
-  homeTab: languages['vi'].login,
+  homeTab: languages['vi'].home,
   groupTab: languages['vi'].group,
   notificationTab: languages['vi'].notification,
   accountTab: languages['vi'].account,

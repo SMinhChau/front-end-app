@@ -5,13 +5,12 @@ import Colors from '../../Themes/Colors';
 interface Props {}
 
 const MenuContent: React.FC<Props> = ({}) => {
-  return <View style={[GlobalStyles.margin20, styles.menu]}></View>;
+  return <View style={[GlobalStyles.borderContent, styles.menu]}></View>;
 };
 export default MenuContent;
 
 const styles = StyleSheet.create({
   menu: {
-    height: 350,
-    backgroundColor: Colors.primary,
+    height: 300,
   },
 });

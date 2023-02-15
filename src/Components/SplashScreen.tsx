@@ -30,7 +30,12 @@ const SplashScreen = () => {
     <>
       <View style={styles.content}>
         <Image source={Images.background_flast} style={styles.bg} />
-        <Logo height={300} width={300} tintColor={Colors.black} />
+        <Logo
+          source={Images.logo}
+          height={300}
+          width={300}
+          tintColor={Colors.black}
+        />
         <ActivityIndicator size={'large'} color={Colors.primaryButton} />
         <Text style={GlobalStyles.textPrimary}>Xin chào!</Text>
       </View>

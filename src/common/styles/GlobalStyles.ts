@@ -41,6 +41,18 @@ export default StyleSheet.create({
   },
   margin20: {
     marginHorizontal: 20,
-    marginTop: 20,
+    marginTop: 30,
+  },
+  borderContent: {
+    borderRadius: 10,
+    borderColor: Colors.blueBoder,
+    borderWidth: 1,
+    elevation: 5,
+    shadowOpacity: 0.02,
+    shadowOffset: {width: 2, height: 3},
+  },
+  flexDirectionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
