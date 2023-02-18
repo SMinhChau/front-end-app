@@ -76,6 +76,11 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     borderRadius: 40,
     margin: 10,
+    borderColor: Colors.blueBoder,
+    borderWidth: 1,
+    elevation: 2.5,
+    shadowOpacity: 0.02,
+    shadowOffset: {width: 2, height: 3},
   },
   left: {
     position: 'absolute',

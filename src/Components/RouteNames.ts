@@ -9,7 +9,7 @@ export default {
   notificationStack: 'Notification',
 
   homeTab: languages['vi'].home,
-  groupTab: languages['vi'].group,
+  groupTab: languages['vi'].title,
   notificationTab: languages['vi'].notification,
   accountTab: languages['vi'].account,
 };

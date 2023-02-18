@@ -9,4 +9,6 @@ export default {
   headerColor: '#838690',
   drakCyonBoder: '#1E90FF',
   blueBoder: '#87CEFA',
+  textPrimary: '#5c677d',
+  accountText: '#184e77',
 };

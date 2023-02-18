@@ -8,7 +8,10 @@ import ContentAccount from '../../common/ContentAccount';
 const Home: React.FC<{}> = () => {
   return (
     <View style={GlobalStyles.container}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.primary} />
+      <StatusBar
+        barStyle={'dark-content'}
+        backgroundColor={Colors.primaryButton}
+      />
       <Header
         title="Trang chủ"
         iconLeft={true}

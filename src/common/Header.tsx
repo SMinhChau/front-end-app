@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   sectionContainer: {
     width: '100%',
     paddingHorizontal: 10,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.primaryButton,
     paddingVertical: 20,
     flexDirection: 'row',
     justifyContent: 'center',

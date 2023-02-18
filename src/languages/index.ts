@@ -1,7 +1,7 @@
 export default {
   vi: {
     login: 'Đăng nhập',
-    loout: 'Đăng xuất',
+    logout: 'Đăng xuất',
     welcome: 'Xin chào',
     home: 'Trang chủ',
     group: 'Nhóm',
@@ -15,5 +15,7 @@ export default {
     class: 'Lớp',
     level: 'Hệ Đào Tạo',
     special: 'Chuyên Ngành',
+    title: 'Đề Tài',
+    numberPhone: 'Điện Thoại',
   },
 };

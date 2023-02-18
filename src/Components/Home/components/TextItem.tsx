@@ -1,8 +1,5 @@
 import React from 'react';
 import {StyleSheet, View, Image, Text} from 'react-native';
-import {string} from 'yup';
-import languages from '../../../languages';
-import Colors from '../../../Themes/Colors';
 
 interface Props {
   textLeft?: string;

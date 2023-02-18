@@ -21,7 +21,7 @@ const MyTabBar = ({state, descriptors, navigation}: any) => {
 
         if (route.name === languages['vi'].home) {
           iconName = isFocused ? 'home' : 'home-outline';
-        } else if (route.name === languages['vi'].group) {
+        } else if (route.name === languages['vi'].title) {
           iconName = isFocused ? 'people' : 'people-outline';
         } else if (route.name === languages['vi'].notification) {
           iconName = isFocused
@@ -58,6 +58,7 @@ const MyTabBar = ({state, descriptors, navigation}: any) => {
             accessibilityLabel={options.tabBarAccessibilityLabel}
             testID={options.tabBarTestID}
             onPress={onPress}
+            style={styles.container}
             onLongPress={onLongPress}>
             {/* <TabbarIcon
             stackName={stackName}
@@ -69,13 +70,13 @@ const MyTabBar = ({state, descriptors, navigation}: any) => {
               <IconView
                 name={iconName}
                 size={24}
-                color={isFocused ? Colors.black : Colors.primary}
+                color={isFocused ? Colors.headerColor : Colors.primary}
               />
             </View>
 
-            <Text style={{color: isFocused ? Colors.black : Colors.primary}}>
+            {/* <Text style={{color: isFocused ? Colors.black : Colors.primary}}>
               {label}
-            </Text>
+            </Text> */}
           </TouchableOpacity>
         );
       })}
@@ -86,6 +87,10 @@ const MyTabBar = ({state, descriptors, navigation}: any) => {
 export default MyTabBar;
 
 const styles = StyleSheet.create({
+  container: {
+    height: 50,
+    justifyContent: 'center',
+  },
   cotent: {
     flexDirection: 'row',
     backgroundColor: Colors.primaryButton,
