@@ -22,11 +22,9 @@ const MyTabBar = ({state, descriptors, navigation}: any) => {
         if (route.name === languages['vi'].home) {
           iconName = isFocused ? 'home' : 'home-outline';
         } else if (route.name === languages['vi'].title) {
-          iconName = isFocused ? 'people' : 'people-outline';
-        } else if (route.name === languages['vi'].notification) {
-          iconName = isFocused
-            ? 'md-notifications-sharp'
-            : 'md-notifications-outline';
+          iconName = isFocused ? 'md-bookmarks' : 'md-bookmarks-outline';
+        } else if (route.name === languages['vi'].term) {
+          iconName = isFocused ? 'md-book' : 'md-book-outline';
         } else if (route.name === languages['vi'].account) {
           iconName = isFocused ? 'person' : 'person-outline';
         }
@@ -74,9 +72,9 @@ const MyTabBar = ({state, descriptors, navigation}: any) => {
               />
             </View>
 
-            {/* <Text style={{color: isFocused ? Colors.black : Colors.primary}}>
+            <Text style={[{color: isFocused ? Colors.black : Colors.primary}, styles.text ]}>
               {label}
-            </Text> */}
+            </Text>
           </TouchableOpacity>
         );
       })}

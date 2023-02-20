@@ -17,5 +17,10 @@ export default {
     special: 'Chuyên Ngành',
     title: 'Đề Tài',
     numberPhone: 'Điện Thoại',
+    gender: 'Giới Tính',
+    term: 'Học Kỳ',
+    teacher: 'Giảng Viên',
+    testMajor: 'Kỹ Thuật Phần Mềm',
+    detail: 'Xem chi tiết',
   },
 };

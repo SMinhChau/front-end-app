@@ -3,9 +3,9 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import AccountStackNavigator from './Navigators/AccountStack';
-import GroupStackNavigator from './Navigators/GroupStack';
+import EvaluationNavigator from './Navigators/EvaluationStack';
 import HomeStackNavigator from './Navigators/HomeStack';
-import NotificationStackNavigator from './Navigators/NotificationStack';
+import TermsStackNavigator from './Navigators/TermsStack';
 
 import RouteNames from './RouteNames';
 import MyTabBar from './Section/MyTabBar';
@@ -18,12 +18,12 @@ const tabScreens = [
     component: HomeStackNavigator,
   },
   {
-    name: RouteNames.groupTab,
-    component: GroupStackNavigator,
+    name: RouteNames.EvaluationTab,
+    component: EvaluationNavigator,
   },
   {
-    name: RouteNames.notificationTab,
-    component: NotificationStackNavigator,
+    name: RouteNames.TermsTab,
+    component: TermsStackNavigator,
   },
   {
     name: RouteNames.accountTab,

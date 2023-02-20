@@ -37,22 +37,25 @@ const ContentAccount: React.FC<{}> = () => {
   };
   return (
     <>
-      <TouchableOpacity
+      <View
         style={[
           styles.contentInfor,
           GlobalStyles.borderContent,
           GlobalStyles.margin20,
-        ]}
-        onPress={() => navigation.navigate(RouteNames.homeTab)}>
+        ]}>
         <View style={[styles.contentInfo]}>
           <View style={styles.left}>
             <Text style={styles.titleText}>{languages['vi'].info}</Text>
           </View>
           <Image source={Images.avatar} style={styles.imgaAvatar} />
+          <TouchableOpacity
+            onPress={() => navigation.navigate(RouteNames.accountTab)}>
+            <Text style={styles.textDetail}>{languages['vi'].detail}</Text>
+          </TouchableOpacity>
         </View>
 
         {renderItemView()}
-      </TouchableOpacity>
+      </View>
     </>
   );
 };
@@ -66,7 +69,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contentInfor: {
-    height: 300,
+    height: 350,
     padding: 10,
     backgroundColor: Colors.white,
   },
@@ -75,7 +78,8 @@ const styles = StyleSheet.create({
     height: 65,
     resizeMode: 'contain',
     borderRadius: 40,
-    margin: 10,
+    margin: 15,
+
     borderColor: Colors.blueBoder,
     borderWidth: 1,
     elevation: 2.5,
@@ -88,12 +92,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     borderColor: Colors.blueBoder,
     borderWidth: 1,
-    borderRadius: 3,
+    borderRadius: 5,
   },
   titleText: {
     alignItems: 'center',
     fontSize: 18,
-    color: Colors.grayLight,
+    color: Colors.textPrimary,
     paddingHorizontal: 10,
   },
   sub: {
@@ -110,5 +114,9 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     justifyContent: 'center',
+  },
+  textDetail: {
+    color: Colors.primaryButton,
+    textDecorationColor: Colors.drakCyonBoder,
   },
 });

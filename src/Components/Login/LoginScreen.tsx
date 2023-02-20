@@ -142,7 +142,10 @@ const Login: React.FC<{}> = () => {
 
   return (
     <View style={GlobalStyles.container}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.primary} />
+      <StatusBar
+        barStyle={'dark-content'}
+        backgroundColor={Colors.primaryButton}
+      />
       <Header title="Đăng nhập"></Header>
 
       <View style={styles.formView}>

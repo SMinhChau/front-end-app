@@ -21,13 +21,17 @@ const Header: React.FC<Props> = ({title, back, iconLeft, home, iconRight}) => {
         <TouchableOpacity
           onPress={() => navigation.navigate(RouteNames.homeTab)}
           style={[styles.contentIcon, styles.contentIconLeft]}>
-          <IconView name="home-outline" color={Colors.black} size={24} />
+          <IconView name="home-outline" color={Colors.textPrimary} size={24} />
         </TouchableOpacity>
       )}
 
       {iconLeft && back && (
         <TouchableOpacity style={[styles.contentIcon, styles.contentIconLeft]}>
-          <IconView name="arrow-back-outline" color={Colors.black} size={24} />
+          <IconView
+            name="arrow-back-outline"
+            color={Colors.textPrimary}
+            size={24}
+          />
         </TouchableOpacity>
       )}
 
@@ -40,7 +44,7 @@ const Header: React.FC<Props> = ({title, back, iconLeft, home, iconRight}) => {
           <TouchableOpacity style={[styles.contentIcon]}>
             <IconView
               name="notifications-outline"
-              color={Colors.black}
+              color={Colors.textPrimary}
               size={24}
             />
           </TouchableOpacity>
@@ -67,8 +71,12 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 2, height: 3},
   },
   contentText: {
-    paddingLeft: 120,
-    paddingRight: 120,
+    width: '90%',
+
+    justifyContent: 'center',
+    alignItems: 'center',
+    // marginLeft: 90,
+    // marginRight: 90,
   },
   textView: {
     textAlign: 'center',

@@ -12,7 +12,7 @@ import IconView from '../../common/IconView';
 const Account: React.FC<{}> = () => {
   const renderTop = () => {
     return (
-      <View style={[styles.topAccount]}>
+      <>
         <Image source={Images.avatar} style={styles.imgaAvatar} />
         <View style={styles.topLeft}>
           <TextItemAccount
@@ -24,13 +24,18 @@ const Account: React.FC<{}> = () => {
             textLeft={languages['vi'].name}
             textRight={'Nguyễn Thị Minh Châu'}></TextItemAccount>
         </View>
-      </View>
+      </>
     );
   };
 
   const renderMain = () => {
     return (
       <View style={styles.main}>
+        <TextItemAccount
+          textLeft={languages['vi'].gender}
+          textRight={'Nữ'}
+          line={true}></TextItemAccount>
+
         <TextItemAccount
           textLeft={languages['vi'].dayofbirth}
           textRight={'14/01/2001'}
@@ -60,22 +65,16 @@ const Account: React.FC<{}> = () => {
         title="Thông tin"
         // iconLeft={true}
         // home={true}
-        // iconRight={true}
-      ></Header>
-
-      <View style={[styles.update]}>
-        <TouchableOpacity>
-          <IconView name={'md-brush'} size={24} color={Colors.blueBoder} />
-        </TouchableOpacity>
-      </View>
+        iconRight={true}></Header>
 
       <View style={[GlobalStyles.container, styles.content]}>
-        {renderTop()}
-
-        <Line></Line>
-        <Line></Line>
-        <Line></Line>
-        <Line></Line>
+        <View style={[styles.update]}>
+          <TouchableOpacity>
+            <IconView name={'md-brush'} size={24} color={Colors.blueBoder} />
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.topAccount]}>{renderTop()}</View>
+        <Line lager={true}></Line>
 
         {renderMain()}
         <TouchableOpacity style={[GlobalStyles.flexDirectionRow]}>
@@ -95,6 +94,7 @@ const styles = StyleSheet.create({
   },
   topAccount: {
     flexDirection: 'row',
+    width: '100%',
   },
   imgaAvatar: {
     width: 80,
@@ -125,10 +125,12 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   update: {
+    width: '100%',
     alignItems: 'flex-end',
-    justifyContent: 'flex-end',
     paddingTop: 10,
     paddingRight: 15,
-    backgroundColor: Colors.white,
+    position: 'relative',
+    top: 20,
+    zIndex: 99999,
   },
 });

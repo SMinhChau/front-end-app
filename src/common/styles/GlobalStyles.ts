@@ -51,6 +51,15 @@ export default StyleSheet.create({
     shadowOpacity: 0.02,
     shadowOffset: {width: 2, height: 3},
   },
+  borderTouch: {
+    borderRadius: 10,
+    borderColor: Colors.blueBoder,
+    borderWidth: 1,
+    shadowOpacity: 1,
+    elevation: 1,
+    shadowOffset: {width: 2, height: 2},
+  },
+
   flexDirectionRow: {
     flexDirection: 'row',
     alignItems: 'center',

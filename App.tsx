@@ -15,7 +15,7 @@ import {store} from './src/redux/store';
 import SplashScreen from './src/Components/SplashScreen';
 import RouteNames from './src/Components/RouteNames';
 import TabNavigation from './src/Components/TabNavigation';
-import Login from './src/Components/Login/Login';
+import Login from './src/Components/Login/LoginScreen';
 
 const App = () => {
   return (

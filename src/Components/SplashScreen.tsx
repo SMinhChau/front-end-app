@@ -4,8 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import Logo from '../common/logo';
 import GlobalStyles from '../common/styles/GlobalStyles';
 import Colors from '../Themes/Colors';
-import RouteNames from './RouteNames';
-import {navigateAndSimpleReset} from './utils';
+
 import {Images} from '../assets/images/Images';
 
 const SplashScreen = () => {

@@ -4,12 +4,12 @@ export default {
   rootTabNavigation: 'RootTabNavigation',
 
   honmeStack: 'Home',
-  groupStack: 'Group',
+  EvaluationStack: ' Evaluation',
   accountStack: 'Account',
-  notificationStack: 'Notification',
+  TermsStack: 'Terms',
 
   homeTab: languages['vi'].home,
-  groupTab: languages['vi'].title,
-  notificationTab: languages['vi'].notification,
+  EvaluationTab: languages['vi'].title,
+  TermsTab: languages['vi'].term,
   accountTab: languages['vi'].account,
 };
