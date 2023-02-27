@@ -5,6 +5,7 @@ import Header from '../../common/Header';
 import ContentAccount from '../../common/ContentAccount';
 import languages from '../../languages';
 import data from './data';
+import {useAppSelector} from '../../redux/hooks';
 
 interface data {
   data: data;

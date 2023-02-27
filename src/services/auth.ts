@@ -1,11 +1,16 @@
-import {axiosNotAuth} from '../utilities/axiosConfig';
+import {axiosAuth, axiosNotAuth} from '../utilities/axiosConfig';
 
 class AuthService {
   login(data: {username: string; password: string}) {
     return axiosNotAuth({
-      url: '/api/student/auth/login',
+      url: 'api/student/auth/login',
       method: 'post',
       data,
+    });
+  }
+  getInfo() {
+    return axiosAuth({
+      url: 'api/student/me',
     });
   }
 }

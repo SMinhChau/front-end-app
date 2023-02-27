@@ -2,6 +2,7 @@ import languages from '../languages';
 
 export default {
   rootTabNavigation: 'RootTabNavigation',
+  loginNavigation: 'Login',
 
   honmeStack: 'Home',
   EvaluationStack: ' Evaluation',

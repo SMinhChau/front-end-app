@@ -2,22 +2,34 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class TokenService {
   getAccessToken = async () => {
-    const value = await AsyncStorage.getItem('access_token');
-    if (value !== null) {
-      return value;
+    try {
+      const value = await AsyncStorage.getItem('access_token');
+      if (value !== null) {
+        return value;
+      }
+    } catch (error) {
+      console.log('Error getAccessToken', error);
     }
   };
 
   setAccessToken = async (token: string) => {
-    const value = await AsyncStorage.setItem('access_token', token);
-    if (value !== null) {
-      return value;
+    try {
+      const value = await AsyncStorage.setItem('access_token', token);
+      if (value !== null) {
+        return value;
+      }
+    } catch (error) {
+      console.log('Error setAccessToken', error);
     }
   };
 
   getRefreshToken = async () => {
-    const value = await AsyncStorage.getItem('refresh_token');
-    return value;
+    try {
+      const value = await AsyncStorage.getItem('refresh_token');
+      return value;
+    } catch (error) {
+      console.log('Error getRefreshToken', error);
+    }
   };
 
   setRefreshToken = async (token: string) => {

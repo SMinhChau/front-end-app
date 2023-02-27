@@ -1,4 +1,4 @@
-import {useEffect, useMemo} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {TouchableOpacity, View, Text, StyleSheet, Image} from 'react-native';
 import Header from '../../common/Header';
 import GlobalStyles from '../../common/styles/GlobalStyles';
@@ -8,54 +8,107 @@ import TextItemAccount from './component/TextItemAccount';
 import languages from '../../languages';
 import Colors from '../../Themes/Colors';
 import IconView from '../../common/IconView';
+import tokenService from '../../services/token';
+
+import {useNavigation} from '@react-navigation/native';
+import {useAppDispatch, useAppSelector} from '../../redux/hooks';
+import RouteNames from '../RouteNames';
+import majorService from '../../services/major';
+import data from '../Home/data';
+import {dispatch} from '@backpackapp-io/react-native-toast/lib/typescript/core/store';
+import majorAPI from '../../redux/apis/major';
+import Major from '../../utilities/contants';
+
+// interface Major {
+//   id: string;
+//   name: string;
+//   headLecturer: {
+//     id: number;
+//     majors: Object;
+//     degree: string;
+//     isAdmin: string;
+//     createdAt: Date;
+//     updatedAt: string;
+//   };
+// }
 
 const Account: React.FC<{}> = () => {
+  const navigation = useNavigation();
+
+  const dispatch = useAppDispatch();
+
+  const majorState = useAppSelector(state => state.major);
+  const userState = useAppSelector(state => state.user.user);
+  const [majorById, setMajorById] = useState<Major>();
+
+  useEffect(() => {
+    dispatch(majorAPI.getMajorById()(userState?.majors?.id));
+  }, []);
+
+  console.log('majorState', majorState.major.name);
+
+  // const getMajor = async () => {
+  //   dispatch(await majorAPI.getMajorById()(userState?.majors?.id));
+  //   console.log('majorState', majorState);
+  // };
+
   const renderTop = () => {
     return (
       <>
-        <Image source={Images.avatar} style={styles.imgaAvatar} />
+        <Image
+          source={userState?.avatar ? {uri: userState?.avatar} : Images.avatar}
+          style={styles.imgaAvatar}
+        />
         <View style={styles.topLeft}>
           <TextItemAccount
             main={true}
             textLeft={languages['vi'].code}
-            textRight={'19468371'}></TextItemAccount>
+            textRight={userState?.username}></TextItemAccount>
           <TextItemAccount
             main={true}
             textLeft={languages['vi'].name}
-            textRight={'Nguyễn Thị Minh Châu'}></TextItemAccount>
+            textRight={userState?.name}></TextItemAccount>
         </View>
       </>
     );
   };
 
   const renderMain = () => {
-    return (
-      <View style={styles.main}>
-        <TextItemAccount
-          textLeft={languages['vi'].gender}
-          textRight={'Nữ'}
-          line={true}></TextItemAccount>
+    return useMemo(
+      () => (
+        <View style={styles.main}>
+          <TextItemAccount
+            textLeft={languages['vi'].gender}
+            textRight={userState?.gender}
+            line={true}></TextItemAccount>
 
-        <TextItemAccount
-          textLeft={languages['vi'].dayofbirth}
-          textRight={'14/01/2001'}
-          line={true}></TextItemAccount>
+          <TextItemAccount
+            textLeft={languages['vi'].schoolYear}
+            textRight={userState?.schoolYear}
+            line={true}></TextItemAccount>
 
-        <TextItemAccount
-          textLeft={languages['vi'].class}
-          textRight={'ĐHKTPM15A'}
-          line={true}></TextItemAccount>
+          <TextItemAccount
+            textLeft={languages['vi'].special}
+            textRight={majorState?.major?.name}
+            line={true}></TextItemAccount>
 
-        <TextItemAccount
-          textLeft={languages['vi'].numberPhone}
-          textRight={'0795815992'}
-          line={true}></TextItemAccount>
+          <TextItemAccount
+            textLeft={languages['vi'].typeTraining}
+            textRight={userState?.typeTraining}
+            line={true}></TextItemAccount>
 
-        <TextItemAccount
-          textLeft={languages['vi'].email}
-          textRight={'chaunguyen@gmadddddddddddddddddddddddddddddddil.com'}
-          line={true}></TextItemAccount>
-      </View>
+          <TextItemAccount
+            textLeft={languages['vi'].numberPhone}
+            textRight={userState?.phoneNumber}
+            line={true}></TextItemAccount>
+
+          <TextItemAccount
+            textLeft={languages['vi'].email}
+            textRight={userState?.email}
+            line={true}></TextItemAccount>
+        </View>
+      ),
+      [userState, majorState],
     );
   };
 
@@ -77,7 +130,14 @@ const Account: React.FC<{}> = () => {
         <Line lager={true}></Line>
 
         {renderMain()}
-        <TouchableOpacity style={[GlobalStyles.flexDirectionRow]}>
+        <TouchableOpacity
+          style={[GlobalStyles.flexDirectionRow]}
+          onPress={() => {
+            tokenService.reset();
+            console.log('Token', tokenService.getAccessToken);
+
+            navigation.navigate(RouteNames.loginNavigation);
+          }}>
           <Text style={styles.logout}>{languages['vi'].logout}</Text>
           <IconView name={'ios-log-out-outline'} size={24} color={Colors.red} />
         </TouchableOpacity>
@@ -104,7 +164,6 @@ const styles = StyleSheet.create({
     margin: 10,
     borderColor: Colors.blueBoder,
     borderWidth: 1,
-    elevation: 2.5,
     shadowOpacity: 0.02,
     shadowOffset: {width: 2, height: 3},
   },

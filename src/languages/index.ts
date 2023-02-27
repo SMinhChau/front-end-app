@@ -14,7 +14,7 @@ export default {
     email: 'Email',
     class: 'Lớp',
     level: 'Hệ Đào Tạo',
-    special: 'Chuyên Ngành',
+    special: 'Ngành',
     title: 'Đề Tài',
     numberPhone: 'Điện Thoại',
     gender: 'Giới Tính',
@@ -22,5 +22,7 @@ export default {
     teacher: 'Giảng Viên',
     testMajor: 'Kỹ Thuật Phần Mềm',
     detail: 'Xem chi tiết',
+    schoolYear: 'Niên khóa',
+    typeTraining: 'Loại hình',
   },
 };

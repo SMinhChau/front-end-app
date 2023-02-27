@@ -6,6 +6,7 @@ import GlobalStyles from '../common/styles/GlobalStyles';
 import Colors from '../Themes/Colors';
 
 import {Images} from '../assets/images/Images';
+import RouteNames from './RouteNames';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
@@ -14,10 +15,10 @@ const SplashScreen = () => {
     await new Promise(resolve =>
       setTimeout(() => {
         resolve(true);
-      }, 2000),
+      }, 1000),
     );
 
-    navigation.navigate('Login');
+    navigation.navigate(RouteNames.loginNavigation);
     // navigateAndSimpleReset(RouteNames.rootTabNavigation);
   };
 

@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {StyleSheet, View, Image, Text, TouchableOpacity} from 'react-native';
 import {Images} from '../assets/images/Images';
 import GlobalStyles from './styles/GlobalStyles';
@@ -7,31 +7,32 @@ import Colors from '../Themes/Colors';
 import TextItem from '../Components/Home/components/TextItem';
 import RouteNames from '../Components/RouteNames';
 import {useNavigation} from '@react-navigation/native';
+import {useAppSelector} from '../redux/hooks';
 
 const Props = {};
 
 const ContentAccount: React.FC<{}> = () => {
   const navigation = useNavigation();
+  const userState = useAppSelector(state => state.user.user);
+
   const renderItemView = () => {
     return (
       <View style={styles.sub}>
         <TextItem
           textLeft={languages['vi'].code}
-          textRight={'19468371'}></TextItem>
+          textRight={userState?.username}></TextItem>
         <TextItem
           textLeft={languages['vi'].name}
-          textRight={'19468371'}></TextItem>
+          textRight={userState?.name}></TextItem>
         <TextItem
-          textLeft={languages['vi'].dayofbirth}
-          textRight={'19468371'}></TextItem>
+          textLeft={languages['vi'].numberPhone}
+          textRight={userState?.phoneNumber}></TextItem>
         <TextItem
-          textLeft={languages['vi'].class}
-          textRight={'19468371'}></TextItem>
+          textLeft={languages['vi'].schoolYear}
+          textRight={userState?.schoolYear}></TextItem>
         <TextItem
           textLeft={languages['vi'].email}
-          textRight={
-            'dsjdbjsbfdhmgbdkdfsfsfsgfjgkdf@gmailhfghgfhjdfjd'
-          }></TextItem>
+          textRight={userState.email}></TextItem>
       </View>
     );
   };
@@ -47,7 +48,12 @@ const ContentAccount: React.FC<{}> = () => {
           <View style={styles.left}>
             <Text style={styles.titleText}>{languages['vi'].info}</Text>
           </View>
-          <Image source={Images.avatar} style={styles.imgaAvatar} />
+          <Image
+            source={
+              userState?.avatar ? {uri: userState?.avatar} : Images.avatar
+            }
+            style={styles.imgaAvatar}
+          />
           <TouchableOpacity
             onPress={() => navigation.navigate(RouteNames.accountTab)}>
             <Text style={styles.textDetail}>{languages['vi'].detail}</Text>
@@ -79,12 +85,10 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     borderRadius: 40,
     margin: 15,
-
     borderColor: Colors.blueBoder,
     borderWidth: 1,
-    elevation: 2.5,
     shadowOpacity: 0.02,
-    shadowOffset: {width: 2, height: 3},
+    // shadowOffset: {width: 2, height: 3},
   },
   left: {
     position: 'absolute',

@@ -13,18 +13,21 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import Colors from '../../Themes/Colors';
 import Header from '../../common/Header';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Formik, FormikErrors, FormikProps, withFormik} from 'formik';
 import ButtonView from '../../common/ButtonView';
 import GlobalStyles from '../../common/styles/GlobalStyles';
 
 import {useAppDispatch, useAppSelector} from '../../redux/hooks';
+import authAPI from '../../redux/apis/auth';
+import NotifyModel from '../../common/NotifyModel';
 
 const Login: React.FC<{}> = () => {
-  const userState = useAppSelector(state => state.student);
+  const userState = useAppSelector(state => state.user);
 
   const [userNameData, setUserName] = useState('');
   const [passwordData, setPassWord] = useState('');
+  const userNameRef = useRef();
 
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
@@ -67,6 +70,7 @@ const Login: React.FC<{}> = () => {
               placeholder={'Tên đăng nhập'}
               value={values.username}
               style={styles.input}
+              ref={userNameRef.current}
             />
             {touched.username && errors.username && (
               <Text style={GlobalStyles.textError}>{errors.username}</Text>
@@ -77,6 +81,7 @@ const Login: React.FC<{}> = () => {
               placeholder={'Mật khẩu'}
               onBlur={handleBlur('password')}
               value={values.password}
+              secureTextEntry
               style={styles.input}
             />
             {touched.password && errors.password && (
@@ -101,17 +106,27 @@ const Login: React.FC<{}> = () => {
     );
   };
 
-  const handleSubmitForm = (value: any) => {
-    console.log('>>>Login value ', value.username, value.password);
-    // dispatch(authAPI.login()(value));
-    // value.username
-    // value.password
-    // const data = [value.username, value.password];
+  const handleSubmitForm = async (value: any) => {
+    value.username;
+    value.password;
 
     setUserName(value.username);
     setPassWord(value.password);
 
-    navigation.navigate('TabNavigation');
+    console.log('Login', value.username, value.password);
+    dispatch(
+      await authAPI.login()({username: userNameData, password: passwordData}),
+    );
+
+    if (userState.is_login) {
+      console.log('userState.user', userState.user);
+
+      navigation.navigate('TabNavigation');
+    } else {
+      if (userState.error) {
+        console.log('userState.error', userState.error);
+      }
+    }
   };
 
   const MyForm = withFormik<MyFormProps, FormValues>({

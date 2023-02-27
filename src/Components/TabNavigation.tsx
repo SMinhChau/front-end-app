@@ -34,7 +34,6 @@ const tabScreens = [
 const TabNavigation = () => {
   return (
     <Tab.Navigator
-      // defaultScreenOptions={{tabBarStyle: {display: 'none'}}}
       tabBar={props => <MyTabBar {...props} />}
       screenOptions={{headerShown: false}}>
       {tabScreens.map(tab => (
