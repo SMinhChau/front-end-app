@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, Text, View} from 'react-native';
 import Colors from '../Themes/Colors';
+import {responsiveHeight, responsiveWidth} from '../utilities/sizeScreen';
 import IconView from './IconView';
 
 import GlobalStyles from './styles/GlobalStyles';
@@ -20,13 +21,13 @@ export default TouchViewMenu;
 
 const styles = StyleSheet.create({
   content: {
-    height: 200,
+    height: responsiveHeight(200),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#caf0f8',
+    backgroundColor: Colors.white,
     flexDirection: 'row',
-    width: 180,
+    width: responsiveWidth(160),
     borderRadius: 20,
     borderColor: Colors.blueBoder,
     borderWidth: 1,

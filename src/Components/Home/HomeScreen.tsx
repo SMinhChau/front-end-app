@@ -5,13 +5,29 @@ import Header from '../../common/Header';
 import ContentAccount from '../../common/ContentAccount';
 import languages from '../../languages';
 import data from './data';
-import {useAppSelector} from '../../redux/hooks';
+import {useAppDispatch, useAppSelector} from '../../redux/hooks';
+import {useEffect} from 'react';
+import majorAPI from '../../redux/apis/major';
+import {
+  responsiveFont,
+  responsiveHeight,
+  responsiveWidth,
+} from '../../utilities/sizeScreen';
 
 interface data {
   data: data;
 }
 
 const Home: React.FC<data> = ({}) => {
+  const dispatch = useAppDispatch();
+
+  const majorState = useAppSelector(state => state.major.major);
+  const userState = useAppSelector(state => state.user.user);
+
+  useEffect(() => {
+    dispatch(majorAPI.getMajorById()(userState?.majors?.id));
+  }, []);
+
   return (
     <View style={GlobalStyles.container}>
       <StatusBar
@@ -30,7 +46,7 @@ const Home: React.FC<data> = ({}) => {
         <View style={[styles.contentMain]}>
           <Text style={styles.titleMain}>{languages['vi'].special}</Text>
         </View>
-        <Text style={styles.title}>{languages['vi'].testMajor}</Text>
+        <Text style={styles.title}>{majorState?.name}</Text>
       </View>
     </View>
   );
@@ -39,12 +55,12 @@ export default Home;
 
 const styles = StyleSheet.create({
   formView: {
-    paddingHorizontal: 20,
+    paddingHorizontal: responsiveWidth(20),
     backgroundColor: Colors.white,
   },
 
   contentMenu: {
-    height: 90,
+    height: responsiveHeight(90),
     padding: 10,
     backgroundColor: Colors.white,
     borderRadius: 10,
@@ -58,7 +74,6 @@ const styles = StyleSheet.create({
   },
   contentMain: {
     position: 'absolute',
-
     top: -20,
     left: 2,
     padding: 3,
@@ -68,12 +83,12 @@ const styles = StyleSheet.create({
     borderColor: Colors.blueBoder,
   },
   titleMain: {
-    fontSize: 17,
+    fontSize: responsiveFont(17),
     color: Colors.textPrimary,
     fontWeight: '400',
   },
   title: {
-    fontSize: 18,
+    fontSize: responsiveFont(18),
     color: Colors.rosyBrown,
     fontWeight: '500',
     textDecorationStyle: 'double',

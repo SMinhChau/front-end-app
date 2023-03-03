@@ -8,6 +8,7 @@ import TextItem from '../Components/Home/components/TextItem';
 import RouteNames from '../Components/RouteNames';
 import {useNavigation} from '@react-navigation/native';
 import {useAppSelector} from '../redux/hooks';
+import {responsiveHeight, responsiveWidth} from '../utilities/sizeScreen';
 
 const Props = {};
 
@@ -75,13 +76,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contentInfor: {
-    height: 350,
+    height: responsiveHeight(390),
     padding: 10,
     backgroundColor: Colors.white,
   },
   imgaAvatar: {
-    width: 65,
-    height: 65,
+    width: responsiveWidth(65),
+    height: responsiveHeight(80),
     resizeMode: 'contain',
     borderRadius: 40,
     margin: 15,
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   subTitle: {
-    paddingVertical: 9,
+    paddingVertical: responsiveWidth(9),
     fontSize: 15,
   },
   item: {

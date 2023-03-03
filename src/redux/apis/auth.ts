@@ -13,6 +13,7 @@ class AuthAPI {
       'user/login',
       async (data: {username: string; password: string}, thunkAPI) => {
         const result = await authService.login(data);
+        console.log('authService.login(data)', result.data);
         if (result.status === 200) return result.data;
         return thunkAPI.rejectWithValue('login fail');
       },

@@ -5,6 +5,7 @@ import IconView from './IconView';
 import {useNavigation} from '@react-navigation/native';
 import GlobalStyles from './styles/GlobalStyles';
 import RouteNames from '../Components/RouteNames';
+import {responsiveHeight} from '../utilities/sizeScreen';
 
 interface Props {
   title: string;
@@ -58,9 +59,9 @@ export default Header;
 const styles = StyleSheet.create({
   sectionContainer: {
     width: '100%',
-    paddingHorizontal: 10,
+    // paddingHorizontal: responsiveHeight(10),
     backgroundColor: Colors.primaryButton,
-    paddingVertical: 20,
+    paddingVertical: responsiveHeight(15),
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -72,7 +73,6 @@ const styles = StyleSheet.create({
   },
   contentText: {
     width: '90%',
-
     justifyContent: 'center',
     alignItems: 'center',
     // marginLeft: 90,

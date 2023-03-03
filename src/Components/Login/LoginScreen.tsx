@@ -8,6 +8,8 @@ import {
   StyleSheet,
   Alert,
   ToastAndroid,
+  KeyboardAvoidingView,
+  ScrollView,
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
@@ -21,6 +23,7 @@ import GlobalStyles from '../../common/styles/GlobalStyles';
 import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 import authAPI from '../../redux/apis/auth';
 import NotifyModel from '../../common/NotifyModel';
+import {isIOS, responsiveHeight} from '../../utilities/sizeScreen';
 
 const Login: React.FC<{}> = () => {
   const userState = useAppSelector(state => state.user);
@@ -114,9 +117,7 @@ const Login: React.FC<{}> = () => {
     setPassWord(value.password);
 
     console.log('Login', value.username, value.password);
-    dispatch(
-      await authAPI.login()({username: userNameData, password: passwordData}),
-    );
+    dispatch(authAPI.login()({username: userNameData, password: passwordData}));
 
     if (userState.is_login) {
       console.log('userState.user', userState.user);
@@ -162,18 +163,24 @@ const Login: React.FC<{}> = () => {
         backgroundColor={Colors.primaryButton}
       />
       <Header title="Đăng nhập"></Header>
+      <ScrollView>
+        <KeyboardAvoidingView
+          style={{flex: 1}}
+          keyboardVerticalOffset={responsiveHeight(150)}
+          behavior={'position'}>
+          <View style={styles.formView}>
+            <MyForm />
+          </View>
 
-      <View style={styles.formView}>
-        <MyForm />
-      </View>
-
-      <View style={GlobalStyles.centerView}>
-        <TouchableOpacity
-          style={[styles.buttonRegister]}
-          onPress={() => navigation.navigate('TabNavigation')}>
-          <Text style={GlobalStyles.textPrimary}>Tạo tài khoản</Text>
-        </TouchableOpacity>
-      </View>
+          {/* <View style={GlobalStyles.centerView}>
+            <TouchableOpacity
+              style={[styles.buttonRegister]}
+              onPress={() => navigation.navigate('TabNavigation')}>
+              <Text style={GlobalStyles.textPrimary}>Tạo tài khoản</Text>
+            </TouchableOpacity>
+          </View> */}
+        </KeyboardAvoidingView>
+      </ScrollView>
     </View>
   );
 };

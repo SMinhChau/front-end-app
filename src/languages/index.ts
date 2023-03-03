@@ -24,5 +24,6 @@ export default {
     detail: 'Xem chi tiết',
     schoolYear: 'Niên khóa',
     typeTraining: 'Loại hình',
+    updateInfo: 'Cập nhật thông tin',
   },
 };

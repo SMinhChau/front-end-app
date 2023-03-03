@@ -34,7 +34,7 @@ axiosAuth.interceptors.response.use(
         const refresh_token = await tokenService.getRefreshToken();
         console.log('refresh_token', refresh_token);
 
-        if (await refresh_token) {
+        if (refresh_token) {
           const res = await axios({
             url: URL + '/api/student/auth/Refresh-token',
             method: 'post',
@@ -43,8 +43,8 @@ axiosAuth.interceptors.response.use(
             },
           });
           if (res.data.accessToken) {
-            tokenService.setAccessToken(res.data.accessToken);
-            tokenService.setRefreshToken(res.data.refreshToken);
+            await tokenService.setAccessToken(res.data.accessToken);
+            await tokenService.setRefreshToken(res.data.refreshToken);
           }
           return axiosAuth(config);
         }
@@ -59,8 +59,8 @@ axiosAuth.interceptors.response.use(
 const axiosNotAuth = axios.create();
 
 axiosNotAuth.interceptors.request.use(
-  config => {
-    config.baseURL = Config.API_URL;
+  async config => {
+    config.baseURL = await Config.API_URL;
     console.log(' Config.API_URL', Config.API_URL);
     return config;
   },

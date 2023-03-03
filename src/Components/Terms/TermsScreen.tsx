@@ -8,6 +8,7 @@ import languages from '../../languages';
 import Colors from '../../Themes/Colors';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {responsiveHeight, responsiveWidth} from '../../utilities/sizeScreen';
 const TermsScreen: React.FC<{}> = () => {
   return (
     <>
@@ -71,10 +72,11 @@ export default TermsScreen;
 const styles = StyleSheet.create({
   content: {
     justifyContent: 'flex-start',
-    paddingTop: 60,
+    paddingTop: responsiveHeight(60),
   },
   top: {
     justifyContent: 'center',
+    alignContent: 'center',
   },
 
   topTop: {
@@ -84,8 +86,8 @@ const styles = StyleSheet.create({
   iconRight: {},
   icon: {
     position: 'relative',
-    right: -75,
-    top: 25,
+    right: responsiveWidth(-65),
+    top: responsiveHeight(25),
     zIndex: 99999,
   },
 });

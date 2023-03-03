@@ -18,6 +18,7 @@ import data from '../Home/data';
 import {dispatch} from '@backpackapp-io/react-native-toast/lib/typescript/core/store';
 import majorAPI from '../../redux/apis/major';
 import Major from '../../utilities/contants';
+import ModalAccount from './component/ModalAccount';
 
 // interface Major {
 //   id: string;
@@ -37,20 +38,21 @@ const Account: React.FC<{}> = () => {
 
   const dispatch = useAppDispatch();
 
-  const majorState = useAppSelector(state => state.major);
+  const majorState = useAppSelector(state => state.major.major);
   const userState = useAppSelector(state => state.user.user);
-  const [majorById, setMajorById] = useState<Major>();
+  const [majorById, setMajorById] = useState({});
 
-  useEffect(() => {
-    dispatch(majorAPI.getMajorById()(userState?.majors?.id));
-  }, []);
-
-  console.log('majorState', majorState.major.name);
+  // useEffect(() => {
+  //   dispatch(majorAPI.getMajorById()(userState?.majors?.id));
+  //   setMajorById(majorState?.name);
+  // }, []);
 
   // const getMajor = async () => {
   //   dispatch(await majorAPI.getMajorById()(userState?.majors?.id));
   //   console.log('majorState', majorState);
   // };
+
+  const [showModal, setShowModal] = useState(false);
 
   const renderTop = () => {
     return (
@@ -89,7 +91,7 @@ const Account: React.FC<{}> = () => {
 
           <TextItemAccount
             textLeft={languages['vi'].special}
-            textRight={majorState?.major?.name}
+            textRight={majorState?.name}
             line={true}></TextItemAccount>
 
           <TextItemAccount
@@ -112,6 +114,11 @@ const Account: React.FC<{}> = () => {
     );
   };
 
+  const checkShowModal = () => {
+    if (!showModal) {
+      setShowModal(!showModal);
+    }
+  };
   return (
     <>
       <Header
@@ -122,7 +129,7 @@ const Account: React.FC<{}> = () => {
 
       <View style={[GlobalStyles.container, styles.content]}>
         <View style={[styles.update]}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={checkShowModal}>
             <IconView name={'md-brush'} size={24} color={Colors.blueBoder} />
           </TouchableOpacity>
         </View>
@@ -133,15 +140,22 @@ const Account: React.FC<{}> = () => {
         <TouchableOpacity
           style={[GlobalStyles.flexDirectionRow]}
           onPress={() => {
-            tokenService.reset();
+            // tokenService.reset();
             console.log('Token', tokenService.getAccessToken);
-
             navigation.navigate(RouteNames.loginNavigation);
           }}>
           <Text style={styles.logout}>{languages['vi'].logout}</Text>
           <IconView name={'ios-log-out-outline'} size={24} color={Colors.red} />
         </TouchableOpacity>
       </View>
+
+      {showModal && (
+        <ModalAccount
+          title={languages['vi'].updateInfo}
+          onPressClose={() => {
+            setShowModal(false);
+          }}></ModalAccount>
+      )}
     </>
   );
 };

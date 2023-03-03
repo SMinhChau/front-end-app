@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, Image, Text} from 'react-native';
+import {responsiveWidth} from '../../../utilities/sizeScreen';
 
 interface Props {
   textLeft?: string;
@@ -31,13 +32,13 @@ const styles = StyleSheet.create({
     alignContent: 'space-between',
   },
   subTitle: {
-    paddingVertical: 9,
+    paddingVertical: responsiveWidth(9),
     fontSize: 15,
   },
   left: {
-    width: '25%',
+    width: '30%',
   },
   right: {
-    width: '75%',
+    width: '70%',
   },
 });

@@ -41,6 +41,8 @@ export const userSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(authAPI.login().fulfilled, (state, action) => {
+      console.log('action-User', action.payload);
+
       tokenService.setAccessToken(action.payload.accessToken);
       tokenService.setRefreshToken(action.payload.refreshToken);
 
