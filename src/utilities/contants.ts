@@ -6,8 +6,8 @@ export default interface User {
   email: string;
   name: string;
   gender: string;
-  createdAt: any;
-  updatedAt: any;
+  createdAt: string;
+  updatedAt: string;
   majors: {
     id: number;
   };
@@ -23,9 +23,48 @@ export default interface Major {
     majors: Object;
     degree: string;
     isAdmin: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
   };
 }
 
 export const NUMBER = 'number';
+
+export const enum TypeDegree {
+  Masters = 'masters',
+  Docter = 'doctor',
+}
+
+export const enum TypeTraining {
+  College = 'college',
+  University = 'university',
+}
+
+export const enum TypeStatusTopic {
+  Refuse = 'refuse',
+  Peding = 'peding',
+  Accept = 'accept',
+}
+
+export const enum TypeGender {
+  Male = 'male',
+  Female = 'female',
+}
+
+export default interface Term {
+  id: string;
+  name: string;
+  startDate: string;
+  endDate: string;
+  startDateSubmitTopic: string;
+  endDateSubmitTopic: string;
+  startDateChooseTopic: string;
+  endDateChooseTopic: string;
+  dateDiscussion: string;
+  dateReport: string;
+  createdAt: string;
+  updatedAt: string;
+  majors: {
+    id: number;
+  };
+}

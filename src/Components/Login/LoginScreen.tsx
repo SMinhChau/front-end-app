@@ -10,7 +10,9 @@ import {
   ToastAndroid,
   KeyboardAvoidingView,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
+import * as yup from 'yup';
 
 import {useNavigation} from '@react-navigation/native';
 import Colors from '../../Themes/Colors';
@@ -24,16 +26,27 @@ import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 import authAPI from '../../redux/apis/auth';
 import NotifyModel from '../../common/NotifyModel';
 import {isIOS, responsiveHeight} from '../../utilities/sizeScreen';
+import TextContent from '../../common/TextContent';
+import tokenService from '../../services/token';
 
 const Login: React.FC<{}> = () => {
   const userState = useAppSelector(state => state.user);
 
-  const [userNameData, setUserName] = useState('');
-  const [passwordData, setPassWord] = useState('');
   const userNameRef = useRef();
+
+  useEffect(() => {
+    if (userState.is_login) {
+      navigation.navigate('TabNavigation');
+    } else {
+      if (userState.error) {
+        Alert.alert('Thông báo!', 'Thông tin đăng nhập không đúng');
+      }
+    }
+  }, [userState]);
 
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
+  const [isLoading, setLoading] = useState(false);
 
   // Shape of form values
   interface FormValues {
@@ -49,6 +62,11 @@ const Login: React.FC<{}> = () => {
     login?: any;
   }
 
+  const initialValues = {
+    email: '',
+    password: '',
+  };
+
   const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
     const {
       touched,
@@ -63,7 +81,7 @@ const Login: React.FC<{}> = () => {
     } = props;
     return (
       <Formik
-        initialValues={{username: ''}}
+        initialValues={initialValues}
         onSubmit={values => console.log(values)}>
         {() => (
           <>
@@ -75,6 +93,7 @@ const Login: React.FC<{}> = () => {
               style={styles.input}
               ref={userNameRef.current}
             />
+
             {touched.username && errors.username && (
               <Text style={GlobalStyles.textError}>{errors.username}</Text>
             )}
@@ -96,7 +115,15 @@ const Login: React.FC<{}> = () => {
                 <Text style={GlobalStyles.rememberText}>Quên mật khẩu?</Text>
               </TouchableOpacity>
             </View>
-
+            {/* 
+            {isLoading && (
+              <View style={{flex: 1}}>
+                <ActivityIndicator
+                  size={'large'}
+                  color={Colors.primaryButton}
+                />
+              </View>
+            )} */}
             <ButtonView
               onPress={handleSubmit}
               title="Đăng nhập"
@@ -109,25 +136,31 @@ const Login: React.FC<{}> = () => {
     );
   };
 
-  const handleSubmitForm = async (value: any) => {
-    value.username;
-    value.password;
+  const handleSubmitForm = (value: any) => {
+    // console.log('Login', value.username, value.password);
 
-    setUserName(value.username);
-    setPassWord(value.password);
+    dispatch(
+      authAPI.login()({
+        username: value.username,
+        password: value.password,
+      }),
+    );
 
-    console.log('Login', value.username, value.password);
-    dispatch(authAPI.login()({username: userNameData, password: passwordData}));
+    // try {
+    //   const result = await dispatch(
+    //     authAPI.login()({username: value.username, password: value.password}),
+    //   ).unwrap();
 
-    if (userState.is_login) {
-      console.log('userState.user', userState.user);
-
-      navigation.navigate('TabNavigation');
-    } else {
-      if (userState.error) {
-        console.log('userState.error', userState.error);
-      }
-    }
+    //   if (userState.user) {
+    //     navigation.navigate('TabNavigation');
+    //   } else {
+    //     if (userState.error) {
+    //       console.log('userState.error', userState.error);
+    //     }
+    //   }
+    // } catch (error) {
+    //   console.log('error', error);
+    // }
   };
 
   const MyForm = withFormik<MyFormProps, FormValues>({
@@ -147,6 +180,8 @@ const Login: React.FC<{}> = () => {
       }
       if (!values.password) {
         errors.password = 'Vui lòng nhập mật khẩu!';
+      } else if (values.password.length < 6) {
+        errors.password = 'Mật khẩu phải lớn hơn 5 ký tự!';
       }
       return errors;
     },

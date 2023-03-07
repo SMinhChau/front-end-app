@@ -19,6 +19,7 @@ import {dispatch} from '@backpackapp-io/react-native-toast/lib/typescript/core/s
 import majorAPI from '../../redux/apis/major';
 import Major from '../../utilities/contants';
 import ModalAccount from './component/ModalAccount';
+import {responsiveWidth} from '../../utilities/sizeScreen';
 
 // interface Major {
 //   id: string;
@@ -129,8 +130,11 @@ const Account: React.FC<{}> = () => {
 
       <View style={[GlobalStyles.container, styles.content]}>
         <View style={[styles.update]}>
-          <TouchableOpacity onPress={checkShowModal}>
+          <TouchableOpacity style={styles.btnView} onPress={checkShowModal}>
             <IconView name={'md-brush'} size={24} color={Colors.blueBoder} />
+            <Text style={GlobalStyles.textPrimary}>
+              {languages['vi'].update}
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={[styles.topAccount]}>{renderTop()}</View>
@@ -139,9 +143,9 @@ const Account: React.FC<{}> = () => {
         {renderMain()}
         <TouchableOpacity
           style={[GlobalStyles.flexDirectionRow]}
-          onPress={() => {
-            // tokenService.reset();
-            console.log('Token', tokenService.getAccessToken);
+          onPress={async () => {
+            await tokenService.reset();
+            console.log('Token - reset', tokenService.getAccessToken);
             navigation.navigate(RouteNames.loginNavigation);
           }}>
           <Text style={styles.logout}>{languages['vi'].logout}</Text>
@@ -198,6 +202,8 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   update: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
     width: '100%',
     alignItems: 'flex-end',
     paddingTop: 10,
@@ -205,5 +211,11 @@ const styles = StyleSheet.create({
     position: 'relative',
     top: 20,
     zIndex: 99999,
+  },
+  btnView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    right: responsiveWidth(10),
   },
 });

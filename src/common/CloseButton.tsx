@@ -4,6 +4,7 @@
 import React from 'react';
 import {Text, StyleSheet, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Colors from '../Themes/Colors';
 import {responsiveWidth} from '../utilities/sizeScreen';
 
 interface Props {
@@ -37,6 +38,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: responsiveWidth(20),
     zIndex: 1,
+    backgroundColor: Colors.white,
+    borderRadius: 8,
   },
   icon: {width: responsiveWidth(14), height: responsiveWidth(14)},
 });

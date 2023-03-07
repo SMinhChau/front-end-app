@@ -1,9 +1,9 @@
 import {axiosAuth, axiosNotAuth} from '../utilities/axiosConfig';
 
 class AuthService {
-  async login(data: {username: string; password: string}) {
+  login(data: {username: string; password: string}) {
     console.log('data - AuthService', data);
-    return await axiosNotAuth({
+    return axiosNotAuth({
       url: 'api/student/auth/login',
       method: 'post',
       data,
@@ -12,6 +12,7 @@ class AuthService {
   getInfo() {
     return axiosAuth({
       url: 'api/student/me',
+      method: 'get',
     });
   }
 }

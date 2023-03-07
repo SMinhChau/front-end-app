@@ -7,9 +7,15 @@ import Colors from '../Themes/Colors';
 
 import {Images} from '../assets/images/Images';
 import RouteNames from './RouteNames';
+import tokenService from '../services/token';
+import {useAppDispatch, useAppSelector} from '../redux/hooks';
+import {useDispatch} from 'react-redux';
+import authAPI from '../redux/apis/auth';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useAppDispatch();
+  const userState = useAppSelector(state => state.user.user);
 
   const init = async () => {
     await new Promise(resolve =>
@@ -18,13 +24,17 @@ const SplashScreen = () => {
       }, 1000),
     );
 
-    navigation.navigate(RouteNames.loginNavigation);
+    const token = await tokenService.getRefreshToken();
+    if (token && userState.id === '') {
+      dispatch(authAPI.getInfo()());
+      navigation.navigate('TabNavigation');
+    } else navigation.navigate(RouteNames.loginNavigation);
     // navigateAndSimpleReset(RouteNames.rootTabNavigation);
   };
 
   useEffect(() => {
     init();
-  });
+  }, []);
 
   return (
     <>

@@ -22,8 +22,8 @@ const initialState = {
       majors: {},
       degree: '',
       isAdmin: '',
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: '',
+      updatedAt: '',
     },
   },
   is_loading: false,
@@ -41,8 +41,6 @@ export const MajorSlices = createSlice({
       state.is_loading = true;
     });
     builder.addCase(majorAPI.getMajorById().fulfilled, (state, action) => {
-      console.log('state.action ', action);
-      console.log('action.payload.major ', action.payload);
       state.major = action.payload;
       state.is_loading = false;
       state.error = false;

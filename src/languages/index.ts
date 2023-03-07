@@ -25,5 +25,6 @@ export default {
     schoolYear: 'Niên khóa',
     typeTraining: 'Loại hình',
     updateInfo: 'Cập nhật thông tin',
+    update: 'Cập nhật',
   },
 };

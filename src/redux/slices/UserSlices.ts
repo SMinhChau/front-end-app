@@ -30,7 +30,7 @@ const initialState = {
     schoolYear: '',
   },
   error: false,
-  is_login: tokenService.getRefreshToken() !== null,
+  is_login: false,
 } as StateType;
 
 export const userSlice = createSlice({
@@ -41,19 +41,21 @@ export const userSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(authAPI.login().fulfilled, (state, action) => {
-      console.log('action-User', action.payload);
-
-      tokenService.setAccessToken(action.payload.accessToken);
-      tokenService.setRefreshToken(action.payload.refreshToken);
+      console.log('action user login', action);
 
       state.user = action.payload.user;
       state.error = false;
-
       state.is_login = true;
     });
     builder.addCase(authAPI.login().rejected, state => {
       state.is_login = false;
       state.error = true;
+    });
+
+    builder.addCase(authAPI.getInfo().fulfilled, (state, action) => {
+      console.log('action getInfo', action.payload);
+
+      state.user = action.payload;
     });
   },
 });

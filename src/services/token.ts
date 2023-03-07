@@ -7,6 +7,8 @@ class TokenService {
       if (value !== null) {
         return value;
       }
+
+      return null;
     } catch (error) {
       console.log('Error getAccessToken', error);
     }
@@ -15,6 +17,8 @@ class TokenService {
   setAccessToken = async (token: string) => {
     try {
       const value = await AsyncStorage.setItem('access_token', token);
+      console.log('TokenService setAccessToken ', value);
+
       if (value !== null) {
         return value;
       }
@@ -26,6 +30,7 @@ class TokenService {
   getRefreshToken = async () => {
     try {
       const value = await AsyncStorage.getItem('refresh_token');
+      console.log('TokenService getRefreshToken ', value);
       return value;
     } catch (error) {
       console.log('Error getRefreshToken', error);

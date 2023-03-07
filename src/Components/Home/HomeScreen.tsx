@@ -13,6 +13,7 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from '../../utilities/sizeScreen';
+import termrAPI from '../../redux/apis/term';
 
 interface data {
   data: data;
@@ -23,10 +24,12 @@ const Home: React.FC<data> = ({}) => {
 
   const majorState = useAppSelector(state => state.major.major);
   const userState = useAppSelector(state => state.user.user);
+  const termState = useAppSelector(state => state.term.term);
 
   useEffect(() => {
     dispatch(majorAPI.getMajorById()(userState?.majors?.id));
-  }, []);
+    dispatch(termrAPI.getLastTerm()(userState?.majors?.id));
+  }, [userState]);
 
   return (
     <View style={GlobalStyles.container}>

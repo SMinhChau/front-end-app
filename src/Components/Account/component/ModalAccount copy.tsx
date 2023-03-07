@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   TouchableOpacity,
   View,
@@ -6,12 +6,15 @@ import {
   StyleSheet,
   Modal,
   ScrollView,
+  Dimensions,
+  StatusBar,
   KeyboardAvoidingView,
+  Button,
   TextInput,
   Image,
 } from 'react-native';
-
 import {Formik, FormikErrors, FormikProps, withFormik} from 'formik';
+import ButtonView from '../../../common/ButtonView';
 import CloseButton from '../../../common/CloseButton';
 import Colors from '../../../Themes/Colors';
 import {
@@ -20,7 +23,6 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from '../../../utilities/sizeScreen';
-import DropDownPicker from 'react-native-dropdown-picker';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import languages from '../../../languages';
@@ -29,6 +31,7 @@ import GlobalStyles from '../../../common/styles/GlobalStyles';
 import {useAppSelector} from '../../../redux/hooks';
 import {Images} from '../../../assets/images/Images';
 import TextItemAccount from './TextItemAccount';
+import TextItem from '../../Home/components/TextItem';
 
 interface Props {
   title: string;
@@ -51,13 +54,6 @@ interface MyFormProps {
 
 const ModalAccount: React.FC<Props> = ({title, onPressClose}) => {
   const userState = useAppSelector(state => state.user.user);
-
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: 'Apple', value: 'apple'},
-    {label: 'Banana', value: 'banana'},
-  ]);
 
   const initialValues = {
     username: '',
@@ -197,21 +193,21 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose}) => {
     // Add a custom validation function (this can be async too!)
     validate: (values: FormValues) => {
       let errors: FormikErrors<FormValues> = {};
-      // if (!values.name) {
-      //   errors.name = 'Vui lòng nhập tên!';
-      // }
-      // if (!values.email) {
-      //   errors.email = 'Vui lòng nhập email!';
-      // } else if (
-      //   !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-      // ) {
-      //   errors.email = 'Định dạng email không đúng!';
-      // }
+      if (!values.name) {
+        errors.name = 'Vui lòng nhập tên!';
+      }
+      if (!values.email) {
+        errors.email = 'Vui lòng nhập email!';
+      } else if (
+        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+      ) {
+        errors.email = 'Định dạng email không đúng!';
+      }
       return errors;
     },
 
     handleSubmit: values => {
-      console.log('handleSubmit - value', values);
+      console.log('Value', values);
     },
   })(InnerForm);
 
@@ -276,7 +272,6 @@ const styles = StyleSheet.create({
     marginTop: 25,
     fontSize: 16,
   },
-
   inputDDefault: {
     borderRadius: 10,
     borderWidth: 2,

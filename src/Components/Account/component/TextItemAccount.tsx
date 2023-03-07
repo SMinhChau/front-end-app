@@ -9,12 +9,14 @@ interface Props {
   color?: string;
   line?: boolean;
   main?: boolean;
+  children?: any;
 }
 const TextItemAccount: React.FC<Props> = ({
   textLeft,
   textRight,
   line,
   main,
+  children,
 }) => {
   return (
     <>
@@ -29,6 +31,7 @@ const TextItemAccount: React.FC<Props> = ({
             </Text>
           </View>
         </View>
+        {children}
         {line && (
           <View style={styles.line}>
             <Line></Line>
