@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primaryButton,
   },
   textStyle: {
-    color: Colors.white,
-    fontSize: 14,
+    color: Colors.textPrimary,
+    fontSize: 16,
     flex: 1,
     textAlign: 'center',
   },

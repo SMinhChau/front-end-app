@@ -62,6 +62,7 @@ axiosNotAuth.interceptors.request.use(
   async config => {
     config.baseURL = await Config.API_URL;
     console.log(' Config.API_URL', Config.API_URL);
+    console.log('config', config);
     return config;
   },
   error => Promise.reject(error),

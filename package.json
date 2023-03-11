@@ -24,6 +24,8 @@
     "formik": "^2.2.9",
     "install": "^0.13.0",
     "lodash": "^4.17.21",
+    "lottie-ios": "3.4.0",
+    "lottie-react-native": "^5.1.5",
     "npm": "^9.4.0",
     "react": "18.2.0",
     "react-native": "0.71.0",

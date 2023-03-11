@@ -1,10 +1,11 @@
 import {StyleSheet} from 'react-native';
 import Colors from '../../Themes/Colors';
+import {responsiveHeight, responsiveWidth} from '../../utilities/sizeScreen';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.bg,
   },
   textPrimary: {
     fontSize: 14,
@@ -40,7 +41,7 @@ export default StyleSheet.create({
     borderColor: Colors.primary,
   },
   margin20: {
-    marginHorizontal: 20,
+    marginHorizontal: responsiveWidth(20),
     marginTop: 30,
   },
   borderContent: {
@@ -63,5 +64,8 @@ export default StyleSheet.create({
   flexDirectionRow: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  maginHorizontal20: {
+    marginHorizontal: responsiveWidth(20),
   },
 });

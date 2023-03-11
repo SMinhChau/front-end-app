@@ -50,21 +50,3 @@ export const enum TypeGender {
   Male = 'male',
   Female = 'female',
 }
-
-export default interface Term {
-  id: string;
-  name: string;
-  startDate: string;
-  endDate: string;
-  startDateSubmitTopic: string;
-  endDateSubmitTopic: string;
-  startDateChooseTopic: string;
-  endDateChooseTopic: string;
-  dateDiscussion: string;
-  dateReport: string;
-  createdAt: string;
-  updatedAt: string;
-  majors: {
-    id: number;
-  };
-}

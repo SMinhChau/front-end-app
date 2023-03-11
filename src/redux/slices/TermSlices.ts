@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import Term from '../../utilities/contants';
+import Term from '../../utilities/Contant/Term';
 import termrAPI from '../apis/term';
 
 interface StateType {
@@ -10,7 +10,7 @@ interface StateType {
 
 const initialState = {
   term: {
-    id: '',
+    id: NaN,
     name: '',
     startDate: '',
     endDate: '',

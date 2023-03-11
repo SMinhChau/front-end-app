@@ -21,7 +21,7 @@ const MyTabBar = ({state, descriptors, navigation}: any) => {
 
         if (route.name === languages['vi'].home) {
           iconName = isFocused ? 'home' : 'home-outline';
-        } else if (route.name === languages['vi'].title) {
+        } else if (route.name === languages['vi'].group) {
           iconName = isFocused ? 'md-bookmarks' : 'md-bookmarks-outline';
         } else if (route.name === languages['vi'].term) {
           iconName = isFocused ? 'md-book' : 'md-book-outline';
@@ -68,13 +68,13 @@ const MyTabBar = ({state, descriptors, navigation}: any) => {
               <IconView
                 name={iconName}
                 size={24}
-                color={isFocused ? Colors.headerColor : Colors.primary}
+                color={isFocused ? Colors.drakCyonBoder : Colors.textPrimary}
               />
             </View>
 
             <Text
               style={[
-                {color: isFocused ? Colors.textPrimary : Colors.primary},
+                {color: isFocused ? Colors.drakCyonBoder : Colors.textPrimary},
               ]}>
               {label}
             </Text>
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: Colors.primaryButton,
     borderTopWidth: 2,
-    // borderColor: Colors.primaryButton,
+    borderColor: Colors.primaryButton,
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 30,

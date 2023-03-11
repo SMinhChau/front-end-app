@@ -1,4 +1,14 @@
-import {StatusBar, StyleSheet, View, Text} from 'react-native';
+import {
+  StatusBar,
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
+
+import Lottie from 'lottie-react-native';
+
 import GlobalStyles from '../../common/styles/GlobalStyles';
 import Colors from '../../Themes/Colors';
 import Header from '../../common/Header';
@@ -6,7 +16,7 @@ import ContentAccount from '../../common/ContentAccount';
 import languages from '../../languages';
 import data from './data';
 import {useAppDispatch, useAppSelector} from '../../redux/hooks';
-import {useEffect} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import majorAPI from '../../redux/apis/major';
 import {
   responsiveFont,
@@ -14,6 +24,9 @@ import {
   responsiveWidth,
 } from '../../utilities/sizeScreen';
 import termrAPI from '../../redux/apis/term';
+import groupAPI from '../../redux/apis/group';
+import {Images} from '../../assets/images/Images';
+import {Json} from '../../assets/jsonAmination/json';
 
 interface data {
   data: data;
@@ -23,13 +36,65 @@ const Home: React.FC<data> = ({}) => {
   const dispatch = useAppDispatch();
 
   const majorState = useAppSelector(state => state.major.major);
-  const userState = useAppSelector(state => state.user.user);
+  const userState = useAppSelector(state => state.user);
   const termState = useAppSelector(state => state.term.term);
+  const groupState = useAppSelector(state => state.group);
 
   useEffect(() => {
-    dispatch(majorAPI.getMajorById()(userState?.majors?.id));
-    dispatch(termrAPI.getLastTerm()(userState?.majors?.id));
+    dispatch(majorAPI.getMajorById()(userState?.user?.majors?.id));
+    dispatch(termrAPI.getLastTerm()(userState?.user?.majors?.id));
   }, [userState]);
+
+  useEffect(() => {
+    dispatch(groupAPI.getMyGroup()(termState?.id));
+  }, [termState]);
+
+  const majorView = useMemo(() => {
+    return (
+      <View style={[styles.contentMenu, GlobalStyles.margin20]}>
+        <View style={[styles.contentMain]}>
+          <Text style={styles.titleMain}>{languages['vi'].special}</Text>
+        </View>
+        <Text style={styles.title}>{majorState?.name}</Text>
+      </View>
+    );
+  }, [majorState]);
+
+  const groupView = useMemo(() => {
+    return (
+      <>
+        <View style={styles.main}>
+          <View
+            style={[
+              styles.contentGroup,
+              GlobalStyles.margin20,
+              GlobalStyles.centerView,
+            ]}>
+            <View style={[styles.contentLogo]}>
+              <Text style={styles.titleLogoGroup}>Xin chào</Text>
+            </View>
+
+            <Text style={[styles.title]}>{userState?.user?.name}</Text>
+          </View>
+
+          {groupState?.group?.id ? (
+            <View style={GlobalStyles.flexDirectionRow}>
+              <Text style={[styles.titleLogoGroup, styles.mainText]}>
+                Nhóm của bạn:
+              </Text>
+              <Text style={[styles.titleLogoGroup, styles.mainText]}>
+                {groupState?.group?.name}
+              </Text>
+            </View>
+          ) : (
+            <Text style={styles.titleLogoGroup}>
+              Bạn chưa có nhóm. Vui lòng chọn nhóm
+            </Text>
+          )}
+        </View>
+      </>
+    );
+  }, [groupState, termState]);
 
   return (
     <View style={GlobalStyles.container}>
@@ -37,19 +102,26 @@ const Home: React.FC<data> = ({}) => {
         barStyle={'dark-content'}
         backgroundColor={Colors.primaryButton}
       />
-      <Header
-        title="Trang chủ"
-        iconLeft={true}
-        home={false}
-        iconRight={true}></Header>
 
-      <ContentAccount></ContentAccount>
+      <View style={styles.containner}>
+        <Header
+          title="Trang chủ"
+          iconLeft={true}
+          home={false}
+          iconRight={true}></Header>
+        <ContentAccount></ContentAccount>
 
-      <View style={[styles.contentMenu, GlobalStyles.margin20]}>
-        <View style={[styles.contentMain]}>
-          <Text style={styles.titleMain}>{languages['vi'].special}</Text>
+        {majorView}
+
+        <View style={styles.bottom}>
+          <Lottie
+            source={require('../../assets/jsonAmination/88012-student-animated-icon.json')}
+            autoPlay
+            loop
+            style={styles.amination}
+          />
+          {groupView}
         </View>
-        <Text style={styles.title}>{majorState?.name}</Text>
       </View>
     </View>
   );
@@ -59,21 +131,34 @@ export default Home;
 const styles = StyleSheet.create({
   formView: {
     paddingHorizontal: responsiveWidth(20),
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.bg,
   },
-
+  containner: {
+    flex: 1,
+    justifyContent: 'space-between',
+    alignContent: 'space-between',
+  },
   contentMenu: {
-    height: responsiveHeight(90),
+    height: responsiveHeight(50),
     padding: 10,
     backgroundColor: Colors.white,
     borderRadius: 10,
     borderColor: Colors.blueBoder,
-    borderWidth: 1,
-    elevation: 2.5,
-    marginTop: 10,
+    borderTopWidth: 1,
+
+    marginVertical: responsiveHeight(10),
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
+  },
+
+  contentGroup: {
+    padding: 10,
+    backgroundColor: Colors.primaryButton,
+    borderRadius: 5,
+    borderColor: Colors.blueBoder,
+    marginBottom: 10,
+    borderTopWidth: 1,
   },
   contentMain: {
     position: 'absolute',
@@ -82,18 +167,63 @@ const styles = StyleSheet.create({
     padding: 3,
     borderWidth: 1,
     backgroundColor: Colors.primary,
-    borderRadius: 10,
+    borderTopRightRadius: 10,
+    borderBottomLeftRadius: 10,
     borderColor: Colors.blueBoder,
+  },
+  contentLogo: {
+    position: 'absolute',
+    top: -20,
+    left: 2,
+    padding: 3,
+    borderWidth: 1,
+    backgroundColor: Colors.drakCyonBoder,
+    borderTopRightRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderColor: Colors.rosyBrown,
   },
   titleMain: {
     fontSize: responsiveFont(17),
     color: Colors.textPrimary,
     fontWeight: '400',
+    paddingHorizontal: responsiveWidth(10),
   },
   title: {
     fontSize: responsiveFont(18),
     color: Colors.rosyBrown,
     fontWeight: '500',
+
     textDecorationStyle: 'double',
+  },
+  titleLogoGroup: {
+    fontSize: responsiveFont(17),
+    color: Colors.textPrimary,
+    fontWeight: '400',
+    paddingHorizontal: responsiveWidth(10),
+    textDecorationStyle: 'double',
+  },
+  bottom: {
+    backgroundColor: '#caf0f8',
+    borderWidth: 1,
+    borderRadius: 10,
+    marginBottom: responsiveHeight(20),
+    marginHorizontal: responsiveWidth(10),
+    borderColor: Colors.blueBoder,
+  },
+  mainText: {
+    fontWeight: '500',
+    textDecorationStyle: 'solid',
+  },
+
+  amination: {
+    width: responsiveWidth(60),
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    position: 'relative',
+    top: -20,
+  },
+  main: {
+    position: 'relative',
+    top: responsiveHeight(-35),
   },
 });

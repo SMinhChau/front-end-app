@@ -2,8 +2,10 @@ import {axiosAuth} from '../utilities/axiosConfig';
 
 class GroupService {
   getMyGroup(termId: number) {
+    console.log(' getMyGroup termId', termId);
+
     return axiosAuth({
-      url: 'api/student/groups/me/' + termId,
+      url: `api/student/groups/me?termId=${termId}`,
       method: 'get',
     });
   }
@@ -13,9 +15,9 @@ class GroupService {
       method: 'get',
     });
   }
-  getListGroup(termId: number, topicId: number) {
+  getListGroup(termId: number) {
     return axiosAuth({
-      url: 'api/student/groups/' + termId + topicId,
+      url: `api/student/groups?termId=${termId}`,
       method: 'get',
     });
   }

@@ -3,7 +3,8 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import AccountStackNavigator from './Navigators/AccountStack';
-import EvaluationNavigator from './Navigators/EvaluationStack';
+import GroupStackNavigator from './Navigators/GroupStack';
+
 import HomeStackNavigator from './Navigators/HomeStack';
 import TermsStackNavigator from './Navigators/TermsStack';
 
@@ -18,8 +19,8 @@ const tabScreens = [
     component: HomeStackNavigator,
   },
   {
-    name: RouteNames.EvaluationTab,
-    component: EvaluationNavigator,
+    name: RouteNames.GroupTab,
+    component: GroupStackNavigator,
   },
   {
     name: RouteNames.TermsTab,

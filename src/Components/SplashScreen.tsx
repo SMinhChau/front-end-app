@@ -1,5 +1,12 @@
 import {useEffect} from 'react';
-import {ActivityIndicator, View, Text, StyleSheet, Image} from 'react-native';
+import {
+  ActivityIndicator,
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  StatusBar,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Logo from '../common/logo';
 import GlobalStyles from '../common/styles/GlobalStyles';
@@ -25,7 +32,7 @@ const SplashScreen = () => {
     );
 
     const token = await tokenService.getRefreshToken();
-    if (token && userState.id === '') {
+    if (token && userState?.id !== null) {
       dispatch(authAPI.getInfo()());
       navigation.navigate('TabNavigation');
     } else navigation.navigate(RouteNames.loginNavigation);

@@ -15,8 +15,10 @@ class AuthAPI {
     return createAsyncThunk(
       'user/login',
       async (data: {username: string; password: string}, thunkAPI) => {
+        console.log('authService.login(data)', data);
         const result = await authService.login(data);
-        console.log('authService.login(data)', result.data);
+        console.log('result', result);
+
         if (result.status === 200) {
           await tokenService.setAccessToken(result.data.accessToken);
 

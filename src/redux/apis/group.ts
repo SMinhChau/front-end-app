@@ -8,6 +8,15 @@ class GroupAPI {
       if (result.status === 200) return result.data;
     });
   }
+
+  getGroupById() {
+    return createAsyncThunk('group/get-group-by-id', async (id: number) => {
+      console.log('group/get-group-by-id ', id);
+      const result = await groupService.getGroupById(id);
+      console.log('group/get-group-by-id result', result);
+      if (result.status === 200) return result.data;
+    });
+  }
 }
 
 const groupAPI = new GroupAPI();

@@ -76,13 +76,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contentInfor: {
-    height: responsiveHeight(390),
-    padding: 10,
+    height: responsiveHeight(360),
+    padding: responsiveHeight(10),
     backgroundColor: Colors.white,
   },
   imgaAvatar: {
     width: responsiveWidth(65),
-    height: responsiveHeight(80),
+    height: responsiveHeight(70),
     resizeMode: 'contain',
     borderRadius: 40,
     margin: 15,

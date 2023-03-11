@@ -7,7 +7,7 @@ import {
   View,
   StyleSheet,
   Alert,
-  ToastAndroid,
+  Image,
   KeyboardAvoidingView,
   ScrollView,
   ActivityIndicator,
@@ -19,22 +19,30 @@ import Colors from '../../Themes/Colors';
 import Header from '../../common/Header';
 import React, {useEffect, useRef, useState} from 'react';
 import {Formik, FormikErrors, FormikProps, withFormik} from 'formik';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import ButtonView from '../../common/ButtonView';
 import GlobalStyles from '../../common/styles/GlobalStyles';
 
 import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 import authAPI from '../../redux/apis/auth';
 import NotifyModel from '../../common/NotifyModel';
-import {isIOS, responsiveHeight} from '../../utilities/sizeScreen';
-import TextContent from '../../common/TextContent';
-import tokenService from '../../services/token';
+import {
+  isIOS,
+  responsiveHeight,
+  responsiveWidth,
+} from '../../utilities/sizeScreen';
 
 const Login: React.FC<{}> = () => {
   const userState = useAppSelector(state => state.user);
 
   const userNameRef = useRef();
+  const [textPass, setTextPass] = useState(false);
+  const [getPassVisible, setPassVisible] = useState(false);
 
   useEffect(() => {
+    console.log('userState', userState);
+
     if (userState.is_login) {
       navigation.navigate('TabNavigation');
     } else {
@@ -67,6 +75,10 @@ const Login: React.FC<{}> = () => {
     password: '',
   };
 
+  const handleChanText = () => {
+    setTextPass(!textPass);
+  };
+
   const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
     const {
       touched,
@@ -85,6 +97,10 @@ const Login: React.FC<{}> = () => {
         onSubmit={values => console.log(values)}>
         {() => (
           <>
+            <View style={styles.viewInput}>
+              <Ionicons name={'md-person'} color={Colors.iconbr} size={16} />
+            </View>
+
             <TextInput
               onChangeText={handleChange('username')}
               onBlur={handleBlur('username')}
@@ -98,14 +114,22 @@ const Login: React.FC<{}> = () => {
               <Text style={GlobalStyles.textError}>{errors.username}</Text>
             )}
 
+            <View style={styles.viewInput}>
+              <Ionicons name={'key'} color={Colors.iconbr} size={16} />
+            </View>
+
             <TextInput
               onChangeText={handleChange('password')}
               placeholder={'Mật khẩu'}
               onBlur={handleBlur('password')}
-              value={values.password}
-              secureTextEntry
+              secureTextEntry={true}
               style={styles.input}
+              autoCapitalize="none"
+              keyboardAppearance="dark"
+              returnKeyType="go"
+              returnKeyLabel="go"
             />
+
             {touched.password && errors.password && (
               <Text style={GlobalStyles.textError}>{errors.password}</Text>
             )}
@@ -115,6 +139,7 @@ const Login: React.FC<{}> = () => {
                 <Text style={GlobalStyles.rememberText}>Quên mật khẩu?</Text>
               </TouchableOpacity>
             </View>
+
             {/* 
             {isLoading && (
               <View style={{flex: 1}}>
@@ -198,6 +223,7 @@ const Login: React.FC<{}> = () => {
         backgroundColor={Colors.primaryButton}
       />
       <Header title="Đăng nhập"></Header>
+
       <ScrollView>
         <KeyboardAvoidingView
           style={{flex: 1}}
@@ -225,15 +251,16 @@ const styles = StyleSheet.create({
   formView: {
     paddingTop: 150,
     paddingHorizontal: 20,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.bg,
   },
   input: {
     borderRadius: 10,
     borderWidth: 2,
     borderColor: Colors.primary,
-    paddingHorizontal: 15,
+    paddingHorizontal: responsiveWidth(30),
     marginTop: 25,
     fontSize: 16,
+    backgroundColor: Colors.white,
   },
 
   buttonRegister: {
@@ -241,5 +268,13 @@ const styles = StyleSheet.create({
   },
   btnPass: {
     marginTop: 5,
+  },
+  viewInput: {
+    width: responsiveWidth(13),
+    position: 'relative',
+    top: responsiveHeight(60),
+    left: 9,
+    zIndex: 99999,
+    backgroundColor: Colors.white,
   },
 });

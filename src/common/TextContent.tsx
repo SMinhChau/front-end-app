@@ -3,13 +3,14 @@ import {TextInput, View, StyleSheet} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 interface Props {
-  icon?: any;
+  icon?: string;
   error: String;
   touched: any;
+  ref: any;
 }
 
 const TextContent = forwardRef(
-  ({icon, error, touched, ...otherProps}: Props, ref) => {
+  ({icon, error, touched, ...otherProps, ref}: Props) => {
     const validationColor = !touched
       ? '#0573ff'
       : error

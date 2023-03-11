@@ -1,6 +1,6 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {combineReducers, configureStore} from '@reduxjs/toolkit';
-import {persistReducer, persistStore} from 'redux-persist';
+import {configureStore} from '@reduxjs/toolkit';
+
+import {GroupSlices} from './slices/GroupSlices';
 import {MajorSlices} from './slices/MajorSlices';
 import {TermSlices} from './slices/TermSlices';
 import {userSlice} from './slices/UserSlices';
@@ -12,6 +12,7 @@ export const store = configureStore({
     user: userSlice.reducer,
     major: MajorSlices.reducer,
     term: TermSlices.reducer,
+    group: GroupSlices.reducer,
   },
 });
 
