@@ -9,7 +9,7 @@ export default interface Group {
   };
   members: [
     {
-      id: 6;
+      id: number;
       student: {
         id: number;
         username: string;

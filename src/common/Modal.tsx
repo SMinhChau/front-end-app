@@ -1,17 +1,59 @@
 import React from 'react';
-import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
-interface Props {}
+import {
+  Modal,
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  KeyboardAvoidingView,
+} from 'react-native';
+import Colors from '../Themes/Colors';
+import {
+  responsiveFont,
+  responsiveHeight,
+  responsiveWidth,
+} from '../utilities/sizeScreen';
+import CloseButton from './CloseButton';
+interface Props {
+  title: string;
+  onPressClose: () => void;
+  children: any;
+}
 
-const Modal: React.FC<Props> = ({}) => {
-  return <View style={styles.content}></View>;
+const ModalView: React.FC<Props> = ({title, onPressClose, children}) => {
+  return (
+    <Modal visible transparent animationType={'slide'}>
+      <View style={{backgroundColor: Colors.white}}>
+        <Text style={styles.title}>{title}</Text>
+        <CloseButton style={styles.logo} onPress={onPressClose} />
+      </View>
+      <ScrollView>
+        <KeyboardAvoidingView
+          style={[styles.content]}
+          keyboardVerticalOffset={responsiveHeight(200)}
+          behavior={'padding'}>
+          {children}
+        </KeyboardAvoidingView>
+      </ScrollView>
+    </Modal>
+  );
 };
-export default Modal;
+export default ModalView;
 
 const styles = StyleSheet.create({
+  title: {
+    fontSize: responsiveFont(20),
+    color: Colors.textPrimary,
+    textAlign: 'center',
+    backgroundColor: Colors.white,
+    margin: responsiveHeight(20),
+  },
+  logo: {
+    top: responsiveWidth(17),
+  },
   content: {
-    width: '90%',
-    height: '80%',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    flex: 1,
+    backgroundColor: Colors.red,
+    paddingHorizontal: responsiveWidth(16),
   },
 });

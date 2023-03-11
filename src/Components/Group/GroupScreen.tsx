@@ -9,10 +9,12 @@ import {
   ScrollView,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
+import Lottie from 'lottie-react-native';
 import Header from '../../common/Header';
 import IconView from '../../common/IconView';
 import Logo from '../../common/logo';
 import GlobalStyles from '../../common/styles/GlobalStyles';
+import languages from '../../languages';
 import groupAPI from '../../redux/apis/group';
 import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 import {TermSlices} from '../../redux/slices/TermSlices';
@@ -27,11 +29,13 @@ import {
 } from '../../utilities/sizeScreen';
 import NoneData from '../Section/NoneData';
 import GroupItem from './components/GroupItem';
+import ModalInfoGroup from './components/ModalInfoGroup';
 
 const Group: React.FC<{}> = () => {
   const groupState = useAppSelector(state => state.group);
   const termState = useAppSelector(state => state.term);
   const userState = useAppSelector(state => state.user);
+  console.log('groupState', groupState);
 
   const [checkStartDate, setcheckStartDate] = useState(false);
   const [listGroup, setListGroup] = useState();
@@ -39,8 +43,10 @@ const Group: React.FC<{}> = () => {
   const [listMenber, setListMember] = useState<User[]>([]);
   const [isMyGroup, setMyGroup] = useState(false);
 
+  const [showModal, setShowModal] = useState(false);
+
   const checkTermStart = () => {
-    const start = new Date(termState?.term.startDate);
+    const start = new Date(termState?.term?.startDate);
     const nowDate = new Date();
     if (start < nowDate) {
       setcheckStartDate(true);
@@ -63,25 +69,20 @@ const Group: React.FC<{}> = () => {
 
   const getGroupInfoById = (id: number) => {
     groupService.getGroupById(id).then(result => {
-      console.log('result', result);
+      console.log('getGroupInfoById result', result);
       if (result.data.members.length < 2) {
         setListMember(result.data.members);
-        console.log('result.data.members', result.data.members);
         listMenber.forEach((i: any) => {
-          console.log('i.student.id  ', i.student.id);
-          console.log('userState.user.id ', userState.user.id);
           if (i.student.id !== userState.user.id) {
             setJoinGroup(true);
-            console.log('isJoinGroup result', isJoinGroup);
           } else {
             setJoinGroup(false);
-            console.log('isJoinGroup false result', isJoinGroup);
           }
         });
       }
     });
   };
-  console.log('isJoinGroup ->', isJoinGroup);
+
   const getGroupInfo = () => {
     console.log();
   };
@@ -89,7 +90,10 @@ const Group: React.FC<{}> = () => {
   const GroupView = useMemo(() => {
     return (
       <TouchableOpacity
-        onPress={() => getGroupInfo()}
+        onPress={() => {
+          checkShowModal();
+          getGroupInfo();
+        }}
         style={[styles.content, GlobalStyles.margin20]}>
         {groupState?.group?.name ? (
           <>
@@ -127,11 +131,6 @@ const Group: React.FC<{}> = () => {
     [isJoinGroup],
   );
 
-  // const renderGroupList = (item: any) => {
-  //   getGroupInfoById(item?.id);
-  //   return <GroupItem join={isJoinGroup} title={item?.name} />;
-  // };
-
   const ListGroup = useMemo(() => {
     return (
       <View style={[styles.bottomContent]}>
@@ -140,6 +139,12 @@ const Group: React.FC<{}> = () => {
             <IconView name="people-sharp" color={Colors.iconbr} size={26} />
           </View>
           <Text style={styles.titleGroup}>Danh sách nhóm</Text>
+          <Lottie
+            source={require('../../assets/jsonAmination/62114-people-icons-lottie-animation.json')}
+            autoPlay
+            loop
+            style={styles.amination}
+          />
         </View>
 
         <View style={[styles.flatList]}>
@@ -153,7 +158,13 @@ const Group: React.FC<{}> = () => {
         </View>
       </View>
     );
-  }, [groupState, listGroup]);
+  }, [listGroup]);
+
+  const checkShowModal = () => {
+    if (!showModal) {
+      setShowModal(!showModal);
+    }
+  };
 
   return (
     <>
@@ -171,6 +182,17 @@ const Group: React.FC<{}> = () => {
           </>
         ) : (
           <NoneData icon title="Chưa đến thời gian chọn nhóm"></NoneData>
+        )}
+
+        {showModal && (
+          <ModalInfoGroup
+            infoGroup={groupState?.group}
+            title={'Thông tin nhóm'}
+            onPressClose={() => {
+              console.log('ModalInfoGroup');
+
+              setShowModal(false);
+            }}></ModalInfoGroup>
         )}
       </View>
     </>
@@ -240,5 +262,8 @@ const styles = StyleSheet.create({
   flatList: {
     width: '100%',
     flex: 1,
+  },
+  amination: {
+    right: responsiveWidth(-150),
   },
 });
