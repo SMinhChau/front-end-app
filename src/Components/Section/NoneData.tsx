@@ -27,6 +27,7 @@ export default NoneData;
 const styles = StyleSheet.create({
   sectionContainer: {
     flex: 1,
+    borderRadius: 10,
     backgroundColor: '#eaf4f4',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -35,6 +36,7 @@ const styles = StyleSheet.create({
   textView: {
     textAlign: 'center',
     fontSize: responsiveFont(17),
+    paddingHorizontal: responsiveWidth(10),
     color: Colors.drakCyonBoder,
     fontWeight: '400',
   },
@@ -43,6 +45,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: responsiveWidth(5),
     paddingVertical: responsiveHeight(10),
-    marginRight: responsiveWidth(10),
   },
 });

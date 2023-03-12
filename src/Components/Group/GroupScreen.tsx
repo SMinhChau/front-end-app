@@ -35,7 +35,6 @@ const Group: React.FC<{}> = () => {
   const groupState = useAppSelector(state => state.group);
   const termState = useAppSelector(state => state.term);
   const userState = useAppSelector(state => state.user);
-  console.log('groupState', groupState);
 
   const [checkStartDate, setcheckStartDate] = useState(false);
   const [listGroup, setListGroup] = useState();
@@ -56,7 +55,7 @@ const Group: React.FC<{}> = () => {
   useEffect(() => {
     checkTermStart();
     getListGroup();
-  }, [checkStartDate]);
+  }, [checkStartDate, termState]);
 
   const getListGroup = async () => {
     await groupService
@@ -69,9 +68,9 @@ const Group: React.FC<{}> = () => {
 
   const getGroupInfoById = (id: number) => {
     groupService.getGroupById(id).then(result => {
-      console.log('getGroupInfoById result', result);
       if (result.data.members.length < 2) {
         setListMember(result.data.members);
+        console.log('>>>>>>>>>>>getGroupInfoById result.data', result.data);
         listMenber.forEach((i: any) => {
           if (i.student.id !== userState.user.id) {
             setJoinGroup(true);
@@ -120,11 +119,10 @@ const Group: React.FC<{}> = () => {
         )}
       </TouchableOpacity>
     );
-  }, []);
+  }, [groupState]);
 
   const renderGroupList = useMemo(
     () => (item: any) => {
-      console.log('renderGroupList', item);
       getGroupInfoById(item?.id);
       return <GroupItem join={isJoinGroup} title={item?.name} />;
     },

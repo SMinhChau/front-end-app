@@ -67,10 +67,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   left: {
-    width: '26%',
+    width: '30%',
   },
   right: {
-    width: '73%',
+    width: '70%',
   },
   container: {
     flexDirection: 'column',

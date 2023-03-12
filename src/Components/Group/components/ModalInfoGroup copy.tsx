@@ -22,9 +22,6 @@ import {
 } from '../../../utilities/sizeScreen';
 import TextItemAccount from '../../Account/component/TextItemAccount';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
-import Topic from '../../../utilities/Contant/Topic';
-import topicService from '../../../services/topic';
-import NoneData from '../../Section/NoneData';
 
 interface Props {
   title: string;
@@ -63,21 +60,10 @@ const ModalInfoGroup: React.FC<Props> = ({
 }) => {
   const [listMember, setListMember] = useState<[Member]>();
   const [isMore, setShowMore] = useState(false);
-  const [topic, setTopic] = useState<Topic>();
 
   useEffect(() => {
     setListMember(infoGroup?.members);
   }, [listMember]);
-
-  const getTopicForGroup = () => {
-    topicService
-      .getMajorById(infoGroup?.topic?.id ? infoGroup?.topic?.id : 3)
-      .then(result => {
-        console.log('getTopicForGroup>>.. result', result);
-        setTopic(result?.data);
-      })
-      .catch(error => console.log('getTopicForGroup>>.. error', error));
-  };
 
   const renderListMember = useMemo(
     () => (item: any) => {
@@ -100,9 +86,7 @@ const ModalInfoGroup: React.FC<Props> = ({
               textRight={item?.student?.name}></TextItemAccount>
             <TextItemAccount
               textLeft={languages['vi'].gender}
-              textRight={
-                item?.student?.gender === 'male' ? 'Nam' : 'Nữ'
-              }></TextItemAccount>
+              textRight={item?.student?.gender}></TextItemAccount>
             <TextItemAccount
               textLeft={languages['vi'].numberPhone}
               textRight={item?.student?.phoneNumber}></TextItemAccount>
@@ -117,31 +101,9 @@ const ModalInfoGroup: React.FC<Props> = ({
   );
 
   const renderInfoTopic = useMemo(() => {
-    getTopicForGroup();
-
     return (
       <View style={styles.contenMember}>
-        <View style={styles.leftContent}></View>
-        <View style={styles.rightContent}>
-          <TextItemAccount
-            textLeft={languages['vi'].name}
-            textRight={topic?.name}></TextItemAccount>
-          <TextItemAccount
-            textLeft={languages['vi'].description}
-            textRight={topic?.description}></TextItemAccount>
-          <TextItemAccount
-            textLeft={languages['vi'].requireInput}
-            textRight={topic?.requireInput}></TextItemAccount>
-          <TextItemAccount
-            textLeft={languages['vi'].requireInput}
-            textRight={topic?.requireInput}></TextItemAccount>
-          <TextItemAccount
-            textLeft={languages['vi'].target}
-            textRight={topic?.target}></TextItemAccount>
-          <TextItemAccount
-            textLeft={languages['vi'].status}
-            textRight={topic?.status}></TextItemAccount>
-        </View>
+        <Text>Thoong tin de tai</Text>
       </View>
     );
   }, []);
@@ -171,17 +133,9 @@ const ModalInfoGroup: React.FC<Props> = ({
           />
         </View>
 
-        <Text style={[styles.titleGroup, {marginVertical: 5}]}>
+        <Text style={[styles.titleGroup, {marginTop: 5}]}>
           Thông tin đề Tài
         </Text>
-
-        {/* {infoGroup?.topic?.id ? (
-          {renderInfoTopic}
-        ) : (
-          <>
-            <NoneData icon title="Nhóm của bạn chưa có Đề tài"></NoneData>
-          </>
-        )} */}
 
         {renderInfoTopic}
       </View>

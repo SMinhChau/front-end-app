@@ -26,5 +26,13 @@ export default {
     typeTraining: 'Loại hình',
     updateInfo: 'Cập nhật thông tin',
     update: 'Cập nhật',
+    nameTopic: 'Tên',
+    note: 'Ghi chú',
+    status: 'Trạng thái',
+    quantityGroupMax: 'Thành viên tối đa',
+    requireInput: 'Yêu cầu đầu vào',
+    standradOutput: 'Yêu cầu cần đạt được',
+    description: 'Mô tả',
+    target: 'target',
   },
 };
