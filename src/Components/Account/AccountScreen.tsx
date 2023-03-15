@@ -82,7 +82,7 @@ const Account: React.FC<{}> = () => {
         <View style={styles.main}>
           <TextItemAccount
             textLeft={languages['vi'].gender}
-            textRight={userState?.gender}
+            textRight={userState?.gender === 'male' ? 'Nam' : 'Nữ'}
             line={true}></TextItemAccount>
 
           <TextItemAccount
@@ -122,11 +122,7 @@ const Account: React.FC<{}> = () => {
   };
   return (
     <>
-      <Header
-        title="Thông tin"
-        // iconLeft={true}
-        // home={true}
-        iconRight={true}></Header>
+      <Header title="Thông tin" iconRight={true}></Header>
 
       <View style={[GlobalStyles.container, styles.content]}>
         <View style={[styles.update]}>

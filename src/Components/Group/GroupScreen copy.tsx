@@ -134,6 +134,21 @@ const Group: React.FC<{}> = () => {
 
   const renderGroupList = useMemo(
     () => (item: any) => {
+      // groupService.getGroupById(item?.id).then(result => {
+      //   setListMember(result.data.members);
+      //   if (result.data.members.length < 2) {
+      //     console.log('>item?.id', item?.id);
+      //     console.log('>groupState?.group?.id>', groupState?.group?.id);
+      //   } else {
+      //     setJoinGroup(true);
+      //   }
+
+      //   // listMenber.findIndex((i: any) => {
+      //   //   if (i?.id === groupState?.group?.id) {
+
+      //   // });
+      // });
+
       return (
         <GroupItem
           onPress={() => {
@@ -146,7 +161,7 @@ const Group: React.FC<{}> = () => {
         />
       );
     },
-    [],
+    [isJoinGroup],
   );
 
   const getTopicForGroup = useCallback((id: any) => {

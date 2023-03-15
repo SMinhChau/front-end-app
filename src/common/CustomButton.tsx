@@ -40,15 +40,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    backgroundColor: Colors.blueBoder,
+    backgroundColor: '#38b000',
     paddingHorizontal: responsiveWidth(16),
-    paddingVertical: responsiveHeight(16),
-    width: responsiveWidth(120),
+    paddingVertical: responsiveHeight(10),
   },
   textStyle: {
     fontSize: 17,
     fontWeight: '400',
     textAlign: 'center',
-    color: Colors.textPrimary,
+    color: Colors.grayLight,
   },
 });

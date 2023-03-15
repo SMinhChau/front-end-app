@@ -1,17 +1,6 @@
 import React, {useState} from 'react';
-import {
-  TouchableOpacity,
-  View,
-  Text,
-  StyleSheet,
-  Modal,
-  ScrollView,
-  KeyboardAvoidingView,
-  TextInput,
-  Image,
-} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 
-import {Formik, FormikErrors, FormikProps, withFormik} from 'formik';
 import CloseButton from '../../../common/CloseButton';
 import Colors from '../../../Themes/Colors';
 import {
@@ -20,15 +9,20 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from '../../../utilities/sizeScreen';
-import DropDownPicker from 'react-native-dropdown-picker';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useAppSelector} from '../../../redux/hooks';
+
+import {
+  HelperText,
+  Modal,
+  Portal,
+  Provider,
+  RadioButton,
+  TextInput,
+} from 'react-native-paper';
 import languages from '../../../languages';
 import CustomButton from '../../../common/CustomButton';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
-import {useAppSelector} from '../../../redux/hooks';
-import {Images} from '../../../assets/images/Images';
-import TextItemAccount from './TextItemAccount';
 
 interface Props {
   title: string;
@@ -45,191 +39,124 @@ interface FormValues {
   schoolYear: string;
 }
 
-interface MyFormProps {
-  initialUserName?: string;
-}
-
 const ModalAccount: React.FC<Props> = ({title, onPressClose}) => {
   const userState = useAppSelector(state => state.user.user);
+  const [checked, setChecked] = useState('male');
 
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: 'Apple', value: 'apple'},
-    {label: 'Banana', value: 'banana'},
-  ]);
+  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
 
-  const initialValues = {
-    username: '',
-    avatar: '',
-    phoneNumber: '',
-    email: '',
-    name: '',
-    gender: '',
-    typeTraining: '',
-    schoolYear: '',
+  const [gender, setGender] = useState('');
+  const [schoolYear, setSchoolYear] = useState('');
+  const [special, setSpecial] = useState('');
+
+  const [typeTraining, setTypeTraining] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+
+  const [email, setEmail] = useState('');
+
+  const onChangeText = (text: string) => setUsername(text);
+
+  const hasErrors = () => {
+    return !username.includes('');
   };
 
-  const InnerForm = (props: FormikProps<FormValues>) => {
-    const {
-      touched,
-      errors,
-      values,
-      handleChange,
-      setFieldTouched,
-      isValid,
-      handleBlur,
-      handleSubmit,
-      isSubmitting,
-    } = props;
-    return (
-      <Formik
-        initialValues={initialValues}
-        onSubmit={values => console.log(values)}>
-        {() => (
-          <>
-            <View style={styles.top}>
-              <Image
-                source={
-                  userState?.avatar ? {uri: userState?.avatar} : Images.avatar
-                }
-                style={styles.imgaAvatar}
-              />
+  const handleSubmitForm = () => {};
+  return (
+    <Portal>
+      <Modal visible>
+        <View style={{backgroundColor: Colors.white}}>
+          <Text style={styles.title}>{title}</Text>
+          <CloseButton style={styles.logo} onPress={onPressClose} />
+        </View>
+        <ScrollView>
+          <View style={styles.contentForm}>
+            <TextInput
+              disabled
+              placeholder={userState?.name}
+              label={languages['vi'].code}
+              style={styles.inputDefault}
+              value={userState?.username}
+              onChangeText={onChangeText}
+            />
 
-              <View style={styles.topLeft}>
-                <Text style={styles.inputDisable}>{languages['vi'].code}:</Text>
-                <TextInput
-                  editable={false}
-                  selectTextOnFocus={false}
-                  placeholder={userState.username}
-                  value={userState.username}
-                  style={styles.inputDisable}
-                />
+            <TextInput
+              placeholder={userState?.name}
+              label={languages['vi'].name}
+              style={styles.inputDefault}
+              value={name}
+              onChangeText={onChangeText}
+            />
+            {/* <HelperText type="error" visible={hasErrors()}>
+              Email address is invalid!
+            </HelperText> */}
+
+            <View style={styles.contentRadio}>
+              <Text style={styles.lable}>{languages['vi'].gender}</Text>
+              <View style={styles.leftRadio}>
+                <View style={styles.rowRadio}>
+                  <RadioButton
+                    value="male"
+                    color={Colors.primaryButton}
+                    status={checked === 'male' ? 'checked' : 'unchecked'}
+                    onPress={() => setChecked('male')}
+                  />
+                  <Text style={styles.lable}>Nam</Text>
+                </View>
+
+                <View style={styles.rowRadio}>
+                  <RadioButton
+                    value="female"
+                    color={Colors.primaryButton}
+                    status={checked === 'female' ? 'checked' : 'unchecked'}
+                    onPress={() => setChecked('female')}
+                  />
+                  <Text style={styles.lable}>Nữ</Text>
+                </View>
               </View>
             </View>
 
-            <TextItemAccount textLeft={languages['vi'].name}>
-              <TextInput
-                onChangeText={handleChange('name')}
-                onBlur={handleBlur('name')}
-                placeholder={userState.name}
-                value={values.name}
-                style={styles.inputDDefault}
-              />
-              {touched.name && errors.name && (
-                <Text style={GlobalStyles.textError}>{errors.name}</Text>
-              )}
-            </TextItemAccount>
+            <TextInput
+              placeholder={userState?.schoolYear}
+              label={languages['vi'].schoolYear}
+              style={styles.inputDefault}
+              value={schoolYear}
+              onChangeText={onChangeText}
+            />
 
-            <TextItemAccount textLeft={languages['vi'].numberPhone}>
-              <TextInput
-                onChangeText={handleChange('phoneNumber')}
-                onBlur={handleBlur('phoneNumber')}
-                placeholder={userState.phoneNumber}
-                value={values.phoneNumber}
-                style={styles.inputDDefault}
-              />
-              {touched.phoneNumber && errors.phoneNumber && (
-                <Text style={GlobalStyles.textError}>{errors.phoneNumber}</Text>
-              )}
-            </TextItemAccount>
+            <TextInput
+              placeholder={userState?.typeTraining}
+              label={languages['vi'].typeTraining}
+              style={styles.inputDefault}
+              value={typeTraining}
+              onChangeText={onChangeText}
+            />
+            <TextInput
+              placeholder={userState?.phoneNumber}
+              label={languages['vi'].numberPhone}
+              style={styles.inputDefault}
+              value={phoneNumber}
+              onChangeText={onChangeText}
+            />
 
-            <TextItemAccount textLeft={languages['vi'].email}>
-              <TextInput
-                onChangeText={handleChange('email')}
-                onBlur={handleBlur('email')}
-                placeholder={userState.email}
-                value={values.email}
-                style={styles.inputDDefault}
-              />
-              {touched.email && errors.email && (
-                <Text style={GlobalStyles.textError}>{errors.email}</Text>
-              )}
-            </TextItemAccount>
-
-            <TextItemAccount textLeft={languages['vi'].gender}>
-              <TextInput
-                onChangeText={handleChange('gender')}
-                onBlur={handleBlur('gender')}
-                placeholder={userState.gender}
-                value={values.gender}
-                style={styles.inputDDefault}
-              />
-            </TextItemAccount>
-
-            <TextItemAccount textLeft={languages['vi'].schoolYear}>
-              <TextInput
-                editable={false}
-                selectTextOnFocus={false}
-                onChangeText={handleChange('schoolYear')}
-                onBlur={handleBlur('schoolYear')}
-                placeholder={userState.schoolYear}
-                value={userState.schoolYear}
-                style={styles.inputDDefault}
-              />
-            </TextItemAccount>
-
-            <TextItemAccount textLeft={languages['vi'].typeTraining}>
-              <TextInput
-                editable={false}
-                selectTextOnFocus={false}
-                onChangeText={handleChange('typeTraining')}
-                onBlur={handleBlur('typeTraining')}
-                placeholder={userState.typeTraining}
-                value={userState.typeTraining}
-                style={styles.inputDDefault}
-              />
-            </TextItemAccount>
+            <TextInput
+              placeholder={userState?.email}
+              label={languages['vi'].email}
+              style={styles.inputDefault}
+              value={email}
+              onChangeText={onChangeText}
+            />
 
             <View style={styles.viewBtn}>
               <CustomButton
-                onPress={handleSubmit}
+                onPress={() => handleSubmitForm()}
                 style={styles.btn}
                 title={languages['vi'].update}></CustomButton>
             </View>
-          </>
-        )}
-      </Formik>
-    );
-  };
-
-  const MyForm = withFormik<MyFormProps, FormValues>({
-    // Add a custom validation function (this can be async too!)
-    validate: (values: FormValues) => {
-      let errors: FormikErrors<FormValues> = {};
-      // if (!values.name) {
-      //   errors.name = 'Vui lòng nhập tên!';
-      // }
-      // if (!values.email) {
-      //   errors.email = 'Vui lòng nhập email!';
-      // } else if (
-      //   !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-      // ) {
-      //   errors.email = 'Định dạng email không đúng!';
-      // }
-      return errors;
-    },
-
-    handleSubmit: values => {
-      console.log('handleSubmit - value', values);
-    },
-  })(InnerForm);
-
-  return (
-    <Modal visible transparent animationType={'slide'}>
-      <View style={{backgroundColor: Colors.white}}>
-        <Text style={styles.title}>{title}</Text>
-        <CloseButton style={styles.logo} onPress={onPressClose} />
-      </View>
-      <ScrollView>
-        <KeyboardAvoidingView
-          style={[styles.content]}
-          keyboardVerticalOffset={responsiveHeight(200)}
-          behavior={'padding'}>
-          <MyForm />
-        </KeyboardAvoidingView>
-      </ScrollView>
-    </Modal>
+          </View>
+        </ScrollView>
+      </Modal>
+    </Portal>
   );
 };
 export default ModalAccount;
@@ -277,11 +204,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-  inputDDefault: {
+  inputDefault: {
     borderRadius: 10,
     borderWidth: 2,
     borderColor: Colors.primary,
+    backgroundColor: Colors.white,
+    marginBottom: responsiveHeight(10),
     paddingHorizontal: responsiveWidth(15),
+    marginHorizontal: responsiveWidth(15),
     fontSize: 16,
   },
   inputDisable: {
@@ -307,5 +237,32 @@ const styles = StyleSheet.create({
   },
   btn: {
     margin: responsiveHeight(16),
+  },
+  contentForm: {
+    backgroundColor: Colors.white,
+  },
+  contentRadio: {
+    flexDirection: 'column',
+    paddingHorizontal: responsiveWidth(16),
+    paddingVertical: responsiveHeight(16),
+  },
+  viewRadio: {
+    paddingHorizontal: responsiveWidth(10),
+    flexDirection: 'row',
+  },
+
+  leftRadio: {
+    flexDirection: 'row',
+    width: '50%',
+    justifyContent: 'space-around',
+  },
+  lable: {
+    color: Colors.textPrimary,
+    fontSize: responsiveFont(14),
+    fontWeight: '400',
+  },
+  rowRadio: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

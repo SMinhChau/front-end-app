@@ -5,7 +5,7 @@ export default interface Topic {
   description: string;
   note: string;
   target: string;
-  standradutput: string;
+  standradOutput: string;
   requireInput: string;
   comment: string;
   status: string;

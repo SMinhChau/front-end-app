@@ -1,7 +1,5 @@
 import {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {Button, Modal, Portal} from 'react-native-paper';
-import CloseButton from '../../../common/CloseButton';
 import IconView from '../../../common/IconView';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
 import {useAppSelector} from '../../../redux/hooks';
@@ -37,42 +35,46 @@ const GroupItem: React.FC<Props> = ({
   console.log('GroupItem groupInfo', groupInfo);
   const groupState = useAppSelector(state => state.group);
   const [isJoinGroup, setJoinGroup] = useState(false);
-  const [infoGroupItem, setInfoGroupItem] = useState<Group>();
-
+  const [infoGroup, setInfoGroup] = useState<Group>();
+  const [showModal, setShowModal] = useState(false);
   const [topic, setTopic] = useState<Topic>();
-
-  const [visible, setVisible] = useState(false);
-
-  const containerStyle = {backgroundColor: 'white', padding: 20};
 
   useEffect(() => {
     handleGetInforGroup();
-    getTopicForGroup();
-    console.log('infoGroupItem', infoGroupItem);
   }, [isJoinGroup]);
 
   const handleGetInforGroup = () => {
     groupService.getGroupById(groupInfo?.id).then(result => {
-      console.log('handleGetInforGroup ====result.data', result.data);
+      setInfoGroup(result.data);
 
-      setInfoGroupItem(result.data);
+      // listMenber.findIndex((i: any) => {
+      //   if (i?.id === groupState?.group?.id) {
+
+      // });
     });
   };
 
-  const getTopicForGroup = () => {
+  const getTopicForGroup = (id: any) => {
     topicService
-      .getMajorById(groupInfo?.topic?.id)
+      .getMajorById(id)
       .then(result => {
         setTopic(result?.data);
       })
       .catch(error => console.log('getTopicForGroup>>.. error', error));
   };
 
+  const checkJoinGroup = () => {
+    console.log('>item?.id', groupInfo?.id);
+    console.log('>infoGroup>', infoGroup?.id);
+  };
+
   return (
     <>
       <TouchableOpacity
         onPress={() => {
-          setVisible(true);
+          getTopicForGroup(groupInfo?.topic?.id);
+          setShowModal(true);
+          console.log('topic', topic);
         }}
         style={[GlobalStyles.margin20, styles.contentTitle]}>
         <View style={styles.viewIcon}>
@@ -97,18 +99,6 @@ const GroupItem: React.FC<Props> = ({
             </TouchableOpacity>
           )}
         </View>
-
-        <Portal>
-          {visible && (
-            <ModalInfoGroup
-              infoGroup={infoGroupItem as Group}
-              title={'Thông tin nhóm'}
-              topicInfo={topic as Topic}
-              onPressClose={() => {
-                setVisible(false);
-              }}></ModalInfoGroup>
-          )}
-        </Portal>
       </TouchableOpacity>
     </>
   );
@@ -154,8 +144,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#38b000',
     paddingHorizontal: responsiveWidth(5),
     paddingVertical: responsiveHeight(3),
-  },
-  logo: {
-    top: responsiveWidth(17),
   },
 });

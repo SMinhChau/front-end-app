@@ -97,50 +97,51 @@ const Login: React.FC<{}> = () => {
         onSubmit={values => console.log(values)}>
         {() => (
           <>
-            <View style={styles.viewInput}>
-              <Ionicons name={'md-person'} color={Colors.iconbr} size={16} />
-            </View>
+            <View style={styles.contentForm}>
+              <View style={styles.viewInput}>
+                <Ionicons name={'md-person'} color={Colors.iconbr} size={16} />
+              </View>
 
-            <TextInput
-              onChangeText={handleChange('username')}
-              onBlur={handleBlur('username')}
-              placeholder={'Tên đăng nhập'}
-              value={values.username}
-              style={styles.input}
-              ref={userNameRef.current}
-            />
+              <TextInput
+                onChangeText={handleChange('username')}
+                onBlur={handleBlur('username')}
+                placeholder={'Tên đăng nhập'}
+                value={values.username}
+                style={styles.input}
+                ref={userNameRef.current}
+              />
 
-            {touched.username && errors.username && (
-              <Text style={GlobalStyles.textError}>{errors.username}</Text>
-            )}
+              {touched.username && errors.username && (
+                <Text style={GlobalStyles.textError}>{errors.username}</Text>
+              )}
 
-            <View style={styles.viewInput}>
-              <Ionicons name={'key'} color={Colors.iconbr} size={16} />
-            </View>
+              <View style={styles.viewInput}>
+                <Ionicons name={'key'} color={Colors.iconbr} size={16} />
+              </View>
 
-            <TextInput
-              onChangeText={handleChange('password')}
-              placeholder={'Mật khẩu'}
-              onBlur={handleBlur('password')}
-              secureTextEntry={true}
-              style={styles.input}
-              autoCapitalize="none"
-              keyboardAppearance="dark"
-              returnKeyType="go"
-              returnKeyLabel="go"
-            />
+              <TextInput
+                onChangeText={handleChange('password')}
+                placeholder={'Mật khẩu'}
+                onBlur={handleBlur('password')}
+                secureTextEntry={true}
+                style={styles.input}
+                autoCapitalize="none"
+                keyboardAppearance="dark"
+                returnKeyType="go"
+                returnKeyLabel="go"
+              />
 
-            {touched.password && errors.password && (
-              <Text style={GlobalStyles.textError}>{errors.password}</Text>
-            )}
+              {touched.password && errors.password && (
+                <Text style={GlobalStyles.textError}>{errors.password}</Text>
+              )}
 
-            <View style={[GlobalStyles.flexEnd]}>
-              <TouchableOpacity style={[styles.btnPass]}>
-                <Text style={GlobalStyles.rememberText}>Quên mật khẩu?</Text>
-              </TouchableOpacity>
-            </View>
+              <View style={[GlobalStyles.flexEnd]}>
+                <TouchableOpacity style={[styles.btnPass]}>
+                  <Text style={GlobalStyles.rememberText}>Quên mật khẩu?</Text>
+                </TouchableOpacity>
+              </View>
 
-            {/* 
+              {/* 
             {isLoading && (
               <View style={{flex: 1}}>
                 <ActivityIndicator
@@ -149,6 +150,7 @@ const Login: React.FC<{}> = () => {
                 />
               </View>
             )} */}
+            </View>
             <ButtonView
               onPress={handleSubmit}
               title="Đăng nhập"
@@ -217,7 +219,7 @@ const Login: React.FC<{}> = () => {
   })(InnerForm);
 
   return (
-    <View style={GlobalStyles.container}>
+    <View style={[GlobalStyles.container, {backgroundColor: '#e8e8e4'}]}>
       <StatusBar
         barStyle={'dark-content'}
         backgroundColor={Colors.primaryButton}
@@ -249,14 +251,15 @@ export default Login;
 
 const styles = StyleSheet.create({
   formView: {
-    paddingTop: 150,
-    paddingHorizontal: 20,
-    backgroundColor: Colors.bg,
+    marginTop: responsiveHeight(150),
+    marginHorizontal: responsiveWidth(5),
+    backgroundColor: Colors.white,
+    borderRadius: 10,
   },
   input: {
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: Colors.primary,
+    borderColor: '#fae1dd',
     paddingHorizontal: responsiveWidth(30),
     marginTop: 25,
     fontSize: 16,
@@ -275,6 +278,17 @@ const styles = StyleSheet.create({
     top: responsiveHeight(60),
     left: 9,
     zIndex: 99999,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.bg,
+  },
+  contentForm: {
+    paddingHorizontal: responsiveHeight(20),
+    paddingBottom: responsiveHeight(20),
+    backgroundColor: Colors.blueBoder,
+    borderColor: '#fec89a',
+
+    borderWidth: 1,
+    shadowOpacity: 3,
+    borderRadius: 10,
+    shadowOffset: {width: 2, height: 3},
   },
 });

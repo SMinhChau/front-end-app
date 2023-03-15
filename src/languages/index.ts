@@ -33,6 +33,6 @@ export default {
     requireInput: 'Yêu cầu đầu vào',
     standradOutput: 'Yêu cầu cần đạt được',
     description: 'Mô tả',
-    target: 'target',
+    target: 'Mục tiêu',
   },
 };

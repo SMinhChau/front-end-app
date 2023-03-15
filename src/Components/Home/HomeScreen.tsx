@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   contentMenu: {
     height: responsiveHeight(50),
     padding: 10,
-    backgroundColor: Colors.white,
+    backgroundColor: '#80b918',
     borderRadius: 10,
     borderColor: Colors.blueBoder,
     borderTopWidth: 1,
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
   },
   titleLogoGroup: {
     fontSize: responsiveFont(17),
-    color: Colors.textPrimary,
+    color: Colors.grayLight,
     fontWeight: '400',
     paddingHorizontal: responsiveWidth(10),
     textDecorationStyle: 'double',
@@ -213,6 +213,8 @@ const styles = StyleSheet.create({
   mainText: {
     fontWeight: '500',
     textDecorationStyle: 'solid',
+    color: Colors.drakCyonBoder,
+    marginLeft: responsiveWidth(15),
   },
 
   amination: {

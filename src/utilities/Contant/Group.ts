@@ -1,12 +1,12 @@
+import Topic from './Topic';
+
 export default interface Group {
   id: number;
   name: string;
   term: {
     id: number;
   };
-  topic: {
-    id: number;
-  };
+  topic: Topic;
   members: [
     {
       id: number;

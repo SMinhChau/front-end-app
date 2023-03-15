@@ -16,9 +16,7 @@ const initialState = {
     term: {
       id: NaN,
     },
-    topic: {
-      id: NaN,
-    },
+    topic: {},
     members: [
       {
         id: NaN,
