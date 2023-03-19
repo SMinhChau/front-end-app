@@ -19,26 +19,17 @@ interface Props {
   style: any;
   text: string;
   icon: string;
+  male?: boolean;
 }
 
-const GenderButton = ({onPress, selected, style, text, icon}: Props) => {
+const GenderButton = ({onPress, selected, male, style, text, icon}: Props) => {
   return (
-    <TouchableOpacity
-      onPress={() => !!onPress && onPress()}
-      style={[
-        styles.container,
-        selected && {
-          backgroundColor: Colors.primary,
-          borderColor: Colors.blueBoder,
-        },
-        style,
-      ]}>
-      <Ionicons name={'close-circle'} color={Colors.grayLight} size={18} />
-      {/* <FastImage
-          source={icon}
-          style={styles.icon}
-          tintColor={selected ? Colors.secondaryPlaceV3 : Colors.borderColor}
-        /> */}
+    <TouchableOpacity onPress={() => !!onPress && onPress()} style={[]}>
+      <Ionicons
+        name={male ? 'male-sharp' : 'male-female-sharp'}
+        color={selected ? Colors.rosyBrown : Colors.grayLight}
+        size={18}
+      />
       <Text style={[styles.text, selected && {color: Colors.rosyBrown}]}>
         {text}
       </Text>

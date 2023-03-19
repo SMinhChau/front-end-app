@@ -21,7 +21,7 @@ class GroupService {
       method: 'get',
     });
   }
-  createGroup(data: any) {
+  createGroup(data: {termId: number; name: string}) {
     return axiosAuth({
       url: 'api/student/groups',
       method: 'post',
@@ -32,7 +32,7 @@ class GroupService {
     return axiosAuth({
       url: 'api/student/groups',
       method: 'delete',
-      data: termId,
+      data: {termId},
     });
   }
 }

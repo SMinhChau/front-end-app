@@ -29,8 +29,11 @@ import ButtonView from '../../../common/ButtonView';
 import ButtonHandle from '../../../common/ButtonHandle';
 import {log} from 'react-native-reanimated';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useAppSelector} from '../../../redux/hooks';
+import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import {Images} from '../../../assets/images/Images';
+import groupService from '../../../services/group';
+import groupAPI from '../../../redux/apis/group';
+import {GroupSlices} from '../../../redux/slices/GroupSlices';
 
 interface Props {
   title: string;
@@ -71,14 +74,20 @@ const ModalInfoGroup: React.FC<Props> = ({
   topicInfo,
 }) => {
   const [listMember, setListMember] = useState<[Member]>();
-  const [isMore, setShowMore] = useState(false);
   const [topic, setTopic] = useState<Topic>();
   const groupState = useAppSelector(state => state.group);
+  const termState = useAppSelector(state => state.term);
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setListMember(infoGroup?.members);
     setTopic(topicInfo);
   }, [listMember, topic]);
+
+  useEffect(() => {
+    dispatch(groupAPI.getMyGroup()(termState?.term?.id));
+  }, []);
 
   // const getTopicForGroup = useCallback(() => {
   //   console.log('getTopicForGroup>>.. result');
@@ -93,6 +102,8 @@ const ModalInfoGroup: React.FC<Props> = ({
 
   const renderListMember = useMemo(
     () => (item: any) => {
+      console.log('>>>>>>.renderListMember', item);
+
       return (
         <View style={styles.contenMember}>
           <View style={styles.leftContent}>
@@ -159,33 +170,28 @@ const ModalInfoGroup: React.FC<Props> = ({
     );
   }, [topic]);
 
-  const renderButton = useMemo(() => {
-    console.log('renderButton groupState?.group?.id', groupState?.group?.id);
-    console.log('renderButton infoGroup?.id', infoGroup?.id);
+  const handleOutGroup = async (id: any) => {
+    console.log('handleOutGroup id', id);
+    await dispatch(groupAPI.outMyGroup()(id));
+    dispatch(GroupSlices.actions.updateOutedGroup(true));
+  };
 
+  const renderButton = useMemo(() => {
     return (
       <View style={styles.contentBtn}>
         {groupState?.group?.id === infoGroup?.id ? (
           <ButtonHandle
             icon
-            // onPress={handleSubmit}
+            onPress={() => handleOutGroup(termState?.term?.id)}
             title="Rời nhóm"
             style={styles.buttonOut}
           />
         ) : (
-          <ButtonHandle
-            // onPress={handleSubmit}
-            icon
-            // onPress={handleSubmit}
-            title="Tham gia nhón"
-            // onPress={handleSubmit}
-
-            style={styles.buttonJoin}
-          />
+          <ButtonHandle icon title="Tham gia nhón" style={styles.buttonJoin} />
         )}
       </View>
     );
-  }, [infoGroup]);
+  }, [infoGroup, groupState]);
 
   const renderViewInfo = useMemo(() => {
     return (
@@ -203,7 +209,6 @@ const ModalInfoGroup: React.FC<Props> = ({
         {listMember?.length ? (
           <View style={[styles.flatList]}>
             <FlatList
-              horizontal={true}
               data={listMember}
               contentContainerStyle={{
                 width: '100%',
@@ -310,6 +315,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#cbdfbd',
     borderRadius: 10,
     borderColor: '#76c893',
+
     marginTop: responsiveHeight(10),
   },
   contenTopic: {
@@ -335,12 +341,12 @@ const styles = StyleSheet.create({
   },
   buttonJoin: {
     backgroundColor: '#38b000',
-    width: responsiveWidth(120),
   },
   contentBtn: {
     paddingHorizontal: responsiveWidth(16),
     backgroundColor: Colors.white,
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
+    marginBottom: responsiveHeight(20),
   },
 });

@@ -10,8 +10,6 @@ import {useNavigation} from '@react-navigation/native';
 import {useAppSelector} from '../redux/hooks';
 import {responsiveHeight, responsiveWidth} from '../utilities/sizeScreen';
 
-const Props = {};
-
 const ContentAccount: React.FC<{}> = () => {
   const navigation = useNavigation();
   const userState = useAppSelector(state => state.user.user);
@@ -33,7 +31,7 @@ const ContentAccount: React.FC<{}> = () => {
           textRight={userState?.schoolYear}></TextItem>
         <TextItem
           textLeft={languages['vi'].email}
-          textRight={userState.email}></TextItem>
+          textRight={userState?.email}></TextItem>
       </View>
     );
   };

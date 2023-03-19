@@ -35,6 +35,7 @@ const tabScreens = [
 const TabNavigation = () => {
   return (
     <Tab.Navigator
+      initialRouteName={RouteNames.homeTab}
       tabBar={props => <MyTabBar {...props} />}
       screenOptions={{headerShown: false}}>
       {tabScreens.map((tab, index) => (

@@ -23,7 +23,7 @@ export default {
     testMajor: 'Kỹ Thuật Phần Mềm',
     detail: 'Xem chi tiết',
     schoolYear: 'Niên khóa',
-    typeTraining: 'Loại hình',
+    typeTraining: 'Hệ',
     updateInfo: 'Cập nhật thông tin',
     update: 'Cập nhật',
     nameTopic: 'Tên',

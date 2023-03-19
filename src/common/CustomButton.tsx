@@ -7,6 +7,8 @@ import React from 'react';
 
 import Colors from '../Themes/Colors';
 import {responsiveHeight, responsiveWidth} from '../utilities/sizeScreen';
+import Icon from 'react-native-paper/lib/typescript/components/Icon';
+import IconView from './IconView';
 
 interface Props {
   title: string;
@@ -14,10 +16,19 @@ interface Props {
   onPress: () => void;
   disabled?: boolean;
   textStyle: any;
-  wrapper: string;
+  wrapper?: string;
+  nameIcon?: string;
+  icon?: boolean;
 }
 
-const CustomButton: React.FC<Props> = ({title, style, onPress, disabled}) => {
+const CustomButton: React.FC<Props> = ({
+  title,
+  style,
+  onPress,
+  disabled,
+  icon,
+  nameIcon,
+}) => {
   return (
     <TouchableOpacity
       style={[
@@ -27,6 +38,13 @@ const CustomButton: React.FC<Props> = ({title, style, onPress, disabled}) => {
       ]}
       disabled={disabled}
       onPress={onPress}>
+      {icon && (
+        <IconView
+          name={nameIcon ? nameIcon : 'sync-outline'}
+          size={24}
+          color={Colors.grayLight}
+        />
+      )}
       {title && <Text style={[styles.textStyle]}>{title}</Text>}
     </TouchableOpacity>
   );
@@ -41,7 +59,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     backgroundColor: '#38b000',
-    paddingHorizontal: responsiveWidth(16),
+    paddingHorizontal: responsiveWidth(10),
     paddingVertical: responsiveHeight(10),
   },
   textStyle: {
@@ -49,5 +67,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     textAlign: 'center',
     color: Colors.grayLight,
+    paddingHorizontal: responsiveWidth(3),
   },
 });

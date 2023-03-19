@@ -1,7 +1,9 @@
+import {log} from 'react-native-reanimated';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import RouteNames from '../../Components/RouteNames';
 import authService from '../../services/auth';
 import tokenService from '../../services/token';
+import User from '../../utilities/contants';
 
 class AuthAPI {
   getInfo() {
@@ -29,6 +31,19 @@ class AuthAPI {
         return thunkAPI.rejectWithValue('login fail');
       },
     );
+  }
+
+  updateUserInfo() {
+    return createAsyncThunk('user/update-info', async (data: FormData) => {
+      console.log('user/update-info update data', data);
+      try {
+        const result = await authService.updateUserInfo(data);
+        console.log(' updateUserInfo ======result', result);
+        if (result.status === 200) return result.data;
+      } catch (error) {
+        console.log(' updateUserInfo ======error', error);
+      }
+    });
   }
 }
 

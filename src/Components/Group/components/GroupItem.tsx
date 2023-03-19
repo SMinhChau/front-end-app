@@ -25,6 +25,7 @@ interface Props {
   handleJoin: () => void;
   join: boolean;
   groupInfo: Group;
+  menberInfo?: string;
 }
 const GroupItem: React.FC<Props> = ({
   title,
@@ -33,12 +34,12 @@ const GroupItem: React.FC<Props> = ({
   join,
   handleJoin,
   groupInfo,
+  menberInfo,
 }) => {
-  console.log('GroupItem groupInfo', groupInfo);
   const groupState = useAppSelector(state => state.group);
   const [isJoinGroup, setJoinGroup] = useState(false);
   const [infoGroupItem, setInfoGroupItem] = useState<Group>();
-
+  const [member, setMember] = useState('');
   const [topic, setTopic] = useState<Topic>();
 
   const [visible, setVisible] = useState(false);
@@ -48,14 +49,13 @@ const GroupItem: React.FC<Props> = ({
   useEffect(() => {
     handleGetInforGroup();
     getTopicForGroup();
-    console.log('infoGroupItem', infoGroupItem);
   }, [isJoinGroup]);
 
   const handleGetInforGroup = () => {
     groupService.getGroupById(groupInfo?.id).then(result => {
-      console.log('handleGetInforGroup ====result.data', result.data);
-
       setInfoGroupItem(result.data);
+      console.log('handleGetInforGroup result?.data', result?.data);
+      setMember(result?.data?.members);
     });
   };
 
@@ -91,11 +91,14 @@ const GroupItem: React.FC<Props> = ({
           <Text numberOfLines={1} style={styles.titleGroup}>
             {groupInfo?.name}
           </Text>
-          {isJoinGroup && (
+
+          <Text style={styles.nemberMember}>Số lượng: {member?.length} </Text>
+
+          {/* {isJoinGroup && (
             <TouchableOpacity onPress={handleJoin}>
               <Text style={styles.joinStyle}>Tham gia </Text>
             </TouchableOpacity>
-          )}
+          )} */}
         </View>
 
         <Portal>
@@ -154,6 +157,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#38b000',
     paddingHorizontal: responsiveWidth(5),
     paddingVertical: responsiveHeight(3),
+  },
+  nemberMember: {
+    fontSize: responsiveFont(16),
+    color: Colors.textPrimary,
+    fontWeight: '400',
+    borderRadius: 3,
   },
   logo: {
     top: responsiveWidth(17),

@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     paddingVertical: responsiveHeight(5),
     marginVertical: responsiveHeight(10),
     borderWidth: StyleSheet.hairlineWidth,
-    paddingHorizontal: responsiveWidth(20),
+    paddingHorizontal: responsiveWidth(15),
     flexDirection: 'row',
     borderRadius: 5,
     alignItems: 'center',
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#80b918',
   },
   textStyle: {
-    color: Colors.grayLight,
+    color: Colors.white,
     fontSize: 16,
     paddingHorizontal: responsiveWidth(10),
     textAlign: 'center',

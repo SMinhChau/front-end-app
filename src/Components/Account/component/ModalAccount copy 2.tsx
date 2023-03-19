@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {
   View,
   Text,
@@ -19,7 +19,7 @@ import {
   responsiveWidth,
 } from '../../../utilities/sizeScreen';
 
-import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
+import {useAppSelector} from '../../../redux/hooks';
 
 import {
   HelperText,
@@ -38,9 +38,6 @@ import {validateEmail} from '../../../utilities/utils';
 import GenderButton from '../../../common/GenderButton';
 
 import {Images} from '../../../assets/images/Images';
-
-import authAPI from '../../../redux/apis/auth';
-import data from '../../Home/data';
 
 interface Props {
   title: string;
@@ -63,7 +60,7 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose}) => {
   const userState = useAppSelector(state => state.user.user);
   const [images, setImages] = useState([]);
   const [selectedAvatar, setSelectedAvatar] = useState<ImagePicker>();
-  const dispatch = useAppDispatch();
+
   const [username, setUsername] = useState('');
 
   const BASIC_INFO = [
@@ -100,39 +97,23 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose}) => {
   ];
 
   const [basicInfo, setBasicInfo] = useState({
-    avatar: userState?.avatar,
+    avatar: selectedAvatar ? selectedAvatar?.uri : userState?.avatar,
     username: userState?.username,
     name: userState?.name,
     gender: userState?.gender || '',
     schoolYear: userState?.schoolYear || '',
-    typeTraining: userState?.typeTraining,
+    special: userState?.typeTraining,
     phoneNumber: userState?.phoneNumber,
     email: userState?.email,
   });
 
   const handleSubmitForm = () => {
-    console.log('handleSubmitForm >>>>>>selectedAvatar', selectedAvatar);
+    console.log('selectedAvatar?.uri', selectedAvatar?.uri);
+
     setBasicInfo({
       ...basicInfo,
     });
-
-    const formData = new FormData();
-    formData.append('username', basicInfo.username);
-    formData.append('name', basicInfo.name);
-    formData.append('gemder', basicInfo.gender);
-    formData.append('schoolYear', basicInfo.schoolYear);
-    formData.append('typeTraining', basicInfo.typeTraining);
-    formData.append('phoneNumber', basicInfo.phoneNumber);
-    formData.append('email', basicInfo.email);
-    formData.append('file', {
-      uri: selectedAvatar?.uri,
-      type: selectedAvatar?.type,
-      fileName: selectedAvatar?.fileName,
-    });
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>formData', formData);
-    dispatch(authAPI.updateUserInfo()(formData));
-
-    console.log('>>>>>>>>>basicInfo', basicInfo);
+    console.log('basicInfo', basicInfo);
   };
 
   const isError = basicInfo.email ? !validateEmail(basicInfo.email) : false;
@@ -146,7 +127,6 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose}) => {
             <View style={styles.rowRadio}>
               <GenderButton
                 text="Nam"
-                male={true}
                 style={Colors.primaryButton}
                 selected={basicInfo.gender === 'Male'}
                 onPress={() => setBasicInfo({...basicInfo, gender: 'Male'})}
@@ -173,7 +153,6 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose}) => {
     if (selectedAvatar) {
       return {uri: selectedAvatar?.uri};
     }
-
     return basicInfo.avatar ? {uri: basicInfo.avatar} : Images.avatar;
   };
 
@@ -187,7 +166,7 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose}) => {
       setSelectedAvatar({
         uri: `file://${response[0].realPath}`,
         type: response[0].mime,
-        fileName: response[0].fileName,
+        name: response[0].fileName,
       });
     } catch (e) {
       console.log(e.code, e.message);
@@ -205,7 +184,7 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose}) => {
         </View>
       </>
     );
-  }, [selectedAvatar]);
+  }, [handleGetAvatar]);
 
   return (
     <Portal>

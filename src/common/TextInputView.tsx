@@ -16,15 +16,15 @@ import {
 } from '../utilities/sizeScreen';
 
 interface Props {
-  value: string;
-  onChangeText(text: any): () => void;
-  title: string;
-  secureTextEntry: boolean;
-  placeholder: string;
-  refs: string | undefined;
-  autoFocus: boolean;
-  messageError: boolean;
-  isRequire: boolean;
+  value?: string | number;
+  onChangeText(text: any): any;
+  title?: string;
+  secureTextEntry?: boolean;
+  placeholder?: string;
+  refs?: string | undefined;
+  autoFocus?: boolean;
+  messageError?: boolean;
+  isRequire?: boolean;
   pointerEvents?: boolean;
   leftIcon?: boolean;
   onPress?: () => void;
@@ -32,20 +32,19 @@ interface Props {
   onBlur?: () => void;
   onEndEditing?: () => void;
   onFocus?: () => void;
-  maxLength: number;
-  placeholderTextColor: string;
+  maxLength?: number;
+  placeholderTextColor?: string;
   keyboardType?: any;
   editable?: boolean;
   scrollEnabled?: boolean;
 
-  numberOfLines: number;
-  textAlignVertical: any;
-  messageInfo: string;
+  numberOfLines?: number;
+  textAlignVertical?: any;
+  messageInfo?: string;
 }
 
 const TextInputView = ({
   value,
-
   title,
   secureTextEntry,
   placeholder,
@@ -76,10 +75,19 @@ const TextInputView = ({
   return (
     <TouchableOpacity onPress={onPress} disabled={!onPress} activeOpacity={1}>
       {!!title && (
-        <Text style={[styles.titleStyle, messageError && {color: Colors.red}]}>
-          {title}
-          {isRequire && <Text style={{color: Colors.red}}> *</Text>}
-        </Text>
+        <>
+          <Text
+            style={[styles.titleStyle, messageError && {color: Colors.red}]}>
+            {title}
+          </Text>
+
+          {isRequire && (
+            <Text
+              style={[styles.titleStyle, messageError && {color: Colors.red}]}>
+              <Text style={{color: Colors.red}}> *</Text>{' '}
+            </Text>
+          )}
+        </>
       )}
       <View
         style={[
@@ -163,25 +171,26 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     height: responsiveHeight(40),
-    borderRadius: responsiveHeight(4),
-    minHeight: 40,
+    // minHeight: responsiveHeight(50),
     paddingHorizontal: responsiveWidth(12),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.white,
-    borderColor: Colors.grayLight,
-    borderWidth: 1,
+    borderColor: Colors.primary,
+    borderRadius: 10,
+    borderWidth: 2,
   },
   textInput: {
     flex: 1,
     color: Colors.black,
     fontSize: responsiveFont(17),
-
     paddingVertical: responsiveHeight(5),
   },
   titleStyle: {
-    fontSize: responsiveFont(15),
-    color: Colors.grayLight,
+    fontSize: responsiveFont(16),
+
+    marginVertical: responsiveHeight(3),
+    color: Colors.headerColor,
   },
 });

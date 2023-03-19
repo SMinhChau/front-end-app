@@ -57,5 +57,18 @@ export const userSlice = createSlice({
 
       state.user = action.payload;
     });
+
+    builder.addCase(authAPI.updateUserInfo().pending, (state, action) => {
+      console.log('action updateUserInfo pending', action);
+      state.error = false;
+    });
+    builder.addCase(authAPI.updateUserInfo().fulfilled, (state, action) => {
+      console.log('action updateUserInfo fulfilled', action);
+      state.user = action.payload.user;
+      state.error = false;
+    });
+    builder.addCase(authAPI.updateUserInfo().rejected, state => {
+      state.error = true;
+    });
   },
 });
