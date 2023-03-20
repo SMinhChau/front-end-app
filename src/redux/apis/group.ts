@@ -13,9 +13,8 @@ class GroupAPI {
 
   getGroupById() {
     return createAsyncThunk('group/get-group-by-id', async (id: number) => {
-      console.log('group/get-group-by-id ', id);
       const result = await groupService.getGroupById(id);
-      console.log('group/get-group-by-id result', result);
+
       if (result.status === 200) return result.data;
     });
   }
@@ -23,17 +22,13 @@ class GroupAPI {
   outMyGroup() {
     return createAsyncThunk(
       'group/out-group-by-termId',
-      async (termId: number) => {
-        console.log('group/out-group-by-termId', termId);
+      async (termId: number, thunkAP) => {
         try {
           const result = await groupService.outGroup(termId);
-          console.log(
-            'group/out-group-by-termId ===============result',
-            result,
-          );
           if (result.status === 200) {
             return result.data;
           }
+          return thunkAP.rejectWithValue('Xóa nhóm không thành công');
         } catch (error) {
           console.log('error', error);
         }
@@ -44,12 +39,14 @@ class GroupAPI {
   createGroup() {
     return createAsyncThunk(
       'group/create-my-group',
-      async (data: {termId: number; name: string}) => {
+      async (data: {termId: number; name: string}, thunkAP) => {
         try {
           const result = await groupService.createGroup(data);
-          console.log('group/create-my-group', result);
 
-          if (result.status === 200) return result.data;
+          if (result.status === 200) {
+            return result.data;
+          }
+          return thunkAP.rejectWithValue('Tạo nhóm không thành công');
         } catch (error) {
           console.log('group/create-my-group error', error);
         }

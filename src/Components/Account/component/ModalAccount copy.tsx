@@ -125,13 +125,11 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
     formData.append('typeTraining', basicInfo.typeTraining);
     formData.append('phoneNumber', basicInfo.phoneNumber);
     formData.append('email', basicInfo.email);
-    selectedAvatar
-      ? formData.append('avatar', {
-          uri: selectedAvatar?.uri,
-          type: selectedAvatar?.mime,
-          fileName: selectedAvatar?.fileName,
-        })
-      : formData.append('avatar', basicInfo?.avatar);
+    formData.append('file', {
+      uri: selectedAvatar?.uri,
+      type: selectedAvatar?.type,
+      fileName: selectedAvatar?.fileName,
+    });
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>formData', formData);
     dispatch(authAPI.updateUserInfo()(formData));
 
@@ -150,11 +148,7 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
               <GenderButton
                 text="Nam"
                 male={true}
-                style={
-                  basicInfo.gender === 'Male'
-                    ? Colors.rosyBrown
-                    : Colors.primaryButton
-                }
+                style={Colors.primaryButton}
                 selected={basicInfo.gender === 'Male'}
                 onPress={() => setBasicInfo({...basicInfo, gender: 'Male'})}
               />
@@ -163,11 +157,7 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
             <View style={styles.rowRadio}>
               <GenderButton
                 text="Nữ"
-                style={
-                  basicInfo.gender === 'Female'
-                    ? Colors.rosyBrown
-                    : Colors.primaryButton
-                }
+                style={Colors.primaryButton}
                 selected={basicInfo.gender === 'Female'}
                 onPress={() => setBasicInfo({...basicInfo, gender: 'Female'})}
               />

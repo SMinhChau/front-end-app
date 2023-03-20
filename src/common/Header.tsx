@@ -13,11 +13,19 @@ interface Props {
   iconRight?: boolean;
   home?: boolean;
   back?: boolean;
+  style?: any;
 }
-const Header: React.FC<Props> = ({title, back, iconLeft, home, iconRight}) => {
+const Header: React.FC<Props> = ({
+  title,
+  style,
+  back,
+  iconLeft,
+  home,
+  iconRight,
+}) => {
   const navigation = useNavigation();
   return (
-    <View style={[styles.sectionContainer]}>
+    <View style={[styles.sectionContainer, style]}>
       {iconLeft && home && (
         <TouchableOpacity
           onPress={() => navigation.navigate(RouteNames.homeTab)}
@@ -27,7 +35,9 @@ const Header: React.FC<Props> = ({title, back, iconLeft, home, iconRight}) => {
       )}
 
       {iconLeft && back && (
-        <TouchableOpacity style={[styles.contentIcon, styles.contentIconLeft]}>
+        <TouchableOpacity
+          style={[styles.contentIcon, styles.contentIconLeft]}
+          onPress={() => navigation.goBack()}>
           <IconView
             name="arrow-back-outline"
             color={Colors.textPrimary}

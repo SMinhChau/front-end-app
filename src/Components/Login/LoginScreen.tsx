@@ -20,6 +20,7 @@ import Header from '../../common/Header';
 import React, {useEffect, useRef, useState} from 'react';
 import {Formik, FormikErrors, FormikProps, withFormik} from 'formik';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Lottie from 'lottie-react-native';
 
 import ButtonView from '../../common/ButtonView';
 import GlobalStyles from '../../common/styles/GlobalStyles';
@@ -44,13 +45,17 @@ const Login: React.FC<{}> = () => {
     console.log('userState', userState);
 
     if (userState.is_login) {
+      setLoading(false);
       navigation.navigate('TabNavigation');
+    }
+    if (userState.is_loading) {
     } else {
       if (userState.error) {
+        setLoading(false);
         Alert.alert('Thông báo!', 'Thông tin đăng nhập không đúng');
       }
     }
-  }, [userState]);
+  }, [userState, isLoading]);
 
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
@@ -165,7 +170,7 @@ const Login: React.FC<{}> = () => {
 
   const handleSubmitForm = (value: any) => {
     // console.log('Login', value.username, value.password);
-
+    setLoading(true);
     dispatch(
       authAPI.login()({
         username: value.username,
@@ -219,7 +224,7 @@ const Login: React.FC<{}> = () => {
   })(InnerForm);
 
   return (
-    <View style={[GlobalStyles.container, {backgroundColor: '#e8e8e4'}]}>
+    <View style={[GlobalStyles.container, {backgroundColor: Colors.white}]}>
       <StatusBar
         barStyle={'dark-content'}
         backgroundColor={Colors.primaryButton}
@@ -229,9 +234,17 @@ const Login: React.FC<{}> = () => {
       <ScrollView>
         <KeyboardAvoidingView
           style={{flex: 1}}
-          keyboardVerticalOffset={responsiveHeight(150)}
+          keyboardVerticalOffset={responsiveHeight(110)}
           behavior={'position'}>
           <View style={styles.formView}>
+            <View style={GlobalStyles.centerView}>
+              <Lottie
+                source={require('../../assets/jsonAmination/login.json')}
+                autoPlay
+                loop
+                style={styles.logo}
+              />
+            </View>
             <MyForm />
           </View>
 
@@ -244,6 +257,9 @@ const Login: React.FC<{}> = () => {
           </View> */}
         </KeyboardAvoidingView>
       </ScrollView>
+      {isLoading === true && (
+        <ActivityIndicator size={'large'} color={'#bec7ef'} />
+      )}
     </View>
   );
 };
@@ -251,9 +267,9 @@ export default Login;
 
 const styles = StyleSheet.create({
   formView: {
-    marginTop: responsiveHeight(150),
+    marginTop: responsiveHeight(50),
     marginHorizontal: responsiveWidth(5),
-    backgroundColor: Colors.bg,
+    backgroundColor: Colors.white,
     borderRadius: 10,
   },
   input: {
@@ -278,7 +294,7 @@ const styles = StyleSheet.create({
     top: responsiveHeight(60),
     left: 9,
     zIndex: 99999,
-    backgroundColor: Colors.bg,
+    backgroundColor: Colors.white,
   },
   contentForm: {
     paddingHorizontal: responsiveHeight(20),
@@ -290,5 +306,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 3,
     borderRadius: 10,
     shadowOffset: {width: 2, height: 3},
+  },
+  logo: {
+    width: responsiveWidth(150),
+    height: responsiveHeight(150),
+    marginBottom: responsiveHeight(10),
+    alignContent: 'center',
   },
 });

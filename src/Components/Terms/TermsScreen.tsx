@@ -1,5 +1,12 @@
 import {useEffect} from 'react';
-import {StatusBar, View, Text, StyleSheet, LogBox} from 'react-native';
+import {
+  StatusBar,
+  View,
+  Text,
+  StyleSheet,
+  LogBox,
+  TouchableOpacity,
+} from 'react-native';
 import Header from '../../common/Header';
 import Logo from '../../common/logo';
 import GlobalStyles from '../../common/styles/GlobalStyles';
@@ -9,7 +16,41 @@ import Colors from '../../Themes/Colors';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {responsiveHeight, responsiveWidth} from '../../utilities/sizeScreen';
+import RouteNames from '../RouteNames';
+
+import {useNavigation} from '@react-navigation/native';
+
 const TermsScreen: React.FC<{}> = () => {
+  const navigation = useNavigation();
+
+  const menu = [
+    {
+      name: 'Học kỳ',
+      key: 'term',
+      navigation: () => navigation.navigate(RouteNames.TermMenu),
+      icon: 'book-sharp',
+    },
+    {
+      name: 'Đề tài',
+      key: 'topic',
+      navigation: () => navigation.navigate(RouteNames.TopicMenu),
+      icon: 'file-tray-full',
+    },
+  ];
+  const menuBottom = [
+    {
+      name: 'Nhóm',
+      key: 'group',
+      navigation: () => navigation.navigate(RouteNames.GroupMenu),
+      icon: 'people-circle',
+    },
+    {
+      name: 'Giảng Viên',
+      key: 'lecture',
+      navigation: () => navigation.navigate(RouteNames.LectureMenu),
+      icon: 'school',
+    },
+  ];
   return (
     <>
       <Header
@@ -21,46 +62,35 @@ const TermsScreen: React.FC<{}> = () => {
       <View style={[GlobalStyles.container, styles.content]}>
         <View style={styles.top}>
           <View style={styles.topTop}>
-            <View style={styles.iconRight}>
-              <Ionicons
-                name={'book-sharp'}
-                color={Colors.primaryButton}
-                size={40}
-                style={styles.icon}
-              />
-              <TouchViewMenu title={languages['vi'].term}></TouchViewMenu>
-            </View>
-            <View style={styles.iconRight}>
-              <Ionicons
-                name={'file-tray-full'}
-                color={Colors.primaryButton}
-                size={40}
-                style={styles.icon}
-              />
-              <TouchViewMenu title={languages['vi'].title}></TouchViewMenu>
-            </View>
+            {menu.map((item, index) => (
+              <View style={styles.iconRight}>
+                <Ionicons
+                  name={item.icon}
+                  color={Colors.primaryButton}
+                  size={40}
+                  style={styles.icon}
+                />
+                <TouchViewMenu
+                  onPress={item.navigation}
+                  title={item.name}></TouchViewMenu>
+              </View>
+            ))}
           </View>
-        </View>
-        <View style={styles.top}>
+
           <View style={styles.topTop}>
-            <View style={styles.iconRight}>
-              <Ionicons
-                name={'people-circle'}
-                color={Colors.primaryButton}
-                size={40}
-                style={styles.icon}
-              />
-              <TouchViewMenu title={languages['vi'].group}></TouchViewMenu>
-            </View>
-            <View style={styles.iconRight}>
-              <Ionicons
-                name={'school'}
-                color={Colors.primaryButton}
-                size={40}
-                style={styles.icon}
-              />
-              <TouchViewMenu title={languages['vi'].teacher}></TouchViewMenu>
-            </View>
+            {menuBottom.map((item, index) => (
+              <View style={styles.iconRight}>
+                <Ionicons
+                  name={item.icon}
+                  color={Colors.primaryButton}
+                  size={40}
+                  style={styles.icon}
+                />
+                <TouchViewMenu
+                  onPress={item.navigation}
+                  title={item.name}></TouchViewMenu>
+              </View>
+            ))}
           </View>
         </View>
       </View>

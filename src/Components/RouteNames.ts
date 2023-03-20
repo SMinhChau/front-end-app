@@ -13,4 +13,9 @@ export default {
   GroupTab: languages['vi'].group,
   TermsTab: languages['vi'].term,
   accountTab: languages['vi'].account,
+
+  TermMenu: 'TermMenu',
+  TopicMenu: 'TopicMenu',
+  GroupMenu: 'GroupMenu',
+  LectureMenu: 'LectureMenu',
 };

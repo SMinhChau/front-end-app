@@ -1,5 +1,6 @@
 import {useEffect, useMemo, useState} from 'react';
 import {TouchableOpacity, View, Text, StyleSheet, Image} from 'react-native';
+import Lottie from 'lottie-react-native';
 import Header from '../../common/Header';
 import GlobalStyles from '../../common/styles/GlobalStyles';
 import {Images} from '../../assets/images/Images';
@@ -19,7 +20,7 @@ import {dispatch} from '@backpackapp-io/react-native-toast/lib/typescript/core/s
 import majorAPI from '../../redux/apis/major';
 import Major from '../../utilities/contants';
 import ModalAccount from './component/ModalAccount';
-import {responsiveWidth} from '../../utilities/sizeScreen';
+import {responsiveFont, responsiveWidth} from '../../utilities/sizeScreen';
 
 // interface Major {
 //   id: string;
@@ -41,7 +42,6 @@ const Account: React.FC<{}> = () => {
 
   const majorState = useAppSelector(state => state.major.major);
   const userState = useAppSelector(state => state.user.user);
-  const [majorById, setMajorById] = useState({});
 
   // useEffect(() => {
   //   dispatch(majorAPI.getMajorById()(userState?.majors?.id));
@@ -115,19 +115,24 @@ const Account: React.FC<{}> = () => {
     );
   };
 
-  const checkShowModal = () => {
-    if (!showModal) {
-      setShowModal(!showModal);
-    }
-  };
   return (
     <>
       <Header title="Thông tin" iconRight={true}></Header>
 
       <View style={[GlobalStyles.container, styles.content]}>
         <View style={[styles.update]}>
-          <TouchableOpacity style={styles.btnView} onPress={checkShowModal}>
-            <IconView name={'md-brush'} size={24} color={Colors.blueBoder} />
+          <TouchableOpacity
+            style={styles.btnView}
+            onPress={() => {
+              setShowModal(true);
+            }}>
+            <Lottie
+              source={require('../../../src/assets/jsonAmination/update.json')}
+              autoPlay
+              loop
+              style={styles.logo}
+            />
+
             <Text style={GlobalStyles.textPrimary}>
               {languages['vi'].update}
             </Text>
@@ -149,13 +154,12 @@ const Account: React.FC<{}> = () => {
         </TouchableOpacity>
       </View>
 
-      {showModal && (
-        <ModalAccount
-          title={languages['vi'].updateInfo}
-          onPressClose={() => {
-            setShowModal(false);
-          }}></ModalAccount>
-      )}
+      <ModalAccount
+        visible={showModal}
+        title={languages['vi'].updateInfo}
+        onPressClose={() => {
+          setShowModal(false);
+        }}></ModalAccount>
     </>
   );
 };
@@ -198,7 +202,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   update: {
-    flexDirection: 'row',
     justifyContent: 'flex-end',
     width: '100%',
     alignItems: 'flex-end',
@@ -213,5 +216,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'relative',
     right: responsiveWidth(10),
+  },
+  logo: {
+    width: 40,
+    height: 40,
+  },
+  textPrimary: {
+    fontSize: responsiveFont(16),
+    color: Colors.drakCyonBoder,
   },
 });

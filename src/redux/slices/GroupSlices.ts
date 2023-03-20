@@ -67,26 +67,38 @@ export const GroupSlices = createSlice({
       state.is_loading = false;
       state.error = false;
     });
+
     builder.addCase(groupAPI.getMyGroup().rejected, state => {
       state.error = true;
       state.is_loading = false;
     });
+
     builder.addCase(groupAPI.outMyGroup().pending, state => {
       state.is_loading = true;
     });
+
     builder.addCase(groupAPI.outMyGroup().fulfilled, (state, action) => {
-      console.log('GroupSlices action', action);
-      state.group = action.payload;
+      console.log('GroupSlices outMyGroup', action);
       state.is_loading = false;
+      state.group = action.payload;
       state.error = false;
     });
+
     builder.addCase(groupAPI.outMyGroup().rejected, state => {
       state.error = true;
       state.is_loading = false;
     });
+
     builder.addCase(groupAPI.createGroup().fulfilled, (state, action) => {
       console.log('createGroup action', action);
       state.group = action.payload;
+      state.is_loading = false;
+    });
+
+    builder.addCase(groupAPI.createGroup().rejected, (state, action) => {
+      console.log('createGroup action', action);
+      state.is_loading = false;
+      state.error = true;
     });
   },
 });

@@ -43,9 +43,6 @@ const Group: React.FC<{}> = () => {
 
   const [checkStartDate, setcheckStartDate] = useState(false);
   const [listGroup, setListGroup] = useState();
-  const [isJoinGroup, setJoinGroup] = useState(false);
-  const [listMenber, setListMember] = useState<User[]>([]);
-  const [isMyGroup, setMyGroup] = useState(false);
   const [topic, setTopic] = useState<Topic>();
   const isOuted = useAppSelector(state => state.group.is_outed);
 
@@ -68,39 +65,14 @@ const Group: React.FC<{}> = () => {
     getInfoGroup();
   }, [checkStartDate, termState]);
 
-  const getListGroup = async () => {
+  const getListGroup = useCallback(async () => {
     await groupService
       .getListGroup(termState.term.id)
       .then(result => {
         setListGroup(result.data);
       })
       .catch(error => console.log(error));
-  };
-
-  // const getGroupInfoById = useCallback(
-  //   (id: number) => {
-  //     groupService.getGroupById(id).then(result => {
-  //       if (result.data.members.length < 2) {
-  //         setListMember(result.data.members);
-
-  //         console.log(
-  //           'getGroupInfoById===========id result.data.members',
-  //           result.data.members,
-  //         );
-  //         console.log('id', id);
-  //         console.log('groupState?.group?.id', groupState?.group?.id);
-  //       }
-  //       listMenber.findIndex((i: any) => {
-  //         if (i?.id === groupState?.group?.id) {
-  //           setJoinGroup(false);
-  //         } else {
-  //           setJoinGroup(true);
-  //         }
-  //       });
-  //     });
-  //   },
-  //   [listGroup],
-  // );
+  }, [groupState]);
 
   const GroupView = useMemo(() => {
     return (
@@ -109,7 +81,7 @@ const Group: React.FC<{}> = () => {
           <>
             <TouchableOpacity
               onPress={() => {
-                checkShowModal();
+                setShowModal(true);
               }}
               style={[styles.content, GlobalStyles.margin20]}>
               <View style={styles.viewIcon}>
@@ -125,7 +97,7 @@ const Group: React.FC<{}> = () => {
         ) : (
           <>
             <TouchableOpacity
-              onPress={() => checkShowModalCreateGroup()}
+              onPress={() => setShowModalCreateGroup(true)}
               style={[styles.content, GlobalStyles.margin20]}>
               <View style={styles.viewIcon}>
                 <IconView
@@ -148,7 +120,6 @@ const Group: React.FC<{}> = () => {
         <GroupItem
           // join={isJoinGroup}
           // title={item?.name}
-
           groupInfo={item}
         />
       );
@@ -182,32 +153,16 @@ const Group: React.FC<{}> = () => {
         </View>
 
         <View style={[styles.flatList]}>
-          <ScrollView>
-            <FlatList
-              data={listGroup}
-              renderItem={(item: any) => renderGroupList(item?.item)}
-              keyExtractor={item => item.id}
-            />
-          </ScrollView>
+          <FlatList
+            data={listGroup}
+            initialNumToRender={20}
+            renderItem={(item: any) => renderGroupList(item?.item)}
+            keyExtractor={item => item.id}
+          />
         </View>
       </View>
     );
-  }, [listGroup]);
-
-  const checkShowModal = () => {
-    console.log('showModal>>>>>>>>>>>>>', showModal);
-
-    if (showModal === false) {
-      setShowModal(true);
-    }
-    dispatch(GroupSlices.actions.updateOutedGroup(false));
-  };
-
-  const checkShowModalCreateGroup = () => {
-    if (!showModalCreateGroup) {
-      setShowModalCreateGroup(!showModalCreateGroup);
-    }
-  };
+  }, [listGroup, groupState]);
 
   const getInfoGroup = () => {
     getTopicForGroup(
@@ -233,25 +188,19 @@ const Group: React.FC<{}> = () => {
           <NoneData icon title="Chưa đến thời gian chọn nhóm"></NoneData>
         )}
 
-        {console.log('outed', isOuted)}
-        {showModal && !isOuted && (
-          <ModalInfoGroup
-            infoGroup={groupState?.group}
-            title={'Thông tin nhóm'}
-            topicInfo={topic as Topic}
-            onPressClose={() => {
-              setShowModal(false);
-            }}></ModalInfoGroup>
-        )}
+        <ModalInfoGroup
+          visible={showModal}
+          infoGroup={groupState?.group}
+          title={'Thông tin nhóm'}
+          topicInfo={topic as Topic}
+          termInfoGroup={termState?.term}
+          modalClose={setShowModal}></ModalInfoGroup>
 
-        {showModalCreateGroup && (
-          <ModelCreateGroup
-            title={'Tạo nhóm'}
-            modalClose={() => setShowModalCreateGroup(false)}
-            onPressClose={() => {
-              setShowModalCreateGroup(false);
-            }}></ModelCreateGroup>
-        )}
+        <ModelCreateGroup
+          visible={showModalCreateGroup}
+          title={'Tạo nhóm'}
+          termCreateGroup={termState?.term}
+          modalClose={setShowModalCreateGroup}></ModelCreateGroup>
       </View>
     </>
   );

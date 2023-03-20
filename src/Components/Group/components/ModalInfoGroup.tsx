@@ -6,8 +6,9 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   FlatList,
+  Alert,
 } from 'react-native';
-import {Modal} from 'react-native-paper';
+import {Modal, Portal} from 'react-native-paper';
 import Lottie from 'lottie-react-native';
 import CloseButton from '../../../common/CloseButton';
 import IconView from '../../../common/IconView';
@@ -34,14 +35,17 @@ import {Images} from '../../../assets/images/Images';
 import groupService from '../../../services/group';
 import groupAPI from '../../../redux/apis/group';
 import {GroupSlices} from '../../../redux/slices/GroupSlices';
+import Term from '../../../utilities/Contant/Term';
 
 interface Props {
   title: string;
   onPressClose: () => void;
+  modalClose: React.Dispatch<React.SetStateAction<boolean>>;
   children: any;
   infoGroup: Group;
   topicInfo: Topic;
   visible: any;
+  termInfoGroup: Term;
 }
 interface Member {
   id: number;
@@ -69,25 +73,27 @@ interface Member {
 const ModalInfoGroup: React.FC<Props> = ({
   title,
   onPressClose,
-  children,
+  modalClose,
   infoGroup,
   topicInfo,
+  visible,
+  termInfoGroup,
 }) => {
   const [listMember, setListMember] = useState<[Member]>();
+  const [term, setTerm] = useState<Term>();
   const [topic, setTopic] = useState<Topic>();
   const groupState = useAppSelector(state => state.group);
-  const termState = useAppSelector(state => state.term);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    console.log('infoGroup?.members', infoGroup?.members);
+    console.log('topicInfo?', topicInfo);
+    console.log('groupState?', groupState);
     setListMember(infoGroup?.members);
     setTopic(topicInfo);
-  }, [listMember, topic]);
-
-  useEffect(() => {
-    dispatch(groupAPI.getMyGroup()(termState?.term?.id));
-  }, []);
+    setTerm(termInfoGroup);
+  }, [listMember, topic, groupState, term]);
 
   // const getTopicForGroup = useCallback(() => {
   //   console.log('getTopicForGroup>>.. result');
@@ -102,8 +108,6 @@ const ModalInfoGroup: React.FC<Props> = ({
 
   const renderListMember = useMemo(
     () => (item: any) => {
-      console.log('>>>>>>.renderListMember', item);
-
       return (
         <View style={styles.contenMember}>
           <View style={styles.leftContent}>
@@ -170,10 +174,16 @@ const ModalInfoGroup: React.FC<Props> = ({
     );
   }, [topic]);
 
-  const handleOutGroup = async (id: any) => {
+  const handleOutGroup = (id: any) => {
     console.log('handleOutGroup id', id);
-    await dispatch(groupAPI.outMyGroup()(id));
-    dispatch(GroupSlices.actions.updateOutedGroup(true));
+    dispatch(groupAPI.outMyGroup()(id)).then(result => {
+      console.log('handleCreatgroup result', result);
+
+      Alert.alert('Thông báo', 'Đã xóa nhóm thành công');
+      modalClose(false);
+    });
+
+    // dispatch(GroupSlices.actions.updateOutedGroup(true));
   };
 
   const renderButton = useMemo(() => {
@@ -182,7 +192,7 @@ const ModalInfoGroup: React.FC<Props> = ({
         {groupState?.group?.id === infoGroup?.id ? (
           <ButtonHandle
             icon
-            onPress={() => handleOutGroup(termState?.term?.id)}
+            onPress={() => handleOutGroup(term?.id)}
             title="Rời nhóm"
             style={styles.buttonOut}
           />
@@ -232,22 +242,24 @@ const ModalInfoGroup: React.FC<Props> = ({
   }, [listMember]);
 
   return (
-    <Modal visible style={{height: '100%'}}>
-      <View style={{backgroundColor: Colors.white}}>
-        <Text style={styles.title}>{title}</Text>
-        <CloseButton style={styles.logo} onPress={onPressClose} />
-      </View>
-      <ScrollView>
-        <View style={styles.content}>
-          {renderViewInfo}
-
-          <Text style={[styles.titleGroup]}>Thông tin Đề tài</Text>
-
-          {renderInfoTopic}
-          {renderButton}
+    <Portal>
+      <Modal visible={visible} style={{height: '100%'}}>
+        <View style={{backgroundColor: Colors.white}}>
+          <Text style={styles.title}>{title}</Text>
+          <CloseButton style={styles.logo} onPress={() => modalClose(false)} />
         </View>
-      </ScrollView>
-    </Modal>
+        <ScrollView>
+          <View style={styles.content}>
+            {renderViewInfo}
+
+            <Text style={[styles.titleGroup]}>Thông tin Đề tài</Text>
+
+            {renderInfoTopic}
+            {renderButton}
+          </View>
+        </ScrollView>
+      </Modal>
+    </Portal>
   );
 };
 export default ModalInfoGroup;

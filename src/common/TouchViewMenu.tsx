@@ -8,10 +8,11 @@ import GlobalStyles from './styles/GlobalStyles';
 interface Props {
   title?: string;
   require?: string;
+  onPress?: () => void;
 }
-const TouchViewMenu: React.FC<Props> = ({title}) => {
+const TouchViewMenu: React.FC<Props> = ({title, onPress}) => {
   return (
-    <TouchableOpacity style={[styles.content]}>
+    <TouchableOpacity style={[styles.content]} onPress={onPress}>
       <Lottie
         source={require('../../src/assets/jsonAmination/term_menu.json')}
         autoPlay

@@ -39,7 +39,7 @@ const TabNavigation = () => {
       tabBar={props => <MyTabBar {...props} />}
       screenOptions={{headerShown: false}}>
       {tabScreens.map((tab, index) => (
-        <Tab.Screen key={tab.name} {...tab} />
+        <Tab.Screen key={index} {...tab} />
       ))}
     </Tab.Navigator>
   );

@@ -11,6 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import Logo from '../common/logo';
 import GlobalStyles from '../common/styles/GlobalStyles';
 import Colors from '../Themes/Colors';
+import Lottie from 'lottie-react-native';
 
 import {Images} from '../assets/images/Images';
 import RouteNames from './RouteNames';
@@ -18,6 +19,7 @@ import tokenService from '../services/token';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
 import {useDispatch} from 'react-redux';
 import authAPI from '../redux/apis/auth';
+import {responsiveFont, responsiveHeight} from '../utilities/sizeScreen';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
@@ -45,16 +47,25 @@ const SplashScreen = () => {
 
   return (
     <>
+      <StatusBar backgroundColor={'#3355f0'} />
       <View style={styles.content}>
         <Image source={Images.background_flast} style={styles.bg} />
-        <Logo
+        {/* <Logo
           source={Images.logo}
           height={300}
           width={300}
           tintColor={Colors.black}
+        /> */}
+        <Lottie
+          source={require('../../src/assets/jsonAmination/start_screen.json')}
+          autoPlay
+          loop
+          style={styles.logo}
         />
-        <ActivityIndicator size={'large'} color={Colors.primaryButton} />
-        <Text style={GlobalStyles.textPrimary}>Xin chào!</Text>
+        <View style={styles.cotent}>
+          <ActivityIndicator size={'large'} color={'#bec7ef'} />
+          <Text style={styles.title}>Xin Chào!</Text>
+        </View>
       </View>
     </>
   );
@@ -72,5 +83,16 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'absolute',
+  },
+  logo: {},
+  cotent: {
+    position: 'relative',
+
+    top: 160,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: Colors.headerColor,
   },
 });

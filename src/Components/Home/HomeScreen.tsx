@@ -47,7 +47,7 @@ const Home: React.FC<data> = ({}) => {
 
   useEffect(() => {
     dispatch(groupAPI.getMyGroup()(termState?.id));
-  }, [termState]);
+  }, []);
 
   const majorView = useMemo(() => {
     return (
@@ -87,9 +87,17 @@ const Home: React.FC<data> = ({}) => {
               </Text>
             </View>
           ) : (
-            <Text style={styles.titleLogoGroup}>
-              Bạn chưa có nhóm. Vui lòng chọn nhóm
-            </Text>
+            <>
+              <Text style={[styles.titleLogoGroup, styles.titleNonGroup]}>
+                Bạn chưa có nhóm. Vui lòng chọn nhóm
+              </Text>
+              <Lottie
+                source={require('../../../src/assets/jsonAmination/warning.json')}
+                autoPlay={true}
+                loop
+                style={styles.logoAmination}
+              />
+            </>
           )}
         </View>
       </>
@@ -140,12 +148,12 @@ const styles = StyleSheet.create({
   },
   contentMenu: {
     height: responsiveHeight(50),
-    padding: 10,
-    backgroundColor: '#80b918',
-    borderRadius: 10,
+
+    backgroundColor: '#80d0f3',
+
     borderColor: Colors.blueBoder,
     borderTopWidth: 1,
-
+    borderRadius: 5,
     marginVertical: responsiveHeight(10),
     justifyContent: 'center',
     alignItems: 'center',
@@ -197,10 +205,13 @@ const styles = StyleSheet.create({
   },
   titleLogoGroup: {
     fontSize: responsiveFont(17),
-    color: Colors.grayLight,
+    color: Colors.bg,
     fontWeight: '400',
-    paddingHorizontal: responsiveWidth(10),
+    paddingHorizontal: responsiveWidth(20),
     textDecorationStyle: 'double',
+  },
+  titleNonGroup: {
+    color: Colors.headerColor,
   },
   bottom: {
     backgroundColor: '#caf0f8',
@@ -227,5 +238,9 @@ const styles = StyleSheet.create({
   main: {
     position: 'relative',
     top: responsiveHeight(-35),
+  },
+  logoAmination: {
+    position: 'absolute',
+    right: -180,
   },
 });

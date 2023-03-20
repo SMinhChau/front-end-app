@@ -36,23 +36,25 @@ const GroupItem: React.FC<Props> = ({
   groupInfo,
   menberInfo,
 }) => {
-  const groupState = useAppSelector(state => state.group);
-  const [isJoinGroup, setJoinGroup] = useState(false);
+  const [itemGroup, setItemGroup] = useState<Group>();
   const [infoGroupItem, setInfoGroupItem] = useState<Group>();
   const [member, setMember] = useState('');
   const [topic, setTopic] = useState<Topic>();
 
   const [visible, setVisible] = useState(false);
 
-  const containerStyle = {backgroundColor: 'white', padding: 20};
+  useEffect(() => {
+    setItemGroup(groupInfo);
+  }, [itemGroup, topic]);
 
   useEffect(() => {
     handleGetInforGroup();
     getTopicForGroup();
-  }, [isJoinGroup]);
+  }, []);
 
   const handleGetInforGroup = () => {
-    groupService.getGroupById(groupInfo?.id).then(result => {
+    console.log('handleGetInforGroup itemGroup', itemGroup);
+    groupService.getGroupById(itemGroup?.id as number).then(result => {
       setInfoGroupItem(result.data);
       console.log('handleGetInforGroup result?.data', result?.data);
       setMember(result?.data?.members);
@@ -61,11 +63,11 @@ const GroupItem: React.FC<Props> = ({
 
   const getTopicForGroup = () => {
     topicService
-      .getMajorById(groupInfo?.topic?.id)
+      .getMajorById(itemGroup?.topic?.id as number)
       .then(result => {
         setTopic(result?.data);
       })
-      .catch(error => console.log('getTopicForGroup>>.. error', error));
+      .catch(error => console.log('getTopic error', error));
   };
 
   return (
@@ -89,7 +91,7 @@ const GroupItem: React.FC<Props> = ({
             width: '90%',
           }}>
           <Text numberOfLines={1} style={styles.titleGroup}>
-            {groupInfo?.name}
+            {itemGroup?.name}
           </Text>
 
           <Text style={styles.nemberMember}>Số lượng: {member?.length} </Text>
@@ -102,15 +104,12 @@ const GroupItem: React.FC<Props> = ({
         </View>
 
         <Portal>
-          {visible && (
-            <ModalInfoGroup
-              infoGroup={infoGroupItem as Group}
-              title={'Thông tin nhóm'}
-              topicInfo={topic as Topic}
-              onPressClose={() => {
-                setVisible(false);
-              }}></ModalInfoGroup>
-          )}
+          <ModalInfoGroup
+            visible={visible}
+            infoGroup={itemGroup as Group}
+            title={'Thông tin nhóm'}
+            topicInfo={topic as Topic}
+            modalClose={setVisible}></ModalInfoGroup>
         </Portal>
       </TouchableOpacity>
     </>
