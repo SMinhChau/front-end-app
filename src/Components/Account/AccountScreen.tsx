@@ -157,9 +157,7 @@ const Account: React.FC<{}> = () => {
       <ModalAccount
         visible={showModal}
         title={languages['vi'].updateInfo}
-        onPressClose={() => {
-          setShowModal(false);
-        }}></ModalAccount>
+        onPressClose={setShowModal}></ModalAccount>
     </>
   );
 };

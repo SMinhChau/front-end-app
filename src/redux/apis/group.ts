@@ -6,6 +6,8 @@ import groupService from '../../services/group';
 class GroupAPI {
   getMyGroup() {
     return createAsyncThunk('group/get-my-group', async (termId: number) => {
+      console.log('>getMyGroup termId', termId);
+
       const result = await groupService.getMyGroup(termId);
       if (result.status === 200) return result.data;
     });

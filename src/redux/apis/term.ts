@@ -1,3 +1,4 @@
+import {log} from 'react-native-reanimated';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import termService from '../../services/term';
 
@@ -5,6 +6,8 @@ class TermrAPI {
   getLastTerm() {
     return createAsyncThunk('term/get-term-last', async (majorsId: number) => {
       try {
+        console.log('>>getLastTerm majorsId', majorsId);
+
         const result = await termService.getLastTerm(majorsId);
         if (result.status === 200) return result.data;
       } catch (error) {

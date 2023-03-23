@@ -35,6 +35,8 @@ import Topic from '../../utilities/Contant/Topic';
 import {To} from 'react-router-dom';
 import ModelCreateGroup from './components/ModelCreateGroup';
 import {GroupSlices} from '../../redux/slices/GroupSlices';
+import {isEmpty} from 'lodash';
+import termrAPI from '../../redux/apis/term';
 
 const Group: React.FC<{}> = () => {
   const groupState = useAppSelector(state => state.group);
@@ -61,17 +63,21 @@ const Group: React.FC<{}> = () => {
 
   useEffect(() => {
     checkTermStart();
-    getListGroup();
+    if (isEmpty(groupState?.group?.id)) {
+      getListGroup();
+    }
     getInfoGroup();
-  }, [checkStartDate, termState]);
+  }, [checkStartDate, termState, groupState]);
 
   const getListGroup = useCallback(async () => {
-    await groupService
-      .getListGroup(termState.term.id)
-      .then(result => {
-        setListGroup(result.data);
-      })
-      .catch(error => console.log(error));
+    if (termState.term.id) {
+      await groupService
+        .getListGroup(termState.term.id)
+        .then(result => {
+          setListGroup(result.data);
+        })
+        .catch(error => console.log(error));
+    }
   }, [groupState]);
 
   const GroupView = useMemo(() => {
@@ -116,13 +122,7 @@ const Group: React.FC<{}> = () => {
 
   const renderGroupList = useMemo(
     () => (item: any) => {
-      return (
-        <GroupItem
-          // join={isJoinGroup}
-          // title={item?.name}
-          groupInfo={item}
-        />
-      );
+      return <GroupItem termInfoGroup={termState?.term} groupInfo={item} />;
     },
     [],
   );
@@ -138,29 +138,39 @@ const Group: React.FC<{}> = () => {
 
   const ListGroup = useMemo(() => {
     return (
-      <View style={[styles.bottomContent]}>
-        <View style={styles.contentTitle}>
-          <View style={styles.viewIcon}>
-            <IconView name="people-sharp" color={Colors.iconbr} size={26} />
-          </View>
-          <Text style={styles.titleGroup}>Danh sách nhóm</Text>
-          <Lottie
-            source={require('../../assets/jsonAmination/62114-people-icons-lottie-animation.json')}
-            autoPlay
-            loop
-            style={styles.amination}
-          />
-        </View>
+      <>
+        {groupState?.group?.id ? null : (
+          <>
+            <View style={[styles.bottomContent]}>
+              <View style={styles.contentTitle}>
+                <View style={styles.viewIcon}>
+                  <IconView
+                    name="people-sharp"
+                    color={Colors.iconbr}
+                    size={26}
+                  />
+                </View>
+                <Text style={styles.titleGroup}>Danh sách nhóm</Text>
+                <Lottie
+                  source={require('../../assets/jsonAmination/62114-people-icons-lottie-animation.json')}
+                  autoPlay
+                  loop
+                  style={styles.amination}
+                />
+              </View>
 
-        <View style={[styles.flatList]}>
-          <FlatList
-            data={listGroup}
-            initialNumToRender={20}
-            renderItem={(item: any) => renderGroupList(item?.item)}
-            keyExtractor={item => item.id}
-          />
-        </View>
-      </View>
+              <View style={[styles.flatList]}>
+                <FlatList
+                  data={listGroup}
+                  initialNumToRender={20}
+                  renderItem={(item: any) => renderGroupList(item?.item)}
+                  keyExtractor={item => item.id}
+                />
+              </View>
+            </View>
+          </>
+        )}
+      </>
     );
   }, [listGroup, groupState]);
 
@@ -173,15 +183,12 @@ const Group: React.FC<{}> = () => {
   return (
     <>
       <View style={[GlobalStyles.container]}>
-        <Header
-          title="Nhóm"
-          // iconLeft={true}
-          // home={true}
-          iconRight={true}></Header>
+        <Header title="Nhóm" iconRight={true}></Header>
 
         {checkStartDate ? (
           <>
             {GroupView}
+
             {ListGroup}
           </>
         ) : (

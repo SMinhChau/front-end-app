@@ -1,6 +1,7 @@
+import {log} from 'react-native-reanimated';
 import axios from 'axios';
 import Config from 'react-native-config';
-import {axiosAuth, axiosNotAuth} from '../utilities/axiosConfig';
+import {axiosAuth, axiosFormData, axiosNotAuth} from '../utilities/axiosConfig';
 import tokenService from './token';
 
 class AuthService {
@@ -19,17 +20,21 @@ class AuthService {
     });
   }
 
-  updateUserInfo(data: FormData) {
-    return axios({
-      method: 'put',
-      url: `${Config.API_URL}api/student/me`,
-      data,
-      headers: {
-        'Content-type': 'multipart/form-data',
-        Authorization: `Bearer  ${tokenService.getAccessToken()}`,
-      },
-    });
-  }
+  updateUserInfo = async (data: FormData) => {
+    try {
+      const result = await axiosFormData({
+        url: 'api/student/me',
+        method: 'put',
+        data,
+      });
+
+      console.log('>>>>updateUserInfo ', result);
+
+      return result;
+    } catch (error) {
+      console.log('updateUserInfo', error);
+    }
+  };
 }
 
 const authService = new AuthService();

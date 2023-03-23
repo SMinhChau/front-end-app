@@ -1,3 +1,4 @@
+import {log} from 'react-native-reanimated';
 import axios, {AxiosRequestHeaders} from 'axios';
 import Config from 'react-native-config';
 import tokenService from '../services/token';
@@ -60,7 +61,7 @@ const axiosNotAuth = axios.create();
 
 axiosNotAuth.interceptors.request.use(
   async config => {
-    config.baseURL = await Config.API_URL;
+    config.baseURL = Config.API_URL;
     console.log(' Config.API_URL', Config.API_URL);
     console.log('config', config);
     return config;
@@ -68,4 +69,24 @@ axiosNotAuth.interceptors.request.use(
   error => Promise.reject(error),
 );
 
-export {axiosAuth, axiosNotAuth};
+const axiosFormData = axios.create({
+  baseURL: Config.API_URL,
+  headers: {
+    'Content-type': 'multipart/form-data',
+  },
+});
+axiosFormData.interceptors.response = axiosAuth.interceptors.response;
+
+axiosFormData.interceptors.request.use(
+  async config => {
+    const access_token = await tokenService.getAccessToken();
+    (config.headers as AxiosRequestHeaders).Authorization =
+      'Bearer ' + access_token;
+    console.log('axiosFormData', config);
+
+    return config;
+  },
+  error => Promise.reject(error),
+);
+
+export {axiosAuth, axiosNotAuth, axiosFormData};

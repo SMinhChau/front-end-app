@@ -25,8 +25,6 @@ import {
 } from '../../utilities/sizeScreen';
 import termrAPI from '../../redux/apis/term';
 import groupAPI from '../../redux/apis/group';
-import {Images} from '../../assets/images/Images';
-import {Json} from '../../assets/jsonAmination/json';
 
 interface data {
   data: data;
@@ -41,13 +39,17 @@ const Home: React.FC<data> = ({}) => {
   const groupState = useAppSelector(state => state.group);
 
   useEffect(() => {
-    dispatch(majorAPI.getMajorById()(userState?.user?.majors?.id));
-    dispatch(termrAPI.getLastTerm()(userState?.user?.majors?.id));
+    console.log('userState============= user', userState?.user);
+
+    if (userState?.user?.majors?.id) {
+      dispatch(majorAPI.getMajorById()(userState?.user?.majors?.id));
+      dispatch(termrAPI.getLastTerm()(userState?.user?.majors?.id));
+    }
   }, [userState]);
 
   useEffect(() => {
     dispatch(groupAPI.getMyGroup()(termState?.id));
-  }, []);
+  }, [termState]);
 
   const majorView = useMemo(() => {
     return (

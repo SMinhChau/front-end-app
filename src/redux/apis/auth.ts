@@ -34,16 +34,20 @@ class AuthAPI {
   }
 
   updateUserInfo() {
-    return createAsyncThunk('user/update-info', async (data: FormData) => {
-      console.log('user/update-info update data', data);
-      try {
-        const result = await authService.updateUserInfo(data);
-        console.log(' updateUserInfo ======result', result);
-        if (result.status === 200) return result.data;
-      } catch (error) {
-        console.log(' updateUserInfo ======error', error);
-      }
-    });
+    return createAsyncThunk(
+      'user/update-info',
+      async (data: FormData, thunkAPI) => {
+        console.log('user/update-info update data', data);
+        try {
+          const result = await authService.updateUserInfo(data);
+          console.log('updateUserInfo ======result', result);
+          if (result.status === 200) return result.data;
+        } catch (error) {
+          console.log(' updateUserInfo ======error', error);
+          return thunkAPI.rejectWithValue('update fail');
+        }
+      },
+    );
   }
 }
 

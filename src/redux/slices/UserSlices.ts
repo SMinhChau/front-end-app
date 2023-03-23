@@ -10,6 +10,8 @@ interface StateType {
   error: boolean;
   is_loading: boolean;
   is_login: boolean;
+  updated: boolean;
+  updateError: boolean;
 }
 
 const initialState = {
@@ -31,6 +33,8 @@ const initialState = {
   },
   error: false,
   is_login: false,
+  updated: false,
+  updateError: false,
 } as StateType;
 
 export const userSlice = createSlice({
@@ -64,11 +68,14 @@ export const userSlice = createSlice({
     });
     builder.addCase(authAPI.updateUserInfo().fulfilled, (state, action) => {
       console.log('action updateUserInfo fulfilled', action);
-      state.user = action.payload.user;
-      state.error = false;
+
+      state.user = action.payload;
+      state.updated = true;
+
+      state.updateError = false;
     });
     builder.addCase(authAPI.updateUserInfo().rejected, state => {
-      state.error = true;
+      state.updateError = true;
     });
   },
 });

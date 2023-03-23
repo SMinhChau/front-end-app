@@ -39,14 +39,14 @@ import Term from '../../../utilities/Contant/Term';
 import {isEmpty} from '../../../utilities/utils';
 
 interface Props {
-  title?: string;
-  onPressClose?: () => void;
-  modalClose?: React.Dispatch<React.SetStateAction<boolean>>;
-  children?: any;
-  infoGroup?: Group;
-  topicInfo?: Topic;
-  visible?: any;
-  termInfoGroup?: Term;
+  title: string;
+  onPressClose: () => void;
+  modalClose: React.Dispatch<React.SetStateAction<boolean>>;
+  children: any;
+  infoGroup: Group;
+  topicInfo: Topic;
+  visible: any;
+  termInfoGroup: Term;
 }
 interface Member {
   id: number;
@@ -71,7 +71,7 @@ interface Member {
   };
 }
 
-const ModalInfoGroup: React.FC<Props> = ({
+const ModalInfoGroupFromList: React.FC<Props> = ({
   title,
   modalClose,
   infoGroup,
@@ -80,7 +80,7 @@ const ModalInfoGroup: React.FC<Props> = ({
   termInfoGroup,
 }) => {
   const [listMember, setListMember] = useState<[Member]>();
-
+  const [term, setTerm] = useState<Term>();
   const [topic, setTopic] = useState<Topic>();
   const groupState = useAppSelector(state => state.group);
 
@@ -89,7 +89,8 @@ const ModalInfoGroup: React.FC<Props> = ({
   useEffect(() => {
     setListMember(infoGroup?.members);
     setTopic(topicInfo);
-  });
+    setTerm(termInfoGroup);
+  }, []);
 
   // const getTopicForGroup = useCallback(() => {
   //   console.log('getTopicForGroup>>.. result');
@@ -104,8 +105,6 @@ const ModalInfoGroup: React.FC<Props> = ({
 
   const renderListMember = useMemo(
     () => (item: any) => {
-      console.log('renderListMember', item);
-
       return (
         <View style={styles.contenMember}>
           <View style={styles.leftContent}>
@@ -137,7 +136,7 @@ const ModalInfoGroup: React.FC<Props> = ({
         </View>
       );
     },
-    [listMember],
+    [],
   );
 
   const renderInfoTopic = useMemo(() => {
@@ -190,7 +189,7 @@ const ModalInfoGroup: React.FC<Props> = ({
         {groupState?.group?.id === infoGroup?.id ? (
           <ButtonHandle
             icon
-            onPress={() => handleOutGroup(termInfoGroup?.id)}
+            onPress={() => handleOutGroup(term?.id)}
             title="Rời nhóm"
             style={styles.buttonOut}
           />
@@ -214,7 +213,6 @@ const ModalInfoGroup: React.FC<Props> = ({
         <Text style={[styles.titleGroup, {marginTop: 5}]}>
           Thông tin sinh viên
         </Text>
-
         {listMember?.length ? (
           <View style={[styles.flatList]}>
             <FlatList
@@ -242,9 +240,7 @@ const ModalInfoGroup: React.FC<Props> = ({
 
   return (
     <Portal>
-      <Modal
-        visible={visible}
-        style={{height: '100%', marginHorizontal: responsiveWidth(10)}}>
+      <Modal visible={visible} style={styles.container}>
         <View style={{backgroundColor: Colors.white}}>
           <Text style={styles.title}>{title}</Text>
           <CloseButton style={styles.logo} onPress={() => modalClose(false)} />
@@ -263,9 +259,14 @@ const ModalInfoGroup: React.FC<Props> = ({
     </Portal>
   );
 };
-export default ModalInfoGroup;
+export default ModalInfoGroupFromList;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+
+    marginHorizontal: responsiveWidth(10),
+  },
   title: {
     fontSize: responsiveFont(20),
     color: Colors.textPrimary,

@@ -63,7 +63,7 @@ const TermsScreen: React.FC<{}> = () => {
         <View style={styles.top}>
           <View style={styles.topTop}>
             {menu.map((item, index) => (
-              <View style={styles.iconRight}>
+              <View key={index} style={styles.iconRight}>
                 <Ionicons
                   name={item.icon}
                   color={Colors.primaryButton}

@@ -11,11 +11,11 @@ import Icon from 'react-native-paper/lib/typescript/components/Icon';
 import IconView from './IconView';
 
 interface Props {
-  title: string;
-  style: any;
-  onPress: () => void;
+  title?: string;
+  style?: any;
+  onPress?: () => void;
   disabled?: boolean;
-  textStyle: any;
+  textStyle?: any;
   wrapper?: string;
   nameIcon?: string;
   icon?: boolean;

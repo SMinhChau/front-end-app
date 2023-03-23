@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {Button, Modal, Portal} from 'react-native-paper';
 import CloseButton from '../../../common/CloseButton';
@@ -9,6 +9,7 @@ import groupService from '../../../services/group';
 import topicService from '../../../services/topic';
 import Colors from '../../../Themes/Colors';
 import Group from '../../../utilities/Contant/Group';
+import Term from '../../../utilities/Contant/Term';
 import Topic from '../../../utilities/Contant/Topic';
 import User from '../../../utilities/contants';
 import {
@@ -16,15 +17,17 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from '../../../utilities/sizeScreen';
+import {isEmpty} from '../../../utilities/utils';
 import ModalInfoGroup from './ModalInfoGroup';
 
 interface Props {
-  title: string;
+  title?: string;
   icon?: boolean;
-  onPress: () => void;
-  handleJoin: () => void;
-  join: boolean;
-  groupInfo: Group;
+  onPress?: () => void;
+  handleJoin?: () => void;
+  join?: boolean;
+  groupInfo?: Group;
+  termInfoGroup?: Term;
   menberInfo?: string;
 }
 const GroupItem: React.FC<Props> = ({
@@ -34,84 +37,93 @@ const GroupItem: React.FC<Props> = ({
   join,
   handleJoin,
   groupInfo,
+  termInfoGroup,
   menberInfo,
 }) => {
-  const [itemGroup, setItemGroup] = useState<Group>();
   const [infoGroupItem, setInfoGroupItem] = useState<Group>();
   const [member, setMember] = useState('');
   const [topic, setTopic] = useState<Topic>();
 
   const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    setItemGroup(groupInfo);
-  }, [itemGroup, topic]);
-
   useEffect(() => {
     handleGetInforGroup();
     getTopicForGroup();
   }, []);
 
-  const handleGetInforGroup = () => {
-    console.log('handleGetInforGroup itemGroup', itemGroup);
-    groupService.getGroupById(itemGroup?.id as number).then(result => {
-      setInfoGroupItem(result.data);
-      console.log('handleGetInforGroup result?.data', result?.data);
-      setMember(result?.data?.members);
-    });
-  };
+  const handleGetInforGroup = useCallback(() => {
+    console.log('handleGetInforGroup groupInfo', groupInfo);
+    if (!isEmpty(groupInfo)) {
+      groupService.getGroupById(groupInfo?.id as number).then(result => {
+        setInfoGroupItem(result.data);
+        console.log('handleGetInforGroup result?.data', result?.data);
+        setMember(result?.data?.members);
+      });
+    }
+  }, [infoGroupItem]);
 
-  const getTopicForGroup = () => {
-    topicService
-      .getMajorById(itemGroup?.topic?.id as number)
-      .then(result => {
-        setTopic(result?.data);
-      })
-      .catch(error => console.log('getTopic error', error));
-  };
+  const getTopicForGroup = useCallback(() => {
+    if (!isEmpty(groupInfo)) {
+      topicService
+        .getMajorById(groupInfo?.topic?.id as number)
+        .then(result => {
+          setTopic(result?.data);
+        })
+        .catch(error => console.log('getTopic error', error));
+    }
+  }, [groupInfo]);
+  const topContent = useMemo(() => {
+    return (
+      <>
+        <TouchableOpacity
+          onPress={() => {
+            console.log('GroupItem infoGroupItem', infoGroupItem);
+
+            setVisible(true);
+          }}
+          style={[GlobalStyles.margin20, styles.contentTitle]}>
+          <View style={styles.viewIcon}>
+            <IconView
+              name="ios-people-circle-sharp"
+              color={Colors.iconbr}
+              size={26}
+            />
+          </View>
+          <View
+            style={{
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+              width: '90%',
+            }}>
+            <Text numberOfLines={1} style={styles.titleGroup}>
+              {infoGroupItem?.name}
+            </Text>
+
+            <Text style={styles.nemberMember}>Số lượng: {member?.length} </Text>
+
+            {/* {isJoinGroup && (
+      <TouchableOpacity onPress={handleJoin}>
+        <Text style={styles.joinStyle}>Tham gia </Text>
+      </TouchableOpacity>
+    )} */}
+          </View>
+        </TouchableOpacity>
+      </>
+    );
+  }, [infoGroupItem, member]);
 
   return (
     <>
-      <TouchableOpacity
-        onPress={() => {
-          setVisible(true);
-        }}
-        style={[GlobalStyles.margin20, styles.contentTitle]}>
-        <View style={styles.viewIcon}>
-          <IconView
-            name="ios-people-circle-sharp"
-            color={Colors.iconbr}
-            size={26}
-          />
-        </View>
-        <View
-          style={{
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            width: '90%',
-          }}>
-          <Text numberOfLines={1} style={styles.titleGroup}>
-            {itemGroup?.name}
-          </Text>
+      {topContent}
 
-          <Text style={styles.nemberMember}>Số lượng: {member?.length} </Text>
-
-          {/* {isJoinGroup && (
-            <TouchableOpacity onPress={handleJoin}>
-              <Text style={styles.joinStyle}>Tham gia </Text>
-            </TouchableOpacity>
-          )} */}
-        </View>
-
-        <Portal>
-          <ModalInfoGroup
-            visible={visible}
-            infoGroup={itemGroup as Group}
-            title={'Thông tin nhóm'}
-            topicInfo={topic as Topic}
-            modalClose={setVisible}></ModalInfoGroup>
-        </Portal>
-      </TouchableOpacity>
+      <Portal>
+        <ModalInfoGroup
+          visible={visible}
+          infoGroup={infoGroupItem as Group}
+          title={'Thông tin nhóm'}
+          topicInfo={topic as Topic}
+          termInfoGroup={termInfoGroup}
+          modalClose={setVisible}></ModalInfoGroup>
+      </Portal>
     </>
   );
 };

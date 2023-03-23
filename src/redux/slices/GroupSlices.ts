@@ -8,6 +8,7 @@ interface StateType {
   error: boolean;
   is_loading: boolean;
   is_outed: boolean;
+  listGroup: object;
 }
 
 const initialState = {
@@ -43,7 +44,7 @@ const initialState = {
       },
     ],
   },
-
+  listGroup: [],
   is_loading: false,
   error: false,
   is_outed: false,
@@ -55,6 +56,9 @@ export const GroupSlices = createSlice({
   reducers: {
     updateOutedGroup: (state, action: PayloadAction<boolean>) => {
       state.is_outed = action.payload;
+    },
+    setListGroup: (state, action: PayloadAction<Object>) => {
+      state.listGroup = action.payload;
     },
   },
   extraReducers: builder => {

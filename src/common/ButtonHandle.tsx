@@ -10,14 +10,14 @@ import {responsiveHeight, responsiveWidth} from '../utilities/sizeScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 interface Props {
-  title: string;
-  style: any;
-  onPress: () => void;
+  title?: string;
+  style?: any;
+  onPress?: () => void;
   out?: boolean;
-  textStyle: any;
-  wrapper: string;
+  textStyle?: any;
+  wrapper?: string;
   icon?: boolean;
-  colorIcon: any;
+  colorIcon?: any;
   iconName?: string;
 }
 

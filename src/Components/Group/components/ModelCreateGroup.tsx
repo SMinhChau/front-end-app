@@ -16,13 +16,14 @@ import {GroupSlices} from '../../../redux/slices/GroupSlices';
 
 import {result} from 'lodash';
 import Term from '../../../utilities/Contant/Term';
+import {isEmpty} from '../../../utilities/utils';
 
 interface Props {
   title?: string;
-  onPressClose: () => void;
-  modalClose: React.Dispatch<React.SetStateAction<boolean>>;
+  onPressClose?: () => void;
+  modalClose?: React.Dispatch<React.SetStateAction<boolean>>;
   termCreateGroup?: any;
-  visible: any;
+  visible?: any;
 }
 
 const ModelCreateGroup: React.FC<Props> = ({
@@ -47,24 +48,25 @@ const ModelCreateGroup: React.FC<Props> = ({
   const handleCreatgroup = () => {
     console.log('termState?.term?.id', term?.id);
     console.log('nameGroupInput', nameGroupInput);
+    if (!isEmpty(term?.id)) {
+      dispatch(
+        groupAPI.createGroup()({
+          termId: term?.id as number,
+          name: nameGroupInput,
+        }),
+      )
+        .then(result => {
+          console.log('handleCreatgroup result', result);
 
-    dispatch(
-      groupAPI.createGroup()({
-        termId: term?.id as number,
-        name: nameGroupInput,
-      }),
-    )
-      .then(result => {
-        console.log('handleCreatgroup result', result);
+          Alert.alert('Thông báo', 'Tạo nhóm thành công');
+          modalClose(false);
+        })
+        .catch(error => {
+          console.log('handleCreatgroup error', error);
 
-        Alert.alert('Thông báo', 'Tạo nhóm thành công');
-        modalClose(false);
-      })
-      .catch(error => {
-        console.log('handleCreatgroup error', error);
-
-        Alert.alert('Thông báo', 'Tạo nhóm không thành công');
-      });
+          Alert.alert('Thông báo', 'Tạo nhóm không thành công');
+        });
+    }
   };
 
   return (

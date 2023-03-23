@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   FlatList,
+  Alert,
   Image,
 } from 'react-native';
 import MultipleImagePicker from '@baronha/react-native-multiple-image-picker';
@@ -34,7 +35,7 @@ import CustomButton from '../../../common/CustomButton';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
 import TextInputView from '../../../common/TextInputView';
 import IconView from '../../../common/IconView';
-import {validateEmail} from '../../../utilities/utils';
+import {isEmpty, validateEmail} from '../../../utilities/utils';
 import GenderButton from '../../../common/GenderButton';
 
 import {Images} from '../../../assets/images/Images';
@@ -44,74 +45,65 @@ import data from '../../Home/data';
 
 interface Props {
   title: string;
-  onPressClose(): any;
+  onPressClose: React.Dispatch<React.SetStateAction<boolean>>;
   visible: boolean;
 }
 interface ImagePicker {
-  bucketId: number;
   fileName: string;
-  height: number;
-  localIdentifier: number;
-  mime: string;
-  parentFolderName: string;
-  path: string;
-  realPath: string;
-  size: number;
+
   uri: string;
   type: string;
 }
 const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
-  const userState = useAppSelector(state => state.user.user);
-  const [images, setImages] = useState([]);
+  const userState = useAppSelector(state => state.user);
   const [selectedAvatar, setSelectedAvatar] = useState<ImagePicker>();
   const dispatch = useAppDispatch();
-  const [username, setUsername] = useState('');
 
   const BASIC_INFO = [
     {
       key: 'username',
-      placeholder: userState?.username,
+      placeholder: userState?.user?.username,
       title: `${languages['vi'].code}`,
     },
     {
       key: 'name',
-      placeholder: userState?.name,
+      placeholder: userState?.user?.name,
       title: `${languages['vi'].name}`,
     },
     {
       key: 'gender',
-      placeholder: userState?.gender,
+      placeholder: userState?.user?.gender,
       title: `${languages['vi'].code}`,
     },
     {
       key: 'schoolYear',
-      placeholder: userState?.schoolYear,
+      placeholder: userState?.user?.schoolYear,
       title: `${languages['vi'].schoolYear}`,
     },
     {
       key: 'phoneNumber',
-      placeholder: userState?.phoneNumber,
+      placeholder: userState?.user?.phoneNumber,
       title: `${languages['vi'].numberPhone}`,
     },
     {
       key: 'email',
-      placeholder: userState?.email,
+      placeholder: userState?.user?.email,
       title: `${languages['vi'].email}`,
     },
   ];
 
   const [basicInfo, setBasicInfo] = useState({
-    avatar: userState?.avatar,
-    username: userState?.username,
-    name: userState?.name,
-    gender: userState?.gender || '',
-    schoolYear: userState?.schoolYear || '',
-    typeTraining: userState?.typeTraining,
-    phoneNumber: userState?.phoneNumber,
-    email: userState?.email,
+    avatar: userState?.user?.avatar,
+    username: userState?.user?.username,
+    name: userState?.user?.name,
+    gender: userState?.user?.gender || '',
+    schoolYear: userState?.user?.schoolYear || '',
+    typeTraining: userState?.user?.typeTraining,
+    phoneNumber: userState?.user?.phoneNumber,
+    email: userState?.user?.email,
   });
 
-  const handleSubmitForm = () => {
+  const handleSubmitForm = async () => {
     console.log('handleSubmitForm >>>>>>selectedAvatar', selectedAvatar);
     setBasicInfo({
       ...basicInfo,
@@ -125,17 +117,26 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
     formData.append('typeTraining', basicInfo.typeTraining);
     formData.append('phoneNumber', basicInfo.phoneNumber);
     formData.append('email', basicInfo.email);
-    selectedAvatar
-      ? formData.append('avatar', {
-          uri: selectedAvatar?.uri,
-          type: selectedAvatar?.mime,
-          fileName: selectedAvatar?.fileName,
-        })
-      : formData.append('avatar', basicInfo?.avatar);
+    if (selectedAvatar?.uri) {
+      formData.append('avatar', {
+        uri: selectedAvatar?.uri,
+        type: selectedAvatar?.type,
+        fileName: selectedAvatar?.fileName,
+      });
+    } else {
+      formData.append('avatar', basicInfo?.avatar);
+    }
+
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>formData', formData);
     dispatch(authAPI.updateUserInfo()(formData));
-
-    console.log('>>>>>>>>>basicInfo', basicInfo);
+    if (userState?.updated) {
+      onPressClose(false);
+      Alert.alert('Thông báo!', 'Cập nhật thành công!');
+    }
+    if (userState?.updateError) {
+      onPressClose(false);
+      Alert.alert('Thông báo!', 'Cập nhật không thành công!');
+    }
   };
 
   const isError = basicInfo.email ? !validateEmail(basicInfo.email) : false;
@@ -145,6 +146,7 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
       <>
         <View key={index} style={styles.contentRadio}>
           <Text style={styles.lable}>{languages['vi'].gender}</Text>
+          <Text style={{color: Colors.red}}> *</Text>
           <View style={styles.leftRadio}>
             <View style={styles.rowRadio}>
               <GenderButton
@@ -181,7 +183,7 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
   const handleGetAvatar = () => {
     console.log('selectedAvatar', selectedAvatar);
 
-    if (selectedAvatar) {
+    if (selectedAvatar?.uri) {
       return {uri: selectedAvatar?.uri};
     }
 
@@ -194,13 +196,12 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
         mediaType: 'image',
       });
       console.log('response', response[0]);
-
       setSelectedAvatar({
         uri: `file://${response[0].realPath}`,
         type: response[0].mime,
         fileName: response[0].fileName,
       });
-    } catch (e) {
+    } catch (e: any) {
       console.log(e.code, e.message);
     }
   };
@@ -211,7 +212,7 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
         <View style={[styles.contentImage, GlobalStyles.flexDirectionRow]}>
           <Image source={handleGetAvatar()} style={styles.imgaAvatar} />
           <TouchableOpacity style={styles.contentIcon} onPress={openPicker}>
-            <IconView name={'camera'} size={24} color={'#008000'} />
+            <IconView name={'camera'} size={24} color={'#2c312c'} />
           </TouchableOpacity>
         </View>
       </>
@@ -220,10 +221,13 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
 
   return (
     <Portal>
-      <Modal visible={visible}>
+      <Modal visible={visible} style={{marginHorizontal: responsiveWidth(10)}}>
         <View style={{backgroundColor: Colors.white}}>
           <Text style={styles.title}>{title}</Text>
-          <CloseButton style={styles.logo} onPress={onPressClose} />
+          <CloseButton
+            style={styles.logo}
+            onPress={() => onPressClose(false)}
+          />
         </View>
         <ScrollView>
           <View style={styles.contentForm}>
@@ -234,37 +238,27 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
                   return genderBlock(index);
                 }
 
+                const isUserName = () => item?.key === 'username';
                 return (
                   <TextInputView
                     inputStyle={{
                       borderColor: Colors.blueBoder,
                       borderRadius: 6,
                     }}
-                    editable={item?.key !== 'birthday'}
-                    // onPress={item?.key === 'birthday' ? () => setShowDatePicker(true) : null}
-                    title={item.placeholder}
+                    isRequire={!isUserName()}
+                    editable={!isUserName()}
+                    title={item.title}
                     titleStyle={[styles.lable]}
                     textInputStyle={{
                       fontSize: responsiveFont(14),
                       color: Colors.black,
                     }}
                     key={index.toString()}
-                    // value={handleGetBirthdayUser(item)}
-                    title={item.title}
                     placeholder={item.placeholder}
                     onChangeText={text =>
                       setBasicInfo({...basicInfo, [item.key]: text})
                     }
                     style={{marginBottom: responsiveHeight(20)}}
-                    // rightIcon={
-                    //   item.key === 'birthday' && (
-                    //     <IconView
-                    //       name={Images.favorite.calendar_v3}
-                    //       style={{ width: 24, height: 24 }}
-                    //       resizeMode={'contain'}
-                    //     />
-                    //   )
-                    // }
                     messageError={item.key === 'email' && isError}
                   />
                 );

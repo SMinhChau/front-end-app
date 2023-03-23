@@ -16,7 +16,7 @@ import {
 } from '../utilities/sizeScreen';
 
 interface Props {
-  value?: string | number;
+  value?: string;
   onChangeText(text: any): any;
   title?: string;
   secureTextEntry?: boolean;
@@ -75,7 +75,7 @@ const TextInputView = ({
   return (
     <TouchableOpacity onPress={onPress} disabled={!onPress} activeOpacity={1}>
       {!!title && (
-        <>
+        <View style={styles.cotentIsRequire}>
           <Text
             style={[styles.titleStyle, messageError && {color: Colors.red}]}>
             {title}
@@ -84,10 +84,10 @@ const TextInputView = ({
           {isRequire && (
             <Text
               style={[styles.titleStyle, messageError && {color: Colors.red}]}>
-              <Text style={{color: Colors.red}}> *</Text>{' '}
+              <Text style={{color: Colors.red}}> *</Text>
             </Text>
           )}
-        </>
+        </View>
       )}
       <View
         style={[
@@ -187,9 +187,11 @@ const styles = StyleSheet.create({
     fontSize: responsiveFont(17),
     paddingVertical: responsiveHeight(5),
   },
+  cotentIsRequire: {
+    flexDirection: 'row',
+  },
   titleStyle: {
     fontSize: responsiveFont(16),
-
     marginVertical: responsiveHeight(3),
     color: Colors.headerColor,
   },
