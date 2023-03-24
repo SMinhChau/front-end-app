@@ -33,6 +33,8 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from '../../utilities/sizeScreen';
+import {Modal, Portal} from 'react-native-paper';
+import LoadingScreen from '../../common/LoadingScreen';
 
 const Login: React.FC<{}> = () => {
   const userState = useAppSelector(state => state.user);
@@ -85,17 +87,8 @@ const Login: React.FC<{}> = () => {
   };
 
   const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
-    const {
-      touched,
-      errors,
-      values,
-      handleChange,
-      setFieldTouched,
-      isValid,
-      handleBlur,
-      handleSubmit,
-      isSubmitting,
-    } = props;
+    const {touched, errors, values, handleChange, handleBlur, handleSubmit} =
+      props;
     return (
       <Formik
         initialValues={initialValues}
@@ -145,16 +138,6 @@ const Login: React.FC<{}> = () => {
                   <Text style={GlobalStyles.rememberText}>Quên mật khẩu?</Text>
                 </TouchableOpacity>
               </View>
-
-              {/* 
-            {isLoading && (
-              <View style={{flex: 1}}>
-                <ActivityIndicator
-                  size={'large'}
-                  color={Colors.primaryButton}
-                />
-              </View>
-            )} */}
             </View>
             <ButtonView
               onPress={handleSubmit}
@@ -169,7 +152,6 @@ const Login: React.FC<{}> = () => {
   };
 
   const handleSubmitForm = (value: any) => {
-    // console.log('Login', value.username, value.password);
     setLoading(true);
     dispatch(
       authAPI.login()({
@@ -177,22 +159,6 @@ const Login: React.FC<{}> = () => {
         password: value.password,
       }),
     );
-
-    // try {
-    //   const result = await dispatch(
-    //     authAPI.login()({username: value.username, password: value.password}),
-    //   ).unwrap();
-
-    //   if (userState.user) {
-    //     navigation.navigate('TabNavigation');
-    //   } else {
-    //     if (userState.error) {
-    //       console.log('userState.error', userState.error);
-    //     }
-    //   }
-    // } catch (error) {
-    //   console.log('error', error);
-    // }
   };
 
   const MyForm = withFormik<MyFormProps, FormValues>({
@@ -247,19 +213,9 @@ const Login: React.FC<{}> = () => {
             </View>
             <MyForm />
           </View>
-
-          {/* <View style={GlobalStyles.centerView}>
-            <TouchableOpacity
-              style={[styles.buttonRegister]}
-              onPress={() => navigation.navigate('TabNavigation')}>
-              <Text style={GlobalStyles.textPrimary}>Tạo tài khoản</Text>
-            </TouchableOpacity>
-          </View> */}
         </KeyboardAvoidingView>
       </ScrollView>
-      {isLoading === true && (
-        <ActivityIndicator size={'large'} color={'#bec7ef'} />
-      )}
+      {isLoading === true && <LoadingScreen />}
     </View>
   );
 };

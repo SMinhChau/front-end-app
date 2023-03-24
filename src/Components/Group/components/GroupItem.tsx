@@ -74,13 +74,7 @@ const GroupItem: React.FC<Props> = ({
   const topContent = useMemo(() => {
     return (
       <>
-        <TouchableOpacity
-          onPress={() => {
-            console.log('GroupItem infoGroupItem', infoGroupItem);
-
-            setVisible(true);
-          }}
-          style={[GlobalStyles.margin20, styles.contentTitle]}>
+        <View style={[GlobalStyles.margin20, styles.contentTitle]}>
           <View style={styles.viewIcon}>
             <IconView
               name="ios-people-circle-sharp"
@@ -99,14 +93,20 @@ const GroupItem: React.FC<Props> = ({
             </Text>
 
             <Text style={styles.nemberMember}>Số lượng: {member?.length} </Text>
+            <TouchableOpacity
+              onPress={() => {
+                console.log('GroupItem infoGroupItem', infoGroupItem);
 
-            {/* {isJoinGroup && (
-      <TouchableOpacity onPress={handleJoin}>
-        <Text style={styles.joinStyle}>Tham gia </Text>
-      </TouchableOpacity>
-    )} */}
+                setVisible(true);
+              }}>
+              <IconView
+                name="ios-ellipsis-vertical"
+                color={Colors.grayLight}
+                size={24}
+              />
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
+        </View>
       </>
     );
   }, [infoGroupItem, member]);

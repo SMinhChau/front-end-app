@@ -48,7 +48,9 @@ const Home: React.FC<data> = ({}) => {
   }, [userState]);
 
   useEffect(() => {
-    dispatch(groupAPI.getMyGroup()(termState?.id));
+    if (termState?.id) {
+      dispatch(groupAPI.getMyGroup()(termState?.id));
+    }
   }, [termState]);
 
   const majorView = useMemo(() => {

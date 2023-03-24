@@ -63,9 +63,9 @@ const Group: React.FC<{}> = () => {
 
   useEffect(() => {
     checkTermStart();
-    if (isEmpty(groupState?.group?.id)) {
-      getListGroup();
-    }
+
+    getListGroup();
+
     getInfoGroup();
   }, [checkStartDate, termState, groupState]);
 
@@ -139,37 +139,31 @@ const Group: React.FC<{}> = () => {
   const ListGroup = useMemo(() => {
     return (
       <>
-        {groupState?.group?.id ? null : (
-          <>
-            <View style={[styles.bottomContent]}>
-              <View style={styles.contentTitle}>
-                <View style={styles.viewIcon}>
-                  <IconView
-                    name="people-sharp"
-                    color={Colors.iconbr}
-                    size={26}
-                  />
-                </View>
-                <Text style={styles.titleGroup}>Danh sách nhóm</Text>
-                <Lottie
-                  source={require('../../assets/jsonAmination/62114-people-icons-lottie-animation.json')}
-                  autoPlay
-                  loop
-                  style={styles.amination}
-                />
+        <>
+          <View style={[styles.bottomContent]}>
+            <View style={styles.contentTitle}>
+              <View style={styles.viewIcon}>
+                <IconView name="people-sharp" color={Colors.iconbr} size={26} />
               </View>
-
-              <View style={[styles.flatList]}>
-                <FlatList
-                  data={listGroup}
-                  initialNumToRender={20}
-                  renderItem={(item: any) => renderGroupList(item?.item)}
-                  keyExtractor={item => item.id}
-                />
-              </View>
+              <Text style={styles.titleGroup}>Danh sách nhóm</Text>
+              <Lottie
+                source={require('../../assets/jsonAmination/62114-people-icons-lottie-animation.json')}
+                autoPlay
+                loop
+                style={styles.amination}
+              />
             </View>
-          </>
-        )}
+
+            <View style={[styles.flatList]}>
+              <FlatList
+                data={listGroup}
+                initialNumToRender={20}
+                renderItem={(item: any) => renderGroupList(item?.item)}
+                keyExtractor={item => item.id}
+              />
+            </View>
+          </View>
+        </>
       </>
     );
   }, [listGroup, groupState]);
@@ -275,7 +269,7 @@ const styles = StyleSheet.create({
   },
   flatList: {
     width: '100%',
-    flex: 1,
+    height: '75%',
   },
   amination: {
     right: responsiveWidth(-150),

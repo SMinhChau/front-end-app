@@ -35,6 +35,13 @@ class GroupService {
       data: {termId},
     });
   }
+
+  sendRequestGroup(groupId: number) {
+    return axiosAuth({
+      url: `api/student/groups/${groupId}/send-requests`,
+      method: 'post',
+    });
+  }
 }
 
 const groupService = new GroupService();

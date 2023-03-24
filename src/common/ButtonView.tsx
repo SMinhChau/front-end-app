@@ -8,12 +8,12 @@ import React from 'react';
 import Colors from '../Themes/Colors';
 
 interface Props {
-  title: string;
-  style: any;
-  onPress: () => void;
+  title?: string;
+  style?: any;
+  onPress?: () => void;
   disabled?: boolean;
-  textStyle: any;
-  wrapper: string;
+  textStyle?: any;
+  wrapper?: string;
 }
 
 const ButtonView: React.FC<Props> = ({title, style, onPress, disabled}) => {

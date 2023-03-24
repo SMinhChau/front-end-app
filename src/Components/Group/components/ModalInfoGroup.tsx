@@ -34,14 +34,14 @@ import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import {Images} from '../../../assets/images/Images';
 import groupService from '../../../services/group';
 import groupAPI from '../../../redux/apis/group';
-import {GroupSlices} from '../../../redux/slices/GroupSlices';
+import {GroupSlices, setLoading} from '../../../redux/slices/GroupSlices';
 import Term from '../../../utilities/Contant/Term';
 import {isEmpty} from '../../../utilities/utils';
-
+import LoadingScreen from '../../../common/LoadingScreen';
 interface Props {
   title?: string;
   onPressClose?: () => void;
-  modalClose?: React.Dispatch<React.SetStateAction<boolean>>;
+  modalClose: React.Dispatch<React.SetStateAction<boolean>>;
   children?: any;
   infoGroup?: Group;
   topicInfo?: Topic;
@@ -83,6 +83,8 @@ const ModalInfoGroup: React.FC<Props> = ({
 
   const [topic, setTopic] = useState<Topic>();
   const groupState = useAppSelector(state => state.group);
+  const [loading, setLoading] = useState(false);
+  const [isRequest, setRequest] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -91,21 +93,31 @@ const ModalInfoGroup: React.FC<Props> = ({
     setTopic(topicInfo);
   });
 
-  // const getTopicForGroup = useCallback(() => {
-  //   console.log('getTopicForGroup>>.. result');
-  //   topicService
-  //     .getMajorById(infoGroup?.topic?.id ? infoGroup?.topic?.id : 3)
-  //     .then(result => {
-  //       console.log('getTopicForGroup>>.. result', result);
-  //       setTopic(result?.data);
-  //     })
-  //     .catch(error => console.log('getTopicForGroup>>.. error', error));
-  // }, [topic]);
+  const handleOutGroup = (id: any) => {
+    setLoading(true);
+    dispatch(groupAPI.outMyGroup()(id)).then(result => {
+      setLoading(false);
+      Alert.alert('Thông báo', 'Đã xóa nhóm thành công');
+      modalClose(false);
+    });
+  };
+
+  const handleSentRequestJoinGroup = async () => {
+    console.log(' infoGroup?.id ====', infoGroup?.id);
+    setRequest(true);
+    await groupService
+      .sendRequestGroup(infoGroup?.id as number)
+      .then(result => {
+        console.log('sendRequestGroup result ====', result);
+        setLoading(false);
+        Alert.alert('Thông báo', 'Đã gửi yêu cầu tham gia nhóm');
+        modalClose(false);
+      })
+      .catch(error => console.log('sendRequestGroup =====error ', error));
+  };
 
   const renderListMember = useMemo(
     () => (item: any) => {
-      console.log('renderListMember', item);
-
       return (
         <View style={styles.contenMember}>
           <View style={styles.leftContent}>
@@ -172,18 +184,6 @@ const ModalInfoGroup: React.FC<Props> = ({
     );
   }, [topic]);
 
-  const handleOutGroup = (id: any) => {
-    console.log('handleOutGroup id', id);
-    dispatch(groupAPI.outMyGroup()(id)).then(result => {
-      console.log('handleCreatgroup result', result);
-
-      Alert.alert('Thông báo', 'Đã xóa nhóm thành công');
-      modalClose(false);
-    });
-
-    // dispatch(GroupSlices.actions.updateOutedGroup(true));
-  };
-
   const renderButton = useMemo(() => {
     return (
       <View style={styles.contentBtn}>
@@ -195,7 +195,16 @@ const ModalInfoGroup: React.FC<Props> = ({
             style={styles.buttonOut}
           />
         ) : (
-          <ButtonHandle icon title="Tham gia nhón" style={styles.buttonJoin} />
+          <>
+            {groupState?.group?.id ? null : (
+              <ButtonHandle
+                onPress={() => handleSentRequestJoinGroup()}
+                icon
+                title="Tham gia nhón"
+                style={styles.buttonJoin}
+              />
+            )}
+          </>
         )}
       </View>
     );
@@ -241,26 +250,34 @@ const ModalInfoGroup: React.FC<Props> = ({
   }, [listMember]);
 
   return (
-    <Portal>
-      <Modal
-        visible={visible}
-        style={{height: '100%', marginHorizontal: responsiveWidth(10)}}>
-        <View style={{backgroundColor: Colors.white}}>
-          <Text style={styles.title}>{title}</Text>
-          <CloseButton style={styles.logo} onPress={() => modalClose(false)} />
-        </View>
-        <ScrollView>
-          <View style={styles.content}>
-            {renderViewInfo}
-
-            <Text style={[styles.titleGroup]}>Thông tin Đề tài</Text>
-
-            {renderInfoTopic}
-            {renderButton}
+    <>
+      <Portal>
+        <Modal
+          visible={visible}
+          style={{height: '100%', marginHorizontal: responsiveWidth(10)}}>
+          <View style={{backgroundColor: Colors.white}}>
+            <Text style={styles.title}>{title}</Text>
+            <CloseButton
+              style={styles.logo}
+              onPress={() => modalClose(false)}
+            />
           </View>
-        </ScrollView>
-      </Modal>
-    </Portal>
+          <ScrollView>
+            <View style={styles.content}>
+              {renderViewInfo}
+
+              <Text style={[styles.titleGroup]}>Thông tin Đề tài</Text>
+
+              {renderInfoTopic}
+              {renderButton}
+            </View>
+          </ScrollView>
+        </Modal>
+      </Portal>
+
+      {loading && <LoadingScreen />}
+      {isRequest && <LoadingScreen />}
+    </>
   );
 };
 export default ModalInfoGroup;

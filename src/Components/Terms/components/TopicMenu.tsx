@@ -1,7 +1,8 @@
-import moment from 'moment';
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import Lottie from 'lottie-react-native';
-import {StatusBar, StyleSheet, View, Text} from 'react-native';
+import moment from 'moment';
+import 'moment/locale/vi';
+import {StatusBar, StyleSheet, View, Text, Image, FlatList} from 'react-native';
 import {useDispatch} from 'react-redux';
 import Header from '../../../common/Header';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
@@ -16,35 +17,87 @@ import {
 
 import NoneData from '../../Section/NoneData';
 import {truncate} from 'lodash';
+import {Avatar, Banner, Card, IconButton} from 'react-native-paper';
+import IconView from '../../../common/IconView';
 
 const TopicMenu = () => {
   const userState = useAppSelector(state => state.user.user);
   const termState = useAppSelector(state => state.term.term);
   const groupState = useAppSelector(state => state.group.group);
-  console.log('>>>TopicMenu termState', termState);
-  console.log('>>>TopicMenu groupState', groupState);
+  const [visible, setVisible] = useState(true);
 
   useEffect(() => {}, []);
 
   const isStartDateChooseTopic = () =>
     moment().isAfter(termState?.startDateChooseTopic);
 
-  var startDateChooseTopicFormat = moment(
-    termState?.startDateChooseTopic,
-  ).format('DD/MM/YYYY - hh:mm');
-
-  const isEndDateChooseTopic = () =>
-    moment() < moment(termState?.endDateChooseTopic);
-
   console.log(
     '>>>TopicMenu termState?.startDateChooseTopic',
     termState?.startDateChooseTopic,
   );
   console.log(
-    '>>>termState?.startDateChooseTopic',
+    'formatDD/MM/YYYY - hh:mm',
     moment(termState?.endDateChooseTopic).format('DD/MM/YYYY - hh:mm'),
   );
-  console.log('>>>TopicMenu date', startDateChooseTopicFormat);
+
+  var startDateChooseTopicFormat = moment(termState?.startDateChooseTopic)
+    .locale('vi')
+    .format('dddd, DD/MM/YYYY, h:mm:ss A');
+
+  const DATETOPIC = [
+    {
+      title: 'Ngày bắt đầu',
+      icon: 'ios-megaphone',
+      date: moment(termState?.startDateChooseTopic)
+        .locale('vi')
+        .format('dddd, DD/MM/YYYY, h:mm:ss A'),
+    },
+    {
+      title: 'Ngày kết thúc',
+      icon: 'ios-megaphone',
+      date: moment(termState?.endDateChooseTopic)
+        .locale('vi')
+        .format('dddd, DD/MM/YYYY, h:mm:ss A'),
+    },
+  ];
+  const renderBannerDate = (item: any) => {
+    return (
+      <>
+        <Card.Title
+          style={styles.contentDate}
+          title={item?.title}
+          subtitle={item?.date}
+          left={props => (
+            <>
+              <View
+                {...props}
+                style={[styles.viewIcon, GlobalStyles.centerView]}>
+                <IconView name={item?.icon} color={Colors.red} size={26} />
+              </View>
+            </>
+          )}
+          right={props => (
+            <IconButton {...props} icon="more-vert" onPress={() => {}} />
+          )}
+        />
+      </>
+    );
+  };
+
+  const renderContentTopic = useMemo(() => {
+    return (
+      <>
+        <View style={styles.content}>
+          <FlatList
+            data={DATETOPIC}
+            initialNumToRender={20}
+            renderItem={(item: any) => renderBannerDate(item?.item)}
+            keyExtractor={item => item.icon}
+          />
+        </View>
+      </>
+    );
+  }, []);
 
   return (
     <>
@@ -88,9 +141,7 @@ const TopicMenu = () => {
               </View>
             </>
           ) : (
-            <>
-              <Text>{startDateChooseTopicFormat}</Text>
-            </>
+            <>{renderContentTopic}</>
           )}
         </View>
       </View>
@@ -121,7 +172,7 @@ const styles = StyleSheet.create({
     height: responsiveHeight(50),
   },
   dateNoChooseTopic: {
-    fontSize: responsiveFont(20),
+    fontSize: responsiveFont(18),
   },
   bottomView: {
     paddingHorizontal: responsiveWidth(10),
@@ -138,7 +189,7 @@ const styles = StyleSheet.create({
     marginLeft: responsiveWidth(5),
     position: 'relative',
     top: -60,
-    left: 90,
+    left: 30,
     fontWeight: '500',
   },
   logo: {
@@ -146,5 +197,20 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  content: {
+    width: '100%',
+  },
+  viewIcon: {
+    backgroundColor: '#ff9f1c',
+    borderRadius: 10,
+    borderColor: '#ff9f1c',
+    borderWidth: 1,
+    paddingHorizontal: responsiveWidth(9),
+    paddingVertical: responsiveHeight(9),
+  },
+  contentDate: {
+    backgroundColor: Colors.blueBoder,
+    marginVertical: responsiveHeight(9),
   },
 });

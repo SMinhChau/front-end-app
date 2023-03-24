@@ -12,16 +12,16 @@ import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import languages from '../../../languages';
 import ButtonHandle from '../../../common/ButtonHandle';
 import groupAPI from '../../../redux/apis/group';
-import {GroupSlices} from '../../../redux/slices/GroupSlices';
 
 import {result} from 'lodash';
 import Term from '../../../utilities/Contant/Term';
 import {isEmpty} from '../../../utilities/utils';
+import LoadingScreen from '../../../common/LoadingScreen';
 
 interface Props {
   title?: string;
   onPressClose?: () => void;
-  modalClose?: React.Dispatch<React.SetStateAction<boolean>>;
+  modalClose: React.Dispatch<React.SetStateAction<boolean>>;
   termCreateGroup?: any;
   visible?: any;
 }
@@ -34,6 +34,7 @@ const ModelCreateGroup: React.FC<Props> = ({
   modalClose,
 }) => {
   const [nameGroupInput, setNameGroupInput] = useState('');
+  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const [term, setTerm] = useState<Term>();
 
@@ -46,9 +47,8 @@ const ModelCreateGroup: React.FC<Props> = ({
   };
 
   const handleCreatgroup = () => {
-    console.log('termState?.term?.id', term?.id);
-    console.log('nameGroupInput', nameGroupInput);
     if (!isEmpty(term?.id)) {
+      setLoading(true);
       dispatch(
         groupAPI.createGroup()({
           termId: term?.id as number,
@@ -56,14 +56,12 @@ const ModelCreateGroup: React.FC<Props> = ({
         }),
       )
         .then(result => {
-          console.log('handleCreatgroup result', result);
-
+          setLoading(false);
           Alert.alert('Thông báo', 'Tạo nhóm thành công');
           modalClose(false);
         })
         .catch(error => {
-          console.log('handleCreatgroup error', error);
-
+          setLoading(false);
           Alert.alert('Thông báo', 'Tạo nhóm không thành công');
         });
     }
@@ -104,17 +102,14 @@ const ModelCreateGroup: React.FC<Props> = ({
                   }}
                   icon
                   iconName={'create-sharp'}
-                  // onPress={handleSubmit}
                   title="Tạo nhóm"
-                  // onPress={handleSubmit}
-
-                  style={styles.buttonJoin}
                 />
               </View>
             </View>
           </ScrollView>
         </Modal>
       </Portal>
+      {loading && <LoadingScreen />}
     </>
   );
 };
