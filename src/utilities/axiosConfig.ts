@@ -8,6 +8,7 @@ const axiosAuth = axios.create({
   headers: {
     'Content-type': 'application/json',
   },
+  timeout: 10000, // 10 seconds
 });
 
 axiosAuth.interceptors.request.use(

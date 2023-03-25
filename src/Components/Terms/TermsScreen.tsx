@@ -39,9 +39,9 @@ const TermsScreen: React.FC<{}> = () => {
   ];
   const menuBottom = [
     {
-      name: 'Nhóm',
-      key: 'group',
-      navigation: () => navigation.navigate(RouteNames.GroupMenu),
+      name: 'Đánh giá',
+      key: 'check',
+      navigation: () => navigation.navigate(RouteNames.EvaluationMenu),
       icon: 'people-circle',
     },
     {
@@ -79,7 +79,7 @@ const TermsScreen: React.FC<{}> = () => {
 
           <View style={styles.topTop}>
             {menuBottom.map((item, index) => (
-              <View style={styles.iconRight}>
+              <View key={index} style={styles.iconRight}>
                 <Ionicons
                   name={item.icon}
                   color={Colors.primaryButton}

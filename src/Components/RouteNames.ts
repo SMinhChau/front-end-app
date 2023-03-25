@@ -16,6 +16,6 @@ export default {
 
   TermMenu: 'TermMenu',
   TopicMenu: 'TopicMenu',
-  GroupMenu: 'GroupMenu',
+  EvaluationMenu: 'EvaluationMenu',
   LectureMenu: 'LectureMenu',
 };

@@ -7,8 +7,8 @@ import TabNavigation from './TabNavigation';
 import SplashScreen from './SplashScreen';
 import TermMenu from './Terms/components/TermMenu';
 import TopicMenu from './Terms/components/TopicMenu';
-import GroupMenu from './Terms/components/GroupMenu';
 import LectureMenu from './Terms/components/LectureMenu';
+import EvaluationMenu from './Terms/components/GroupMenu';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,7 +32,7 @@ const NavigationRouter = () => {
         <Stack.Screen name={'TabNavigation'} component={TabNavigation} />
         <Stack.Screen name={'TermMenu'} component={TermMenu} />
         <Stack.Screen name={'TopicMenu'} component={TopicMenu} />
-        <Stack.Screen name={'GroupMenu'} component={GroupMenu} />
+        <Stack.Screen name={'EvaluationMenu'} component={EvaluationMenu} />
         <Stack.Screen name={'LectureMenu'} component={LectureMenu} />
       </Stack.Navigator>
     </NavigationContainer>

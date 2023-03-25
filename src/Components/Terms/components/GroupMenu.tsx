@@ -5,7 +5,7 @@ import GlobalStyles from '../../../common/styles/GlobalStyles';
 import Colors from '../../../Themes/Colors';
 import {responsiveWidth} from '../../../utilities/sizeScreen';
 
-const GroupMenu = () => {
+const EvaluationMenu = () => {
   return (
     <>
       <View style={GlobalStyles.container}>
@@ -16,7 +16,7 @@ const GroupMenu = () => {
 
         <View style={styles.containner}>
           <Header
-            title="Nhóm"
+            title="Đánh giá"
             iconLeft={true}
             home={false}
             style={styles.header}
@@ -28,7 +28,7 @@ const GroupMenu = () => {
   );
 };
 
-export default GroupMenu;
+export default EvaluationMenu;
 
 const styles = StyleSheet.create({
   containner: {

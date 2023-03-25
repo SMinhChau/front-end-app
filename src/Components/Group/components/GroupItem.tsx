@@ -64,7 +64,7 @@ const GroupItem: React.FC<Props> = ({
   const getTopicForGroup = useCallback(() => {
     if (!isEmpty(groupInfo)) {
       topicService
-        .getMajorById(groupInfo?.topic?.id as number)
+        .getTopicId(groupInfo?.topic?.id as number)
         .then(result => {
           setTopic(result?.data);
         })

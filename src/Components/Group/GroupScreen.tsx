@@ -129,7 +129,7 @@ const Group: React.FC<{}> = () => {
 
   const getTopicForGroup = useCallback((id: any) => {
     topicService
-      .getMajorById(id)
+      .getTopicId(id)
       .then(result => {
         setTopic(result?.data);
       })

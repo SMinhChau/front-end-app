@@ -83,9 +83,7 @@ const Home: React.FC<data> = ({}) => {
 
           {groupState?.group?.id ? (
             <View style={GlobalStyles.flexDirectionRow}>
-              <Text style={[styles.titleLogoGroup, styles.mainText]}>
-                Nhóm của bạn:
-              </Text>
+              <Text style={[styles.mainText]}>Nhóm của bạn:</Text>
               <Text style={[styles.titleLogoGroup, styles.mainText]}>
                 {groupState?.group?.name}
               </Text>

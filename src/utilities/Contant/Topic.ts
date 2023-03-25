@@ -1,7 +1,7 @@
 export default interface Topic {
   id: number;
   name: string;
-  quantityroupMax: 11;
+  quantityGroupMax: number;
   description: string;
   note: string;
   target: string;
@@ -15,7 +15,7 @@ export default interface Topic {
     id: number;
     username: string;
     avatar: string;
-    phoneumber: string;
+    phoneNumber: string;
     email: string;
     name: string;
     gender: string;
