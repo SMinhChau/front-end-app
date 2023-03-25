@@ -8,18 +8,33 @@ import GlobalStyles from './styles/GlobalStyles';
 interface Props {
   title?: string;
   require?: string;
+  backgroundColor?: any;
+  borderColor?: any;
   onPress?: () => void;
 }
-const TouchViewMenu: React.FC<Props> = ({title, onPress}) => {
+const TouchViewMenu: React.FC<Props> = ({
+  title,
+  onPress,
+  backgroundColor,
+  borderColor,
+}) => {
   return (
-    <TouchableOpacity style={[styles.content]} onPress={onPress}>
+    <TouchableOpacity
+      style={[
+        styles.content,
+        {backgroundColor: backgroundColor ? backgroundColor : Colors.white},
+        {borderColor: borderColor ? borderColor : Colors.blueBoder},
+      ]}
+      onPress={onPress}>
       <Lottie
         source={require('../../src/assets/jsonAmination/term_menu.json')}
         autoPlay
         loop
-        style={styles.iconTerm}
+        style={[styles.iconTerm]}
       />
-      <Text style={styles.title}>{title}</Text>
+      <View style={styles.cotent}>
+        <Text style={styles.title}>{title}</Text>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -32,24 +47,25 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.white,
-    flexDirection: 'row',
+
+    flexDirection: 'column',
     width: responsiveWidth(160),
-    borderRadius: 20,
-    borderColor: Colors.blueBoder,
-    borderWidth: 1,
+    borderRadius: 30,
+
+    borderWidth: 2,
     shadowOpacity: 1,
     shadowColor: Colors.primaryButton,
     elevation: 5,
     shadowOffset: {width: 2, height: 2},
   },
+  cotent: {},
   title: {
     fontSize: 20,
     color: '#0096c7',
     fontWeight: '500',
   },
   iconTerm: {
-    position: 'absolute',
+    // position: 'absolute',
     width: responsiveWidth(70),
   },
 });

@@ -38,7 +38,6 @@ const SplashScreen = () => {
       dispatch(authAPI.getInfo()());
       navigation.navigate('TabNavigation');
     } else navigation.navigate(RouteNames.loginNavigation);
-    // navigateAndSimpleReset(RouteNames.rootTabNavigation);
   };
 
   useEffect(() => {

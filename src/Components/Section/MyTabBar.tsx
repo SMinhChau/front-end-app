@@ -1,4 +1,3 @@
-import {clone} from 'lodash';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import IconView from '../../common/IconView';
 import GlobalStyles from '../../common/styles/GlobalStyles';
@@ -23,7 +22,7 @@ const MyTabBar = ({state, descriptors, navigation}: any) => {
           iconName = isFocused ? 'home' : 'home-outline';
         } else if (route.name === languages['vi'].group) {
           iconName = isFocused ? 'md-bookmarks' : 'md-bookmarks-outline';
-        } else if (route.name === languages['vi'].term) {
+        } else if (route.name === languages['vi'].evaluation) {
           iconName = isFocused ? 'md-book' : 'md-book-outline';
         } else if (route.name === languages['vi'].account) {
           iconName = isFocused ? 'person' : 'person-outline';
@@ -58,23 +57,17 @@ const MyTabBar = ({state, descriptors, navigation}: any) => {
             onPress={onPress}
             style={styles.container}
             onLongPress={onLongPress}>
-            {/* <TabbarIcon
-            stackName={stackName}
-            isFocused={isFocused}
-            isHome={isHome}
-            isHomeFocus={isHomeFocus}
-            /> */}
             <View style={GlobalStyles.centerView}>
               <IconView
                 name={iconName}
                 size={24}
-                color={isFocused ? Colors.drakCyonBoder : Colors.textPrimary}
+                color={isFocused ? Colors.tabActice : Colors.nonActice}
               />
             </View>
 
             <Text
               style={[
-                {color: isFocused ? Colors.drakCyonBoder : Colors.textPrimary},
+                {color: isFocused ? Colors.tabActice : Colors.nonActice},
               ]}>
               {label}
             </Text>

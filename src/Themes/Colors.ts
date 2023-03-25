@@ -5,7 +5,7 @@ export default {
   rosyBrown: '#BC8F8F',
   grayLight: '#D3D3D3',
   red: '#FF0000',
-  primaryButton: '#a2d2ff',
+  primaryButton: '#3355f0',
   headerColor: '#838690',
   drakCyonBoder: '#1E90FF',
   blueBoder: '#87CEFA',
@@ -14,4 +14,6 @@ export default {
   statusBar: '#0D0D99',
   bg: '#f8f9fa',
   iconbr: '#03045e',
+  tabActice: '#003049',
+  nonActice: '#778da9',
 };

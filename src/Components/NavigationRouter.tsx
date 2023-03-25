@@ -5,10 +5,10 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Login from './Login/LoginScreen';
 import TabNavigation from './TabNavigation';
 import SplashScreen from './SplashScreen';
-import TermMenu from './Terms/components/TermMenu';
-import TopicMenu from './Terms/components/TopicMenu';
-import LectureMenu from './Terms/components/LectureMenu';
-import EvaluationMenu from './Terms/components/GroupMenu';
+import TermMenu from './Home/components/TermMenu';
+import TopicMenu from './Home/components/TopicMenu';
+import EvaluationMenu from './Home/components/GroupMenu';
+import LectureMenu from './Home/components/LectureMenu';
 
 const Stack = createNativeStackNavigator();
 

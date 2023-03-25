@@ -1,36 +1,34 @@
+import {useEffect} from 'react';
 import {
   StatusBar,
-  StyleSheet,
   View,
   Text,
-  Image,
-  ActivityIndicator,
+  StyleSheet,
+  LogBox,
+  TouchableOpacity,
 } from 'react-native';
 
 import Lottie from 'lottie-react-native';
-
-import GlobalStyles from '../../common/styles/GlobalStyles';
-import Colors from '../../Themes/Colors';
 import Header from '../../common/Header';
-import ContentAccount from '../../common/ContentAccount';
+import Logo from '../../common/logo';
+import GlobalStyles from '../../common/styles/GlobalStyles';
+import TouchViewMenu from '../../common/TouchViewMenu';
 import languages from '../../languages';
-import data from './data';
+import Colors from '../../Themes/Colors';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {responsiveHeight, responsiveWidth} from '../../utilities/sizeScreen';
+import RouteNames from '../RouteNames';
+
+import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch, useAppSelector} from '../../redux/hooks';
-import {useEffect, useMemo, useRef, useState} from 'react';
 import majorAPI from '../../redux/apis/major';
-import {
-  responsiveFont,
-  responsiveHeight,
-  responsiveWidth,
-} from '../../utilities/sizeScreen';
 import termrAPI from '../../redux/apis/term';
 import groupAPI from '../../redux/apis/group';
+import {menu, menuBottom} from './content';
 
-interface data {
-  data: data;
-}
-
-const Home: React.FC<data> = ({}) => {
+const HomeScreen: React.FC<{}> = () => {
+  const navigation = useNavigation();
   const dispatch = useAppDispatch();
 
   const majorState = useAppSelector(state => state.major.major);
@@ -53,196 +51,88 @@ const Home: React.FC<data> = ({}) => {
     }
   }, [termState]);
 
-  const majorView = useMemo(() => {
-    return (
-      <View style={[styles.contentMenu, GlobalStyles.margin20]}>
-        <View style={[styles.contentMain]}>
-          <Text style={styles.titleMain}>{languages['vi'].special}</Text>
-        </View>
-        <Text style={styles.title}>{majorState?.name}</Text>
+  return (
+    <>
+      <Header title="Trang chủ" iconRight={true}></Header>
+      <View style={styles.contentTop}>
+        <Lottie
+          source={require('../../assets/jsonAmination/hello_1.json')}
+          autoPlay
+          loop
+          style={styles.iconUser}
+        />
+        <Text>{userState?.user?.name}</Text>
       </View>
-    );
-  }, [majorState]);
-
-  const groupView = useMemo(() => {
-    return (
-      <>
-        <View style={styles.main}>
-          <View
-            style={[
-              styles.contentGroup,
-              GlobalStyles.margin20,
-              GlobalStyles.centerView,
-            ]}>
-            <View style={[styles.contentLogo]}>
-              <Text style={styles.titleLogoGroup}>Xin chào</Text>
-            </View>
-
-            <Text style={[styles.title]}>{userState?.user?.name}</Text>
+      <View style={[GlobalStyles.container, styles.content]}>
+        <View style={styles.top}>
+          <View style={styles.topTop}>
+            {menu.map((item, index) => (
+              <View key={index} style={styles.iconRight}>
+                <Ionicons
+                  name={item.icon}
+                  color={item?.color}
+                  size={40}
+                  style={styles.icon}
+                />
+                <TouchViewMenu
+                  backgroundColor={item?.backgroundColor}
+                  borderColor={item?.color}
+                  onPress={item.navigation}
+                  title={item.name}></TouchViewMenu>
+              </View>
+            ))}
           </View>
 
-          {groupState?.group?.id ? (
-            <View style={GlobalStyles.flexDirectionRow}>
-              <Text style={[styles.mainText]}>Nhóm của bạn:</Text>
-              <Text style={[styles.titleLogoGroup, styles.mainText]}>
-                {groupState?.group?.name}
-              </Text>
-            </View>
-          ) : (
-            <>
-              <Text style={[styles.titleLogoGroup, styles.titleNonGroup]}>
-                Bạn chưa có nhóm. Vui lòng chọn nhóm
-              </Text>
-              <Lottie
-                source={require('../../../src/assets/jsonAmination/warning.json')}
-                autoPlay={true}
-                loop
-                style={styles.logoAmination}
-              />
-            </>
-          )}
-        </View>
-      </>
-    );
-  }, [groupState, termState]);
-
-  return (
-    <View style={GlobalStyles.container}>
-      <StatusBar
-        barStyle={'dark-content'}
-        backgroundColor={Colors.primaryButton}
-      />
-
-      <View style={styles.containner}>
-        <Header
-          title="Trang chủ"
-          iconLeft={true}
-          home={false}
-          iconRight={true}></Header>
-        <ContentAccount></ContentAccount>
-
-        {majorView}
-
-        <View style={styles.bottom}>
-          <Lottie
-            source={require('../../assets/jsonAmination/88012-student-animated-icon.json')}
-            autoPlay
-            loop
-            style={styles.amination}
-          />
-          {groupView}
+          <View style={styles.topTop}>
+            {menuBottom.map((item, index) => (
+              <View key={index} style={styles.iconRight}>
+                <Ionicons
+                  name={item.icon}
+                  color={item?.color}
+                  size={40}
+                  style={styles.icon}
+                />
+                <TouchViewMenu
+                  backgroundColor={item?.backgroundColor}
+                  borderColor={item?.color}
+                  onPress={item.navigation}
+                  title={item.name}></TouchViewMenu>
+              </View>
+            ))}
+          </View>
         </View>
       </View>
-    </View>
+    </>
   );
 };
-export default Home;
+export default HomeScreen;
 
 const styles = StyleSheet.create({
-  formView: {
-    paddingHorizontal: responsiveWidth(20),
-    backgroundColor: Colors.bg,
-  },
-  containner: {
-    flex: 1,
-    justifyContent: 'space-between',
-    alignContent: 'space-between',
-  },
-  contentMenu: {
-    height: responsiveHeight(50),
-
-    backgroundColor: '#80d0f3',
-
-    borderColor: Colors.blueBoder,
-    borderTopWidth: 1,
-    borderRadius: 5,
-    marginVertical: responsiveHeight(10),
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-  },
-
-  contentGroup: {
-    padding: 10,
-    backgroundColor: Colors.primaryButton,
-    borderRadius: 5,
-    borderColor: Colors.blueBoder,
-    marginBottom: 10,
-    borderTopWidth: 1,
-  },
-  contentMain: {
-    position: 'absolute',
-    top: -20,
-    left: 2,
-    padding: 3,
-    borderWidth: 1,
-    backgroundColor: Colors.primary,
-    borderTopRightRadius: 10,
-    borderBottomLeftRadius: 10,
-    borderColor: Colors.blueBoder,
-  },
-  contentLogo: {
-    position: 'absolute',
-    top: -20,
-    left: 2,
-    padding: 3,
-    borderWidth: 1,
-    backgroundColor: Colors.drakCyonBoder,
-    borderTopRightRadius: 10,
-    borderBottomLeftRadius: 10,
-    borderColor: Colors.rosyBrown,
-  },
-  titleMain: {
-    fontSize: responsiveFont(17),
-    color: Colors.textPrimary,
-    fontWeight: '400',
-    paddingHorizontal: responsiveWidth(10),
-  },
-  title: {
-    fontSize: responsiveFont(18),
-    color: Colors.rosyBrown,
-    fontWeight: '500',
-
-    textDecorationStyle: 'double',
-  },
-  titleLogoGroup: {
-    fontSize: responsiveFont(17),
-    color: Colors.bg,
-    fontWeight: '400',
-    paddingHorizontal: responsiveWidth(20),
-    textDecorationStyle: 'double',
-  },
-  titleNonGroup: {
-    color: Colors.headerColor,
-  },
-  bottom: {
-    backgroundColor: '#caf0f8',
-    borderWidth: 1,
-    borderRadius: 10,
-    marginBottom: responsiveHeight(20),
-    marginHorizontal: responsiveWidth(10),
-    borderColor: Colors.blueBoder,
-  },
-  mainText: {
-    fontWeight: '500',
-    textDecorationStyle: 'solid',
-    color: Colors.drakCyonBoder,
-    marginLeft: responsiveWidth(15),
-  },
-
-  amination: {
-    width: responsiveWidth(60),
+  content: {
     justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    position: 'relative',
-    top: -20,
+    paddingTop: responsiveHeight(20),
   },
-  main: {
-    position: 'relative',
-    top: responsiveHeight(-35),
+  top: {
+    justifyContent: 'center',
+    alignContent: 'center',
   },
-  logoAmination: {
-    position: 'absolute',
-    right: -180,
+
+  topTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  iconRight: {},
+  icon: {
+    position: 'relative',
+    right: responsiveWidth(-65),
+    top: responsiveHeight(25),
+    zIndex: 99999,
+  },
+  iconUser: {
+    width: 100,
+  },
+  contentTop: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
   },
 });

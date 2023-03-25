@@ -4,35 +4,37 @@ import {Images} from '../assets/images/Images';
 import GlobalStyles from './styles/GlobalStyles';
 import languages from '../languages';
 import Colors from '../Themes/Colors';
-import TextItem from '../Components/Home/components/TextItem';
+
 import RouteNames from '../Components/RouteNames';
 import {useNavigation} from '@react-navigation/native';
 import {useAppSelector} from '../redux/hooks';
 import {responsiveHeight, responsiveWidth} from '../utilities/sizeScreen';
+import TextItem from '../Components/Evaluation/components/TextItem';
 
 const ContentAccount: React.FC<{}> = () => {
   const navigation = useNavigation();
   const userState = useAppSelector(state => state.user.user);
 
+  const INFO_USER = [
+    {key: languages['vi'].code, name: userState?.username},
+    {key: languages['vi'].name, name: userState?.name},
+    {key: languages['vi'].numberPhone, name: userState?.phoneNumber},
+    {key: languages['vi'].schoolYear, name: userState?.schoolYear},
+    {key: languages['vi'].email, name: userState?.email},
+  ];
+
   const renderItemView = () => {
     return (
-      <View style={styles.sub}>
-        <TextItem
-          textLeft={languages['vi'].code}
-          textRight={userState?.username}></TextItem>
-        <TextItem
-          textLeft={languages['vi'].name}
-          textRight={userState?.name}></TextItem>
-        <TextItem
-          textLeft={languages['vi'].numberPhone}
-          textRight={userState?.phoneNumber}></TextItem>
-        <TextItem
-          textLeft={languages['vi'].schoolYear}
-          textRight={userState?.schoolYear}></TextItem>
-        <TextItem
-          textLeft={languages['vi'].email}
-          textRight={userState?.email}></TextItem>
-      </View>
+      <>
+        <View style={styles.sub}>
+          {INFO_USER.map((item, index) => (
+            <TextItem
+              key={index}
+              textLeft={item?.key}
+              textRight={item?.name}></TextItem>
+          ))}
+        </View>
+      </>
     );
   };
   return (
@@ -54,7 +56,7 @@ const ContentAccount: React.FC<{}> = () => {
             style={styles.imgaAvatar}
           />
           <TouchableOpacity
-            onPress={() => navigation.navigate(RouteNames.accountTab)}>
+            onPress={() => navigation.navigate(RouteNames.AccountTab)}>
             <Text style={styles.textDetail}>{languages['vi'].detail}</Text>
           </TouchableOpacity>
         </View>

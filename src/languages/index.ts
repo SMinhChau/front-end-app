@@ -34,5 +34,6 @@ export default {
     standradOutput: 'Yêu cầu cần đạt được',
     description: 'Mô tả',
     target: 'Mục tiêu',
+    evaluation: 'Đánh giá',
   },
 };

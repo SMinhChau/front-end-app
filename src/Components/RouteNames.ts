@@ -4,15 +4,15 @@ export default {
   rootTabNavigation: 'RootTabNavigation',
   loginNavigation: 'Login',
 
-  honmeStack: 'Home',
+  HonmeStack: 'Home',
   GroupStack: 'Group',
-  accountStack: 'Account',
-  TermsStack: 'Terms',
+  AccountStack: 'Account',
+  EvaluationStack: 'Evaluation',
 
-  homeTab: languages['vi'].home,
+  HomeTab: languages['vi'].home,
   GroupTab: languages['vi'].group,
-  TermsTab: languages['vi'].term,
-  accountTab: languages['vi'].account,
+  EvaluationTab: languages['vi'].evaluation,
+  AccountTab: languages['vi'].account,
 
   TermMenu: 'TermMenu',
   TopicMenu: 'TopicMenu',

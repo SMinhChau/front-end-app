@@ -5,7 +5,7 @@ import IconView from './IconView';
 import {useNavigation} from '@react-navigation/native';
 import GlobalStyles from './styles/GlobalStyles';
 import RouteNames from '../Components/RouteNames';
-import {responsiveHeight} from '../utilities/sizeScreen';
+import {responsiveFont, responsiveHeight} from '../utilities/sizeScreen';
 
 interface Props {
   title: string;
@@ -47,7 +47,7 @@ const Header: React.FC<Props> = ({
       )}
 
       <View style={styles.contentText}>
-        <Text style={[GlobalStyles.titleHeader, styles.textView]}>{title}</Text>
+        <Text style={[styles.textView]}>{title}</Text>
       </View>
 
       <View style={styles.contentIconRight}>
@@ -90,6 +90,9 @@ const styles = StyleSheet.create({
   },
   textView: {
     textAlign: 'center',
+    fontSize: responsiveFont(20),
+    color: '#f7ede2',
+    fontWeight: '600',
   },
   contentIcon: {
     backgroundColor: Colors.white,
