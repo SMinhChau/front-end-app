@@ -35,6 +35,15 @@ class AuthService {
       console.log('updateUserInfo', error);
     }
   };
+
+  getStudent(termId: number, groupExists: boolean) {
+    console.log('getStudent Service termId ', termId);
+    console.log('getStudent Service groupExists ', groupExists);
+    return axiosAuth({
+      url: `api/student/students?termId=${termId}&groupExists=${groupExists}`,
+      method: 'get',
+    });
+  }
 }
 
 const authService = new AuthService();

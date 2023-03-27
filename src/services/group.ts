@@ -36,10 +36,18 @@ class GroupService {
     });
   }
 
-  sendRequestGroup(groupId: number) {
+  sendRequestGroup(groupId: number, message: string) {
     return axiosAuth({
-      url: `api/student/groups/${groupId}/send-requests`,
+      url: `api/student/groups/${groupId}/my-requests`,
       method: 'post',
+      data: {message},
+    });
+  }
+  inviteStudentJoinMyGroup(termId: number, studentId: string, message: string) {
+    return axiosAuth({
+      url: `api/student/groups/group-requests`,
+      method: 'post',
+      data: {termId, studentId, message},
     });
   }
 }

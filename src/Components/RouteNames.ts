@@ -18,4 +18,9 @@ export default {
   TopicMenu: 'TopicMenu',
   EvaluationMenu: 'EvaluationMenu',
   LectureMenu: 'LectureMenu',
+
+  ItemListGroup: 'ItemListGroup',
+  ItemStudents: 'ItemStudents',
+  RequestJoinMyGroup: 'RequestJoinMyGroup',
+  InviteJoinGroup: 'InviteJoinGroup',
 };

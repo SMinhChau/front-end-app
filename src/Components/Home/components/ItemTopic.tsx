@@ -76,32 +76,34 @@ const ItemTopic = ({topicInfo}: Props) => {
               />
             )}>
             <ScrollView style={{height: 200}}>
-              {TOPIC_DATA.map((item, index) => (
-                <List.Item
-                  key={index}
-                  style={styles.contentListItem}
-                  title={<Text style={styles.titleMain}>{item?.key}</Text>}
-                  description={
-                    <>
-                      <Text style={styles.subTitle}>{item?.name}</Text>
-                    </>
-                  }
-                  right={props => (
-                    <TouchableOpacity
-                      onPress={() => {
-                        showModal(true);
-                        setValueModal(item?.name as string);
-                      }}>
-                      <IconView
-                        {...props}
-                        name="ios-ellipsis-vertical"
-                        color={Colors.grayLight}
-                        size={24}
-                      />
-                    </TouchableOpacity>
-                  )}
-                />
-              ))}
+              {TOPIC_DATA.map((item, index) => {
+                return (
+                  <List.Item
+                    key={index}
+                    style={styles.contentListItem}
+                    title={<Text style={styles.titleMain}>{item?.key}</Text>}
+                    description={
+                      <>
+                        <Text style={styles.subTitle}>{item?.name}</Text>
+                      </>
+                    }
+                    right={props => (
+                      <TouchableOpacity
+                        onPress={() => {
+                          showModal(true);
+                          setValueModal(item?.name as string);
+                        }}>
+                        <IconView
+                          {...props}
+                          name="ios-ellipsis-vertical"
+                          color={Colors.grayLight}
+                          size={24}
+                        />
+                      </TouchableOpacity>
+                    )}
+                  />
+                );
+              })}
             </ScrollView>
           </List.Accordion>
 
@@ -120,32 +122,55 @@ const ItemTopic = ({topicInfo}: Props) => {
             expanded={expanded}
             onPress={handlePress}>
             <ScrollView style={{height: 300}}>
-              {LECTURER_DATA.map((item, index) => (
-                <List.Item
-                  key={index}
-                  style={styles.contentListItem}
-                  title={<Text style={styles.titleMain}>{item?.key}</Text>}
-                  description={
+              {LECTURER_DATA.map((item, index) => {
+                if (item?.key === '') {
+                  return (
                     <>
-                      <Text style={styles.subTitle}>{item?.name}</Text>
-                    </>
-                  }
-                  right={props => (
-                    <TouchableOpacity
-                      onPress={() => {
-                        showModal(true);
-                        setValueModal(item?.name as string);
-                      }}>
-                      <IconView
-                        {...props}
-                        name="ios-ellipsis-vertical"
-                        color={Colors.grayLight}
-                        size={24}
+                      <List.Item
+                        key={index}
+                        style={styles.contentListItem}
+                        title={''}
+                        description={<></>}
+                        right={props => (
+                          <>
+                            <Image
+                              source={{uri: item.name}}
+                              style={styles.imgaAvatar}
+                            />
+                          </>
+                        )}
                       />
-                    </TouchableOpacity>
-                  )}
-                />
-              ))}
+                    </>
+                  );
+                }
+
+                return (
+                  <List.Item
+                    key={index}
+                    style={styles.contentListItem}
+                    title={<Text style={styles.titleMain}>{item?.key}</Text>}
+                    description={
+                      <>
+                        <Text style={styles.subTitle}>{item?.name}</Text>
+                      </>
+                    }
+                    right={props => (
+                      <TouchableOpacity
+                        onPress={() => {
+                          showModal(true);
+                          setValueModal(item?.name as string);
+                        }}>
+                        <IconView
+                          {...props}
+                          name="ios-ellipsis-vertical"
+                          color={Colors.grayLight}
+                          size={24}
+                        />
+                      </TouchableOpacity>
+                    )}
+                  />
+                );
+              })}
             </ScrollView>
           </List.Accordion>
         </List.Section>
@@ -162,7 +187,7 @@ export default ItemTopic;
 
 const styles = StyleSheet.create({
   mainTopic: {
-    backgroundColor: Colors.white,
+    backgroundColor: '#fff0f3',
     borderLeftColor: '#f08080',
     borderRightColor: '#f08080',
     borderBottomColor: '#f08080',
@@ -175,6 +200,7 @@ const styles = StyleSheet.create({
   },
   content: {
     width: '100%',
+    backgroundColor: Colors.white,
   },
   iconMenu: {
     width: 50,
@@ -194,4 +220,15 @@ const styles = StyleSheet.create({
     color: Colors.textPrimary,
   },
   contentListItem: {},
+  imgaAvatar: {
+    width: 60,
+    height: 60,
+    resizeMode: 'contain',
+    // borderRadius: 50,
+    // borderColor: Colors.blueBoder,
+    // borderWidth: 1,
+    // shadowOpacity: 0.02,
+    position: 'absolute',
+    top: -10,
+  },
 });

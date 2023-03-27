@@ -1,0 +1,43 @@
+import RouteNames from '../RouteNames';
+
+export const MENU = [
+  {
+    key: 'group',
+  },
+  {
+    key: 'listGroup',
+    backgroupIcon: '#a2d2ff',
+    borderIcon: '#0096c7',
+    title: 'Danh sách nhóm',
+    navigate: RouteNames.ItemListGroup,
+    icon: 'people-sharp',
+    iconColor: '#0096c7',
+  },
+  {
+    key: 'students',
+    backgroupIcon: '#fae1dd',
+    borderIcon: '#fec5bb',
+    title: 'Danh sách sinh viên',
+    navigate: RouteNames.ItemStudents,
+    icon: 'ios-people-circle-outline',
+    iconColor: '#f4978e',
+  },
+  {
+    key: 'students',
+    backgroupIcon: '#caffbf',
+    borderIcon: '#38b000',
+    title: 'Yêu cầu tham gia nhóm',
+    navigate: RouteNames.RequestJoinMyGroup,
+    icon: 'paper-plane',
+    iconColor: '#008000',
+  },
+  {
+    key: 'students',
+    backgroupIcon: '#e9f5db',
+    borderIcon: '#cfe1b9',
+    title: 'Lời mời tham gia nhóm',
+    navigate: RouteNames.InviteJoinGroup,
+    icon: 'ios-person-add',
+    iconColor: '#008000',
+  },
+];

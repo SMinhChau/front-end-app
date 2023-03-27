@@ -17,7 +17,11 @@ import languages from '../../languages';
 import Colors from '../../Themes/Colors';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {responsiveHeight, responsiveWidth} from '../../utilities/sizeScreen';
+import {
+  responsiveFont,
+  responsiveHeight,
+  responsiveWidth,
+} from '../../utilities/sizeScreen';
 import RouteNames from '../RouteNames';
 
 import {useNavigation} from '@react-navigation/native';
@@ -56,12 +60,15 @@ const HomeScreen: React.FC<{}> = () => {
       <Header title="Trang chủ" iconRight={true}></Header>
       <View style={styles.contentTop}>
         <Lottie
-          source={require('../../assets/jsonAmination/hello_1.json')}
+          source={require('../../assets/jsonAmination/hello.json')}
           autoPlay
           loop
           style={styles.iconUser}
         />
-        <Text>{userState?.user?.name}</Text>
+
+        <View style={styles.nameContent}>
+          <Text style={styles.nameTitle}>{userState?.user?.name}</Text>
+        </View>
       </View>
       <View style={[GlobalStyles.container, styles.content]}>
         <View style={styles.top}>
@@ -128,11 +135,33 @@ const styles = StyleSheet.create({
     top: responsiveHeight(25),
     zIndex: 99999,
   },
+
   iconUser: {
-    width: 100,
+    width: 80,
   },
   contentTop: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: Colors.primaryButton,
+    borderBottomRightRadius: 200,
+    borderColor: 'none',
+    borderBottomLeftRadius: 5,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 0,
+    overflow: 'hidden',
+  },
+
+  nameTitle: {
+    textAlign: 'center',
+    fontSize: responsiveFont(20),
+    color: '#f5cac3',
+    fontWeight: '600',
+  },
+  nameContent: {
+    flexDirection: 'column',
+    width: '50%',
+    paddingHorizontal: responsiveWidth(10),
+    paddingVertical: responsiveHeight(5),
   },
 });

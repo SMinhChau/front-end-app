@@ -95,7 +95,7 @@ const GroupItem: React.FC<Props> = ({
             <Text style={styles.nemberMember}>Số lượng: {member?.length} </Text>
             <TouchableOpacity
               onPress={() => {
-                console.log('GroupItem infoGroupItem', infoGroupItem);
+                console.log('GroupItem infoGroupItem', infoGroupItem?.id);
 
                 setVisible(true);
               }}>

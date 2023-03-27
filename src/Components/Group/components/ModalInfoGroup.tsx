@@ -8,7 +8,7 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
-import {Modal, Portal} from 'react-native-paper';
+import {Button, Dialog, Modal, Portal, TextInput} from 'react-native-paper';
 import Lottie from 'lottie-react-native';
 import CloseButton from '../../../common/CloseButton';
 import IconView from '../../../common/IconView';
@@ -86,7 +86,17 @@ const ModalInfoGroup: React.FC<Props> = ({
   const [loading, setLoading] = useState(false);
   const [isRequest, setRequest] = useState(false);
 
+  const [modalRequestToJoinGroup, seModalRequestToJoinGroup] = useState(false);
+
+  const hideDialog = () => seModalRequestToJoinGroup(false);
+
   const dispatch = useAppDispatch();
+
+  const [content, SetContent] = useState('');
+
+  const onChangeText = (text: string) => {
+    SetContent(text);
+  };
 
   useEffect(() => {
     setListMember(infoGroup?.members);
@@ -103,17 +113,27 @@ const ModalInfoGroup: React.FC<Props> = ({
   };
 
   const handleSentRequestJoinGroup = async () => {
-    console.log(' infoGroup?.id ====', infoGroup?.id);
+    seModalRequestToJoinGroup(true);
+  };
+
+  const sendRequestToGroup = async () => {
+    console.log('>>>>>>>>>>>>>>content', content);
     setRequest(true);
     await groupService
-      .sendRequestGroup(infoGroup?.id as number)
+      .sendRequestGroup(infoGroup?.id as number, content)
       .then(result => {
         console.log('sendRequestGroup result ====', result);
-        setLoading(false);
+        setRequest(false);
         Alert.alert('Thông báo', 'Đã gửi yêu cầu tham gia nhóm');
+        seModalRequestToJoinGroup(false);
         modalClose(false);
       })
-      .catch(error => console.log('sendRequestGroup =====error ', error));
+      .catch(error => {
+        setRequest(false);
+        Alert.alert('Thông báo', 'Gửi yêu cầu thất bại');
+        seModalRequestToJoinGroup(false);
+        modalClose(false);
+      });
   };
 
   const renderListMember = useMemo(
@@ -228,9 +248,7 @@ const ModalInfoGroup: React.FC<Props> = ({
           <View style={[styles.flatList]}>
             <FlatList
               data={listMember}
-              contentContainerStyle={{
-                width: '100%',
-              }}
+              horizontal={true}
               renderItem={(item: any) => renderListMember(item?.item)}
             />
           </View>
@@ -277,6 +295,30 @@ const ModalInfoGroup: React.FC<Props> = ({
 
       {loading && <LoadingScreen />}
       {isRequest && <LoadingScreen />}
+
+      <Portal>
+        <Dialog visible={modalRequestToJoinGroup} onDismiss={hideDialog}>
+          <Dialog.Title>Gửi yêu cầu tham gia nhóm</Dialog.Title>
+
+          <Dialog.Content>
+            <TextInput
+              placeholder={'Nội dung'}
+              onChangeText={text => onChangeText(text)}
+            />
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => seModalRequestToJoinGroup(false)}>
+              Hủy
+            </Button>
+            <ButtonHandle
+              onPress={() => sendRequestToGroup()}
+              icon
+              iconName="paper-plane-outline"
+              title="Gửi"
+            />
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </>
   );
 };
@@ -334,18 +376,17 @@ const styles = StyleSheet.create({
   },
   flatList: {
     width: '100%',
-    // height: '80%',
-    flex: 1,
+    flexDirection: 'column',
   },
   contenMember: {
     flexDirection: 'row',
-    width: '100%',
+    justifyContent: 'space-between',
     borderWidth: 1,
     shadowOpacity: 3,
     backgroundColor: '#cbdfbd',
     borderRadius: 10,
     borderColor: '#76c893',
-
+    width: '100%',
     marginTop: responsiveHeight(10),
   },
   contenTopic: {
@@ -360,10 +401,10 @@ const styles = StyleSheet.create({
     marginVertical: responsiveHeight(10),
   },
   leftContent: {
-    width: '25%',
+    width: responsiveWidth(70),
   },
   rightContent: {
-    width: '75%',
+    width: responsiveWidth(260),
     paddingVertical: responsiveHeight(10),
   },
   buttonOut: {
@@ -371,6 +412,9 @@ const styles = StyleSheet.create({
   },
   buttonJoin: {
     backgroundColor: '#38b000',
+  },
+  buttonSent: {
+    backgroundColor: Colors.primaryButton,
   },
   contentBtn: {
     paddingHorizontal: responsiveWidth(16),
