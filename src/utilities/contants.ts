@@ -50,3 +50,7 @@ export const enum TypeGender {
   Male = 'male',
   Female = 'female',
 }
+export const TypeRequestGroup = {
+  REQUEST_JOIN: 'REQUEST_JOIN',
+  REQUEST_INVITE: 'REQUEST_INVITE',
+};

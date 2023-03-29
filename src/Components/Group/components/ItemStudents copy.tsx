@@ -22,6 +22,9 @@ import IconView from '../../../common/IconView';
 import GroupItem from './GroupItem';
 import authService from '../../../services/auth';
 import StudentOfList from './StudentOfList';
+import {isEmpty} from 'lodash';
+import groupService from '../../../services/group';
+import {TypeRequestGroup} from '../../../utilities/contants';
 
 const ItemStudents = () => {
   const termState = useAppSelector(state => state.term);
@@ -34,8 +37,6 @@ const ItemStudents = () => {
       await authService
         .getStudent(termState?.term?.id, false)
         .then(result => {
-          console.log('getListGroup', result);
-
           setStudents(result.data);
         })
         .catch(error => console.log(error));

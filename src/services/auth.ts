@@ -27,9 +27,6 @@ class AuthService {
         method: 'put',
         data,
       });
-
-      console.log('>>>>updateUserInfo ', result);
-
       return result;
     } catch (error) {
       console.log('updateUserInfo', error);
@@ -37,8 +34,6 @@ class AuthService {
   };
 
   getStudent(termId: number, groupExists: boolean) {
-    console.log('getStudent Service termId ', termId);
-    console.log('getStudent Service groupExists ', groupExists);
     return axiosAuth({
       url: `api/student/students?termId=${termId}&groupExists=${groupExists}`,
       method: 'get',

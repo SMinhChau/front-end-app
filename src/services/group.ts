@@ -50,6 +50,12 @@ class GroupService {
       data: {termId, studentId, message},
     });
   }
+  getMyrequestJoinGroup(termId: number, type: string) {
+    return axiosAuth({
+      url: `/api/student/groups/group-requests?termId=${termId}&type=${type}`,
+      method: 'get',
+    });
+  }
 }
 
 const groupService = new GroupService();

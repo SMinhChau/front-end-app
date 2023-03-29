@@ -15,6 +15,7 @@ import {
   Portal,
   TextInput,
 } from 'react-native-paper';
+import Lottie from 'lottie-react-native';
 import {Images} from '../../../assets/images/Images';
 import ButtonHandle from '../../../common/ButtonHandle';
 import CloseButton from '../../../common/CloseButton';
@@ -27,8 +28,8 @@ import topicService from '../../../services/topic';
 import Colors from '../../../Themes/Colors';
 import Group from '../../../utilities/Contant/Group';
 import Term from '../../../utilities/Contant/Term';
-import Topic from '../../../utilities/Contant/Topic';
-import User from '../../../utilities/contants';
+
+import User, {TypeRequestGroup} from '../../../utilities/contants';
 import {
   responsiveFont,
   responsiveHeight,
@@ -37,6 +38,8 @@ import {
 import {isEmpty} from '../../../utilities/utils';
 import TextItemAccount from '../../Account/component/TextItemAccount';
 import ModalInfoGroup from './ModalInfoGroup';
+import {color} from 'react-native-reanimated';
+import LoadingScreen from '../../../common/LoadingScreen';
 
 interface Props {
   title?: string;
@@ -45,10 +48,16 @@ interface Props {
   handleJoin?: () => void;
   notGroup?: boolean;
   join?: boolean;
+  isStudentInvited?: boolean;
   studentInfo?: User;
   termInfoGroup?: Term;
 }
-const StudentOfList: React.FC<Props> = ({studentInfo, notGroup}) => {
+
+const StudentOfList: React.FC<Props> = ({
+  studentInfo,
+  notGroup,
+  isStudentInvited,
+}) => {
   const [visible, setVisible] = useState(false);
   const groupState = useAppSelector(state => state.group);
   const termState = useAppSelector(state => state.term);
@@ -56,6 +65,9 @@ const StudentOfList: React.FC<Props> = ({studentInfo, notGroup}) => {
   const [isInvite, setInvite] = useState(false);
   const [modalInviteStudentJionGtoup, setModalInviteStudentJionGtoup] =
     useState(false);
+
+  console.log('>>>>>>>studentInfo', studentInfo);
+  console.log('>>>>>>>isStudentInvited', isStudentInvited);
 
   const onChangeText = (text: string) => {
     SetContent(text);
@@ -104,12 +116,42 @@ const StudentOfList: React.FC<Props> = ({studentInfo, notGroup}) => {
         Alert.alert('Thông báo', 'Lời mời tham gia nhóm chưa được gửi');
         setModalInviteStudentJionGtoup(false);
       });
+    SetContent('');
   };
+
+  const renderButton = useMemo(() => {
+    return (
+      <>
+        {isStudentInvited === true ? (
+          <ButtonHandle
+            disabled
+            onPress={() => {
+              setModalInviteStudentJionGtoup(true);
+            }}
+            style={styles.btnDisabled}
+            icon
+            iconName="ios-person-add"
+            title="Đã mời"
+          />
+        ) : (
+          <ButtonHandle
+            onPress={() => {
+              setModalInviteStudentJionGtoup(true);
+            }}
+            style={styles.btn}
+            icon
+            iconName="ios-person-add"
+            title="Mời tham gia nhóm"
+          />
+        )}
+      </>
+    );
+  }, [isStudentInvited]);
 
   const topContent = useMemo(() => {
     return (
       <>
-        <View style={[GlobalStyles.margin20, styles.contentTitle]}>
+        <View style={[styles.contentTitle]}>
           <Image
             source={{
               uri: studentInfo?.avatar ? studentInfo?.avatar : Images.avatar,
@@ -119,7 +161,7 @@ const StudentOfList: React.FC<Props> = ({studentInfo, notGroup}) => {
 
           <View
             style={{
-              justifyContent: 'space-between',
+              justifyContent: 'flex-start',
               flexDirection: 'row',
               width: '80%',
             }}>
@@ -127,39 +169,29 @@ const StudentOfList: React.FC<Props> = ({studentInfo, notGroup}) => {
               {DATA.map((item: any, index: any) => {
                 return (
                   <>
-                    <TextItemAccount
-                      key={index}
-                      main={true}
-                      textLeft={item?.key}
-                      textRight={item?.title}></TextItemAccount>
+                    <View style={styles.viewText}>
+                      <Text style={styles.key}>{item?.key}: </Text>
+                      <Text numberOfLines={1} style={styles.title}>
+                        {item?.title}
+                      </Text>
+                    </View>
                   </>
                 );
               })}
-            </View>
 
-            {groupState?.group?.id ? (
-              <>
-                {notGroup && (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setModalInviteStudentJionGtoup(true);
-                    }}>
-                    <IconView
-                      name="ios-ellipsis-vertical"
-                      color={Colors.grayLight}
-                      size={24}
-                    />
-                  </TouchableOpacity>
+              <View style={styles.buttonView}>
+                {groupState?.group?.id ? (
+                  <>{notGroup && renderButton}</>
+                ) : (
+                  <></>
                 )}
-              </>
-            ) : (
-              <></>
-            )}
+              </View>
+            </View>
           </View>
         </View>
       </>
     );
-  }, [studentInfo]);
+  }, [studentInfo, groupState?.group?.id]);
 
   return (
     <>
@@ -188,6 +220,8 @@ const StudentOfList: React.FC<Props> = ({studentInfo, notGroup}) => {
           </Dialog.Actions>
         </Dialog>
       </Portal>
+
+      {isInvite && <LoadingScreen />}
     </>
   );
 };
@@ -199,13 +233,13 @@ const styles = StyleSheet.create({
     paddingVertical: responsiveHeight(9),
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'center',
+    marginHorizontal: responsiveWidth(5),
     borderWidth: 0.5,
     shadowOpacity: 3,
     borderRadius: 10,
     backgroundColor: '#caf0f8',
     borderColor: '#caf0f8',
-    marginTop: responsiveHeight(10),
+    marginBottom: responsiveHeight(15),
     shadowOffset: {width: 2, height: 3},
   },
   viewIcon: {
@@ -248,10 +282,40 @@ const styles = StyleSheet.create({
     borderColor: Colors.blueBoder,
     borderWidth: 1,
     shadowOpacity: 0.02,
-    marginRight: responsiveWidth(5),
+    marginRight: responsiveWidth(10),
     shadowOffset: {width: 2, height: 3},
   },
   content: {
     flexDirection: 'column',
+  },
+  viewText: {
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    paddingVertical: responsiveHeight(3),
+    alignItems: 'flex-start',
+  },
+  key: {
+    fontSize: responsiveFont(15),
+    color: Colors.textPrimary,
+    fontWeight: '500',
+    width: '30%',
+  },
+  title: {
+    fontSize: responsiveFont(15),
+    color: Colors.accountText,
+    fontWeight: '400',
+    textAlign: 'left',
+    width: '70%',
+  },
+  buttonView: {
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+  },
+  btn: {
+    width: '70%',
+    marginRight: responsiveWidth(5),
+  },
+  btnDisabled: {
+    opacity: 0.5,
   },
 });

@@ -23,11 +23,27 @@ import IconView from '../../../common/IconView';
 import GroupItem from './GroupItem';
 import authService from '../../../services/auth';
 import StudentOfList from './StudentOfList';
-
+import groupService from '../../../services/group';
+import {TypeRequestGroup} from '../../../utilities/contants';
+interface ListInvited {
+  id: number;
+  message: string;
+  type: string;
+  group: {
+    id: number;
+  };
+  student: {
+    id: number;
+  };
+}
 const ItemStudents = () => {
   const termState = useAppSelector(state => state.term);
   const [students, setStudents] = useState();
   const [studentsHaveGroup, setStudentsHaveGroup] = useState();
+
+  const [isStudentInvited, setStudentInvited] = useState(false);
+  const [listStudentInvitedJoinGroup, setStudentInvitedJoinGroup] =
+    useState<ListInvited[]>();
 
   const layout = useWindowDimensions();
 
@@ -42,8 +58,7 @@ const ItemStudents = () => {
       await authService
         .getStudent(termState?.term?.id, false)
         .then(result => {
-          console.log('getListGroup', result);
-
+          console.log('>>>>>>>>getListGroup Nonnnnn', result);
           setStudents(result.data);
         })
         .catch(error => console.log(error));
@@ -55,8 +70,6 @@ const ItemStudents = () => {
       await authService
         .getStudent(termState?.term?.id, true)
         .then(result => {
-          console.log('getListGroup getListStdentsHaveGroup', result);
-
           setStudentsHaveGroup(result.data);
         })
         .catch(error => console.log(error));
@@ -68,11 +81,50 @@ const ItemStudents = () => {
     getListStdentsHaveGroup();
   }, [termState]);
 
+  useEffect(() => {
+    getListInvitedJoinGroup();
+  }, []);
+
+  const getListInvitedJoinGroup = () => {
+    if (termState?.term?.id) {
+      groupService
+        .getMyrequestJoinGroup(
+          termState?.term?.id,
+          TypeRequestGroup.REQUEST_INVITE,
+        )
+        .then(result => {
+          console.log('>>>>>>>>>>result?.data', result?.data);
+          setStudentInvitedJoinGroup(result?.data);
+        })
+        .catch(error => console.log('error', error));
+    }
+  };
+
+  const checkInvited = (id: any) => {
+    let temp = [];
+    if (
+      listStudentInvitedJoinGroup &&
+      listStudentInvitedJoinGroup?.length > 0
+    ) {
+      temp = listStudentInvitedJoinGroup;
+      temp.forEach(i => {
+        if (i?.student?.id === id) {
+          setStudentInvited(true);
+        } else {
+          setStudentInvited(false);
+        }
+      });
+    }
+    console.log('>>>>isStudentInvited', isStudentInvited);
+  };
+
   const renderListStudents = useMemo(
     () => (item: any) => {
+      checkInvited(item?.id);
       return (
         <StudentOfList
           notGroup
+          isStudentInvited
           termInfoGroup={termState?.term}
           studentInfo={item}
         />
@@ -95,10 +147,12 @@ const ItemStudents = () => {
   const TabStudentHaveGroup = () => {
     return <>{ListStudentsHaveGroup}</>;
   };
+
   const renderScene = SceneMap({
     not: TabStudentNotGroup,
     have: TabStudentHaveGroup,
   });
+
   const ListStudents = useMemo(() => {
     return (
       <>
@@ -166,6 +220,7 @@ export default ItemStudents;
 const styles = StyleSheet.create({
   containner: {
     flex: 1,
+    backgroundColor: Colors.white,
     justifyContent: 'space-between',
     alignContent: 'space-between',
   },

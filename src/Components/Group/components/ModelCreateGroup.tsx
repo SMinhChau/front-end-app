@@ -56,6 +56,7 @@ const ModelCreateGroup: React.FC<Props> = ({
         }),
       )
         .then(result => {
+          console.log('handleCreatgroup result', result);
           setLoading(false);
           Alert.alert('Thông báo', 'Tạo nhóm thành công');
           modalClose(false);
@@ -64,6 +65,7 @@ const ModelCreateGroup: React.FC<Props> = ({
           setLoading(false);
           Alert.alert('Thông báo', 'Tạo nhóm không thành công');
         });
+      setNameGroupInput('');
     }
   };
 

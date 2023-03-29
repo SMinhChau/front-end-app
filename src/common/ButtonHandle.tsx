@@ -17,6 +17,7 @@ interface Props {
   textStyle?: any;
   wrapper?: string;
   icon?: boolean;
+  disabled?: boolean;
   colorIcon?: any;
   iconName?: string;
 }
@@ -28,9 +29,11 @@ const ButtonHandle: React.FC<Props> = ({
   out,
   colorIcon,
   iconName,
+  disabled,
 }) => {
   return (
     <TouchableOpacity
+      disabled={disabled}
       style={[styles.container, style, out && {backgroundColor: '#bc4749'}]}
       onPress={onPress}>
       <View style={styles.content}>
