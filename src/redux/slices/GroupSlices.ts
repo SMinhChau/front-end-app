@@ -109,6 +109,23 @@ export const GroupSlices = createSlice({
       state.is_loading = false;
       state.error = true;
     });
+
+    builder.addCase(groupAPI.accpectJoinGroup().pending, (state, action) => {
+      console.log('accpectJoinGroup action', action);
+
+      state.is_loading = true;
+    });
+    builder.addCase(groupAPI.accpectJoinGroup().fulfilled, (state, action) => {
+      console.log('accpectJoinGroup action', action);
+      state.group = action.payload;
+      state.is_loading = false;
+    });
+
+    builder.addCase(groupAPI.accpectJoinGroup().rejected, (state, action) => {
+      console.log('accpectJoinGroup action', action);
+      state.is_loading = false;
+      state.error = true;
+    });
   },
 });
 

@@ -57,15 +57,11 @@ const TopicMenu = () => {
   // }, [groupState]);
 
   const getToppicList = useCallback(() => {
-    console.log('=======termState', termState?.id);
-
     topicService
       .getTopicList(termState?.id ? termState?.id : 0)
       .then(result => {
-        console.log('getMyTopic=============', result?.data);
         setTopics(result?.data);
-      })
-      .catch(error => console.log('getTopic error', error));
+      });
   }, [groupState]);
 
   const isStartDateChooseTopic = () =>
@@ -171,7 +167,9 @@ const TopicMenu = () => {
           horizontal={true}
           data={topics}
           initialNumToRender={20}
-          renderItem={(item: any) => <ItemTopic topicInfo={item?.item} />}
+          renderItem={(item: any) => (
+            <ItemTopic key={item} topicInfo={item?.item} />
+          )}
         />
 
         {/* <ItemTopic topicInfo={myTopic} /> */}

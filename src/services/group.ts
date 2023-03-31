@@ -52,8 +52,26 @@ class GroupService {
   }
   getMyrequestJoinGroup(termId: number, type: string) {
     return axiosAuth({
-      url: `/api/student/groups/group-requests?termId=${termId}&type=${type}`,
+      url: `api/student/groups/group-requests?termId=${termId}&type=${type}`,
       method: 'get',
+    });
+  }
+  getRequestJoinGroupOrder(termId: number, type: string) {
+    return axiosAuth({
+      url: `api/student/groups/my-requests?termId=${termId}&type=${type}`,
+      method: 'get',
+    });
+  }
+  deleteRequest(id: number) {
+    return axiosAuth({
+      url: `api/student/groups/refuse-request/${id}`,
+      method: 'delete',
+    });
+  }
+  acceptRequest(id: number) {
+    return axiosAuth({
+      url: `api/student/groups/accep-request/${id}`,
+      method: 'post',
     });
   }
 }

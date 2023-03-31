@@ -79,7 +79,7 @@ const ModalInfoGroup: React.FC<Props> = ({
   visible,
   termInfoGroup,
 }) => {
-  const [listMember, setListMember] = useState<[Member]>();
+  const [listMember, setListMember] = useState<Member[]>();
 
   const [topic, setTopic] = useState<Topic>();
   const groupState = useAppSelector(state => state.group);
@@ -97,6 +97,8 @@ const ModalInfoGroup: React.FC<Props> = ({
   const onChangeText = (text: string) => {
     SetContent(text);
   };
+
+  console.log('>>>>>>>>>>>>>>>>infoGroup?.members', infoGroup?.members);
 
   useEffect(() => {
     setListMember(infoGroup?.members);
@@ -231,6 +233,8 @@ const ModalInfoGroup: React.FC<Props> = ({
   }, [infoGroup, groupState]);
 
   const renderViewInfo = useMemo(() => {
+    console.log('>>>>>>>>>>>>>>>>>>>>>>renderViewInfo listMember', listMember);
+
     return (
       <View style={styles.contentTitle}>
         <View style={styles.nameGroup}>
@@ -375,7 +379,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   flatList: {
-    width: '100%',
+    width: responsiveWidth(300),
     flexDirection: 'column',
   },
   contenMember: {

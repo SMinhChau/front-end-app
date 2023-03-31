@@ -13,6 +13,7 @@ import ItemStudents from './Group/components/ItemStudents';
 import ItemListGroup from './Group/components/ItemListGroup';
 import RequestJoinMyGroup from './Group/components/RequestJoinMyGroup';
 import InviteJoinGroup from './Group/components/InviteJoinGroup';
+import JoinGroupToOrther from './Group/components/JoinGroupToOrther';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,8 +43,8 @@ const NavigationRouter = () => {
         <Stack.Screen name={'ItemListGroup'} component={ItemListGroup} />
         <Stack.Screen name={'ItemStudents'} component={ItemStudents} />
         <Stack.Screen
-          name={'RequestJoinMyGroup'}
-          component={RequestJoinMyGroup}
+          name={'JoinGroupToOrther'}
+          component={JoinGroupToOrther}
         />
         <Stack.Screen name={'InviteJoinGroup'} component={InviteJoinGroup} />
       </Stack.Navigator>

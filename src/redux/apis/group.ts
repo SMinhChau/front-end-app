@@ -25,15 +25,11 @@ class GroupAPI {
     return createAsyncThunk(
       'group/out-group-by-termId',
       async (termId: number, thunkAP) => {
-        try {
-          const result = await groupService.outGroup(termId);
-          if (result.status === 200) {
-            return result.data;
-          }
-          return thunkAP.rejectWithValue('Xóa nhóm không thành công');
-        } catch (error) {
-          console.log('error', error);
+        const result = await groupService.outGroup(termId);
+        if (result.status === 200) {
+          return result.data;
         }
+        return thunkAP.rejectWithValue('Xóa nhóm không thành công');
       },
     );
   }
@@ -42,18 +38,25 @@ class GroupAPI {
     return createAsyncThunk(
       'group/create-my-group',
       async (data: {termId: number; name: string}, thunkAP) => {
-        try {
-          const result = await groupService.createGroup(data);
+        const result = await groupService.createGroup(data);
 
-          if (result.status === 200) {
-            return result.data;
-          }
-          return thunkAP.rejectWithValue('Tạo nhóm không thành công');
-        } catch (error) {
-          console.log('group/create-my-group error', error);
+        if (result.status === 200) {
+          return result.data;
         }
+        return thunkAP.rejectWithValue('Tạo nhóm không thành công');
       },
     );
+  }
+
+  accpectJoinGroup() {
+    return createAsyncThunk('group/accept-join-group', async (id: number) => {
+      const result = await groupService.acceptRequest(id);
+      console.log('accpectJoinGroup result================', result);
+
+      if (result.status === 200) {
+        return result.data;
+      }
+    });
   }
 }
 

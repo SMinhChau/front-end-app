@@ -30,7 +30,6 @@ interface Props {
 }
 
 const ItemTopic = ({topicInfo}: Props) => {
-  console.log('ItemTopic topicInfo', topicInfo);
   const [expanded, setExpanded] = useState(true);
 
   const handlePress = () => setExpanded(!expanded);

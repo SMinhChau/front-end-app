@@ -21,6 +21,6 @@ export default {
 
   ItemListGroup: 'ItemListGroup',
   ItemStudents: 'ItemStudents',
-  RequestJoinMyGroup: 'RequestJoinMyGroup',
+  JoinGroupToOrther: 'JoinGroupToOrther',
   InviteJoinGroup: 'InviteJoinGroup',
 };

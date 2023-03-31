@@ -6,6 +6,7 @@ import {
   StyleSheet,
   FlatList,
   ScrollView,
+  useWindowDimensions,
 } from 'react-native';
 import Lottie from 'lottie-react-native';
 import {TabView, SceneMap} from 'react-native-tab-view';
@@ -22,68 +23,73 @@ import IconView from '../../../common/IconView';
 import GroupItem from './GroupItem';
 import authService from '../../../services/auth';
 import StudentOfList from './StudentOfList';
+import groupService from '../../../services/group';
+import {TypeRequestGroup} from '../../../utilities/contants';
+import ContentItemInvite from './content/ContentItemInvite';
+import {isEmpty} from '../../../utilities/utils';
 
 const InviteJoinGroup = () => {
+  const layout = useWindowDimensions();
+  const [listInvitedToStudent, setListInvitedToStudent] = useState();
+  const [listInviteReceidFromStudent, setInviteReceidFromStudent] = useState();
+
   const termState = useAppSelector(state => state.term);
-  const [students, setStudents] = useState();
 
   const [index, setIndex] = useState(0);
-
-  const getListStdentsNonGroup = useCallback(async () => {
-    if (termState?.term?.id) {
-      await authService
-        .getStudent(termState?.term?.id, false)
-        .then(result => {
-          console.log('getListGroup', result);
-
-          setStudents(result.data);
-        })
-        .catch(error => console.log(error));
-    }
-  }, []);
+  const [routes] = useState([
+    {key: 'send', title: 'Gửi Đến Sinh Viên'},
+    {key: 'receid', title: 'Nhận Từ Sinh Viên'},
+  ]);
 
   useEffect(() => {
-    getListStdentsNonGroup();
+    listInvited();
   }, [termState]);
 
-  const renderListStudents = useMemo(
-    () => (item: any) => {
-      return (
-        <StudentOfList termInfoGroup={termState?.term} studentInfo={item} />
-      );
-    },
-    [],
-  );
+  const listInvited = async () => {
+    if (!isEmpty(termState?.term?.id)) {
+      await groupService
+        .getMyrequestJoinGroup(
+          termState?.term?.id,
+          TypeRequestGroup.REQUEST_INVITE,
+        )
+        .then(result => {
+          setListInvitedToStudent(result?.data);
+        })
+        .catch(error => console.log('error', error));
+    }
+  };
 
-  const ListStudents = useMemo(() => {
+  const InvitedStudentJionGroup = () => {
+    return <>{renderInvitedStudentJionGroup}</>;
+  };
+  const ReciedRequestionGroup = () => {
+    return <>{renderReciedRequestionGroup}</>;
+  };
+
+  const renderScene = SceneMap({
+    send: InvitedStudentJionGroup,
+    receid: ReciedRequestionGroup,
+  });
+
+  const renderStudentJionGroup = (item: any) => {
+    return (
+      <ContentItemInvite
+        studentName={item?.student?.name}
+        message={item?.message}
+      />
+    );
+  };
+
+  const renderInvitedStudentJionGroup = useMemo(() => {
     return (
       <>
         <>
           <View style={[styles.bottomContent]}>
-            {/* <View style={styles.contentTitle}>
-              <View style={styles.viewIcon}>
-                <IconView
-                  name="people-ouline"
-                  color={Colors.iconbr}
-                  size={26}
-                />
-              </View>
-              <Text style={styles.titleGroup}>
-                Danh sách sinh viên chưa có nhóm
-              </Text>
-              <Lottie
-                source={require('../../../assets/jsonAmination/62114-people-icons-lottie-animation.json')}
-                autoPlay
-                loop
-                style={styles.amination}
-              />
-            </View> */}
-
             <View style={[styles.flatList]}>
               <FlatList
-                data={students}
+                data={listInvitedToStudent}
                 initialNumToRender={20}
-                renderItem={(item: any) => renderListStudents(item?.item)}
+                renderItem={(item: any) => renderStudentJionGroup(item?.item)}
                 keyExtractor={item => item.id}
               />
             </View>
@@ -91,20 +97,45 @@ const InviteJoinGroup = () => {
         </>
       </>
     );
-  }, [students]);
+  }, [listInvitedToStudent]);
+
+  const renderReciedRequestionGroup = useMemo(() => {
+    return (
+      <>
+        <>
+          <View style={[styles.bottomContent]}>
+            <View style={[styles.flatList]}>
+              <FlatList
+                data={listInviteReceidFromStudent}
+                initialNumToRender={20}
+                renderItem={(item: any) => renderStudentJionGroup(item?.item)}
+                keyExtractor={item => item.id}
+              />
+              <Text>hjnhkljn</Text>
+            </View>
+          </View>
+        </>
+      </>
+    );
+  }, [listInviteReceidFromStudent]);
   return (
     <>
       <View style={GlobalStyles.container}>
         <View style={styles.containner}>
           <Header
-            title="Mời tham gia nhóm"
+            title="Yêu cầu tham gia nhóm"
             iconLeft={true}
             home={false}
             style={styles.header}
             back={true}
             iconRight={false}></Header>
-
-          {ListStudents}
+          <TabView
+            navigationState={{index, routes}}
+            renderScene={renderScene}
+            onIndexChange={setIndex}
+            style={styles.contentTab}
+            initialLayout={{width: layout.width}}
+          />
         </View>
       </View>
     </>
@@ -116,6 +147,7 @@ export default InviteJoinGroup;
 const styles = StyleSheet.create({
   containner: {
     flex: 1,
+    backgroundColor: Colors.white,
     justifyContent: 'space-between',
     alignContent: 'space-between',
   },
@@ -127,7 +159,6 @@ const styles = StyleSheet.create({
     height: '90%',
     backgroundColor: Colors.white,
     borderColor: '#caf0f8',
-    marginTop: responsiveHeight(20),
     shadowOffset: {width: 2, height: 3},
   },
 
@@ -168,4 +199,5 @@ const styles = StyleSheet.create({
   amination: {
     right: responsiveWidth(-150),
   },
+  contentTab: {},
 });
