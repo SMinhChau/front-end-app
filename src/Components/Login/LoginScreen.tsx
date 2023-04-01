@@ -35,6 +35,7 @@ import {
 } from '../../utilities/sizeScreen';
 import {Modal, Portal} from 'react-native-paper';
 import LoadingScreen from '../../common/LoadingScreen';
+import RouteNames from '../RouteNames';
 
 const Login: React.FC<{}> = () => {
   const userState = useAppSelector(state => state.user);
@@ -48,7 +49,7 @@ const Login: React.FC<{}> = () => {
 
     if (userState.is_login) {
       setLoading(false);
-      navigation.navigate('TabNavigation');
+      navigation.navigate(RouteNames.TabNavigation);
     }
     if (userState.is_loading) {
     } else {

@@ -4,6 +4,7 @@ import {GroupSlices} from './slices/GroupSlices';
 import {MajorSlices} from './slices/MajorSlices';
 import {TermSlices} from './slices/TermSlices';
 import {userSlice} from './slices/UserSlices';
+import {TopicSlices} from './slices/TopicSlices';
 
 // ...
 
@@ -13,6 +14,7 @@ export const store = configureStore({
     major: MajorSlices.reducer,
     term: TermSlices.reducer,
     group: GroupSlices.reducer,
+    topic: TopicSlices.reducer,
   },
 });
 

@@ -7,6 +7,7 @@ import {
   FlatList,
   ScrollView,
   useWindowDimensions,
+  Alert,
 } from 'react-native';
 import Lottie from 'lottie-react-native';
 import {TabView, SceneMap} from 'react-native-tab-view';
@@ -18,15 +19,15 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from '../../../utilities/sizeScreen';
-import {useAppSelector} from '../../../redux/hooks';
-import IconView from '../../../common/IconView';
-import GroupItem from './GroupItem';
-import authService from '../../../services/auth';
-import StudentOfList from './StudentOfList';
+import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import groupService from '../../../services/group';
 import {TypeRequestGroup} from '../../../utilities/contants';
-import ContentItemInvite from './content/ContentItemInvite';
+
 import {isEmpty} from '../../../utilities/utils';
+import ContentItemInvite from '../components/content/ContentItemInvite';
+import LoadingScreen from '../../../common/LoadingScreen';
+import {log} from 'react-native-reanimated';
+import groupAPI from '../../../redux/apis/group';
 
 const InviteJoinGroup = () => {
   const layout = useWindowDimensions();
@@ -34,6 +35,9 @@ const InviteJoinGroup = () => {
   const [listInviteReceidFromStudent, setInviteReceidFromStudent] = useState();
 
   const termState = useAppSelector(state => state.term);
+  const [isLoading, setLoading] = useState(false);
+
+  const dispatch = useAppDispatch();
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
@@ -43,7 +47,10 @@ const InviteJoinGroup = () => {
 
   useEffect(() => {
     listInvited();
-  }, [termState]);
+  }, [isLoading]);
+  useEffect(() => {
+    listRevied();
+  }, [isLoading]);
 
   const listInvited = async () => {
     if (!isEmpty(termState?.term?.id)) {
@@ -54,6 +61,21 @@ const InviteJoinGroup = () => {
         )
         .then(result => {
           setListInvitedToStudent(result?.data);
+        })
+        .catch(error => console.log('error', error));
+    }
+  };
+  const listRevied = async () => {
+    if (!isEmpty(termState?.term?.id)) {
+      await groupService
+        .getMyrequestJoinGroup(
+          termState?.term?.id,
+          TypeRequestGroup.REQUEST_JOIN,
+        )
+        .then(result => {
+          console.log('listRevied', result?.data);
+
+          setInviteReceidFromStudent(result?.data);
         })
         .catch(error => console.log('error', error));
     }
@@ -71,9 +93,49 @@ const InviteJoinGroup = () => {
     receid: ReciedRequestionGroup,
   });
 
-  const renderStudentJionGroup = (item: any) => {
+  const handleCancel = (id: number) => {
+    setLoading(true);
+    console.log('id=====', id);
+
+    groupService
+      .deleteRequest(id)
+      .then(() => {
+        setLoading(false);
+        Alert.alert('Thông báo', 'Đã hủy yêu cầu');
+      })
+      .catch(() => {});
+  };
+
+  const handleAccpect = async (id: number) => {
+    setLoading(true);
+    groupService
+      .acceptRequest(id)
+      .then(() => {
+        setLoading(false);
+        Alert.alert('Thông báo', 'Đã duyệt tham gia nhóm');
+      })
+      .catch(() => {});
+    dispatch(groupAPI.getMyGroup()(termState?.term?.id));
+  };
+
+  const renderInviteStudentJionGroup = (item: any) => {
     return (
       <ContentItemInvite
+        onPressCancel={() => handleCancel(item?.id)}
+        studentName={item?.student?.name}
+        message={item?.message}
+      />
+    );
+  };
+
+  const renderStudentReciedJionGroup = (item: any) => {
+    return (
+      <ContentItemInvite
+        accept
+        recied
+        onPressCancel={() => handleCancel(item?.id)}
+        onPressAccept={() => handleAccpect(item?.id)}
+        iconGroup={'people-sharp'}
         studentName={item?.student?.name}
         message={item?.message}
       />
@@ -89,7 +151,9 @@ const InviteJoinGroup = () => {
               <FlatList
                 data={listInvitedToStudent}
                 initialNumToRender={20}
-                renderItem={(item: any) => renderStudentJionGroup(item?.item)}
+                renderItem={(item: any) =>
+                  renderInviteStudentJionGroup(item?.item)
+                }
                 keyExtractor={item => item.id}
               />
             </View>
@@ -108,10 +172,11 @@ const InviteJoinGroup = () => {
               <FlatList
                 data={listInviteReceidFromStudent}
                 initialNumToRender={20}
-                renderItem={(item: any) => renderStudentJionGroup(item?.item)}
+                renderItem={(item: any) =>
+                  renderStudentReciedJionGroup(item?.item)
+                }
                 keyExtractor={item => item.id}
               />
-              <Text>hjnhkljn</Text>
             </View>
           </View>
         </>
@@ -137,6 +202,7 @@ const InviteJoinGroup = () => {
             initialLayout={{width: layout.width}}
           />
         </View>
+        {isLoading && <LoadingScreen />}
       </View>
     </>
   );

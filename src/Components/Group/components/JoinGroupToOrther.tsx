@@ -16,19 +16,20 @@ import {
   responsiveWidth,
 } from '../../../utilities/sizeScreen';
 import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
-import ContentItemInvite from './content/ContentItemInvite';
+
 import groupService from '../../../services/group';
 import {TypeRequestGroup} from '../../../utilities/contants';
 import LoadingScreen from '../../../common/LoadingScreen';
 import NoneData from '../../Section/NoneData';
 import {isEmpty} from 'lodash';
 import groupAPI from '../../../redux/apis/group';
+import ContentItemInvite from '../components/content/ContentItemInvite';
 
 const JoinGroupToOrther = () => {
   const layout = useWindowDimensions();
 
   const termState = useAppSelector(state => state.term);
-  const groupState = useAppSelector(state => state.group);
+
   const [listRecied, setListRevied] = useState();
   const [listRequested, setListRequested] = useState();
   const [isLoading, setLoading] = useState(false);
@@ -57,11 +58,8 @@ const JoinGroupToOrther = () => {
           TypeRequestGroup.REQUEST_INVITE,
         )
         .then(result => {
-          console.log('getListReciedFromGroup result.data', result?.data);
-
           setListRevied(result?.data);
-        })
-        .catch(error => console.log('error', error));
+        });
     }
   };
 
@@ -74,8 +72,7 @@ const JoinGroupToOrther = () => {
         )
         .then(result => {
           setListRequested(result?.data);
-        })
-        .catch(error => console.log('error', error));
+        });
     }
   };
 

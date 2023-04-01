@@ -168,7 +168,7 @@ const TopicMenu = () => {
           data={topics}
           initialNumToRender={20}
           renderItem={(item: any) => (
-            <ItemTopic key={item} topicInfo={item?.item} />
+            <ItemTopic key={item?.item} topicInfo={item?.item} />
           )}
         />
 

@@ -16,30 +16,30 @@ import {
   TextInput,
 } from 'react-native-paper';
 import Lottie from 'lottie-react-native';
-import {Images} from '../../../assets/images/Images';
-import ButtonHandle from '../../../common/ButtonHandle';
-import CloseButton from '../../../common/CloseButton';
-import IconView from '../../../common/IconView';
-import GlobalStyles from '../../../common/styles/GlobalStyles';
-import languages from '../../../languages';
-import {useAppSelector} from '../../../redux/hooks';
-import groupService from '../../../services/group';
-import topicService from '../../../services/topic';
-import Colors from '../../../Themes/Colors';
-import Group from '../../../utilities/Contant/Group';
-import Term from '../../../utilities/Contant/Term';
+import {Images} from '../../../../assets/images/Images';
+import ButtonHandle from '../../../../common/ButtonHandle';
+import CloseButton from '../../../../common/CloseButton';
+import IconView from '../../../../common/IconView';
+import GlobalStyles from '../../../../common/styles/GlobalStyles';
+import languages from '../../../../languages';
+import {useAppSelector} from '../../../../redux/hooks';
+import groupService from '../../../../services/group';
+import topicService from '../../../../services/topic';
+import Colors from '../../../../Themes/Colors';
+import Group from '../../../../utilities/Contant/Group';
+import Term from '../../../../utilities/Contant/Term';
 
-import User, {TypeRequestGroup} from '../../../utilities/contants';
+import User, {TypeRequestGroup} from '../../../../utilities/contants';
 import {
   responsiveFont,
   responsiveHeight,
   responsiveWidth,
-} from '../../../utilities/sizeScreen';
-import {isEmpty} from '../../../utilities/utils';
-import TextItemAccount from '../../Account/component/TextItemAccount';
-import ModalInfoGroup from './ModalInfoGroup';
-import {color} from 'react-native-reanimated';
-import LoadingScreen from '../../../common/LoadingScreen';
+} from '../../../../utilities/sizeScreen';
+import {isEmpty} from '../../../../utilities/utils';
+import TextItemAccount from '../../../Account/component/TextItemAccount';
+import ModalInfoGroup from '../ModalInfoGroup';
+import {color, log} from 'react-native-reanimated';
+import LoadingScreen from '../../../../common/LoadingScreen';
 
 interface Props {
   title?: string;
@@ -66,8 +66,7 @@ const StudentOfList: React.FC<Props> = ({
   const [modalInviteStudentJionGtoup, setModalInviteStudentJionGtoup] =
     useState(false);
 
-  console.log('>>>>>>>studentInfo', studentInfo);
-  console.log('>>>>>>>isStudentInvited', isStudentInvited);
+  console.log('isStudentInvited 2', isStudentInvited);
 
   const onChangeText = (text: string) => {
     SetContent(text);

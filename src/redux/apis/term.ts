@@ -6,8 +6,6 @@ class TermrAPI {
   getLastTerm() {
     return createAsyncThunk('term/get-term-last', async (majorsId: number) => {
       try {
-        console.log('>>getLastTerm majorsId', majorsId);
-
         const result = await termService.getLastTerm(majorsId);
         if (result.status === 200) return result.data;
       } catch (error) {

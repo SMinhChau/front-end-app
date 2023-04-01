@@ -1,6 +1,5 @@
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import {
-  StatusBar,
   StyleSheet,
   View,
   Text,
@@ -8,21 +7,16 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {List, Modal, Portal} from 'react-native-paper';
+import {List} from 'react-native-paper';
 import Lottie from 'lottie-react-native';
 import IconView from '../../../common/IconView';
 import Colors from '../../../Themes/Colors';
 import Topic from '../../../utilities/Contant/Topic';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {
   responsiveFont,
   responsiveHeight,
   responsiveWidth,
 } from '../../../utilities/sizeScreen';
-import TextItemAccount from '../../Account/component/TextItemAccount';
-import languages from '../../../languages';
-import ListItemDes from './content/ListItemDes';
-import CloseButton from '../../../common/CloseButton';
 import ModalDes from './ModalDes';
 
 interface Props {
@@ -187,12 +181,8 @@ export default ItemTopic;
 const styles = StyleSheet.create({
   mainTopic: {
     backgroundColor: '#fff0f3',
-    borderLeftColor: '#f08080',
-    borderRightColor: '#f08080',
-    borderBottomColor: '#f08080',
-    borderTopColor: Colors.white,
+    borderColor: '#f08080',
     borderWidth: 1,
-
     width: responsiveWidth(360),
     marginHorizontal: responsiveWidth(6),
     paddingHorizontal: responsiveWidth(16),

@@ -40,4 +40,13 @@ export const MENU = [
     icon: 'ios-person-add',
     iconColor: '#bc4749',
   },
+  {
+    key: 'topic',
+    backgroupIcon: '#cce3de',
+    borderIcon: '#6b9080',
+    title: 'Đề tài',
+    navigate: RouteNames.ItemTopicMenu,
+    icon: 'md-book',
+    iconColor: '#6b9080',
+  },
 ];

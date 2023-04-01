@@ -22,9 +22,11 @@ import {useAppSelector} from '../../../redux/hooks';
 import IconView from '../../../common/IconView';
 import GroupItem from './GroupItem';
 import authService from '../../../services/auth';
-import StudentOfList from './StudentOfList';
+
 import groupService from '../../../services/group';
 import {TypeRequestGroup} from '../../../utilities/contants';
+import StudentOfList from './content/StudentOfList';
+import {log} from 'react-native-reanimated';
 interface ListInvited {
   id: number;
   message: string;
@@ -38,10 +40,10 @@ interface ListInvited {
 }
 const ItemStudents = () => {
   const termState = useAppSelector(state => state.term);
-  const [students, setStudents] = useState();
+  const [students, setStudents] = useState([]);
   const [studentsHaveGroup, setStudentsHaveGroup] = useState();
 
-  const [isStudentInvited, setStudentInvited] = useState(false);
+  const [flag, setFlag] = useState(false);
   const [listStudentInvitedJoinGroup, setStudentInvitedJoinGroup] =
     useState<ListInvited[]>();
 
@@ -53,17 +55,31 @@ const ItemStudents = () => {
     {key: 'have', title: 'Đã có nhóm'},
   ]);
 
-  const getListStdentsNonGroup = useCallback(async () => {
-    if (termState?.term?.id) {
-      await authService
-        .getStudent(termState?.term?.id, false)
-        .then(result => {
-          console.log('>>>>>>>>getListGroup Nonnnnn', result);
-          setStudents(result.data);
-        })
-        .catch(error => console.log(error));
-    }
-  }, []);
+  const getListStdentsNonGroup = useCallback(
+    async (listStudentInvited: any[]) => {
+      if (termState?.term?.id) {
+        await authService
+          .getStudent(termState?.term?.id, false)
+          .then(result => {
+            console.log('listStudentInvited', listStudentInvited);
+
+            const checkInvited = (item: {id: number}) =>
+              listStudentInvited?.find(
+                (studentGroup: {student: {id: number}}) =>
+                  studentGroup?.student?.id === item.id,
+              );
+
+            const resultTemp = result?.data.map((item: any) => ({
+              ...item,
+              invited: !!checkInvited(item),
+            }));
+            setStudents(resultTemp);
+          })
+          .catch(error => console.log(error));
+      }
+    },
+    [],
+  );
 
   const getListStdentsHaveGroup = useCallback(async () => {
     if (termState?.term?.id) {
@@ -77,9 +93,11 @@ const ItemStudents = () => {
   }, []);
 
   useEffect(() => {
-    getListStdentsNonGroup();
-    getListStdentsHaveGroup();
-  }, [termState]);
+    const initData = async () => {
+      await getListStdentsHaveGroup();
+    };
+    initData();
+  }, []);
 
   useEffect(() => {
     getListInvitedJoinGroup();
@@ -92,54 +110,32 @@ const ItemStudents = () => {
           termState?.term?.id,
           TypeRequestGroup.REQUEST_INVITE,
         )
-        .then(result => {
-          console.log('>>>>>>>>>>result?.data', result?.data);
+        .then(async result => {
+          console.log('>>>>>getListInvitedJoinGroup', result?.data);
+
           setStudentInvitedJoinGroup(result?.data);
+          await getListStdentsNonGroup(result?.data);
         })
         .catch(error => console.log('error', error));
     }
   };
 
-  const checkInvited = (id: any) => {
-    let temp = [];
-    if (
-      listStudentInvitedJoinGroup &&
-      listStudentInvitedJoinGroup?.length > 0
-    ) {
-      temp = listStudentInvitedJoinGroup;
-      temp.forEach(i => {
-        if (i?.student?.id === id) {
-          setStudentInvited(true);
-        } else {
-          setStudentInvited(false);
-        }
-      });
-    }
-    console.log('>>>>isStudentInvited', isStudentInvited);
+  const renderListStudents = (item: any) => {
+    console.log('item', item);
+
+    return (
+      <StudentOfList
+        notGroup
+        isStudentInvited={item?.invited}
+        termInfoGroup={termState?.term}
+        studentInfo={item}
+      />
+    );
   };
 
-  const renderListStudents = useMemo(
-    () => (item: any) => {
-      checkInvited(item?.id);
-      return (
-        <StudentOfList
-          notGroup
-          isStudentInvited
-          termInfoGroup={termState?.term}
-          studentInfo={item}
-        />
-      );
-    },
-    [],
-  );
-  const renderListStudentsHaveGroup = useMemo(
-    () => (item: any) => {
-      return (
-        <StudentOfList termInfoGroup={termState?.term} studentInfo={item} />
-      );
-    },
-    [],
-  );
+  const renderListStudentsHaveGroup = (item: any) => {
+    return <StudentOfList termInfoGroup={termState?.term} studentInfo={item} />;
+  };
 
   const TabStudentNotGroup = () => {
     return <>{ListStudents}</>;
@@ -162,7 +158,6 @@ const ItemStudents = () => {
               <FlatList
                 data={students}
                 renderItem={(item: any) => renderListStudents(item?.item)}
-                keyExtractor={item => item.id}
               />
             </View>
           </View>

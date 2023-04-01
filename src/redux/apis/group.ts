@@ -1,15 +1,15 @@
-import {log} from 'react-native-reanimated';
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import {Alert} from 'react-native/Libraries/Alert/Alert';
 import groupService from '../../services/group';
+import {setTopic} from '../slices/TopicSlices';
+import Topic from '../../utilities/Contant/Topic';
 
 class GroupAPI {
   getMyGroup() {
     return createAsyncThunk('group/get-my-group', async (termId: number) => {
-      console.log('>getMyGroup termId', termId);
-
       const result = await groupService.getMyGroup(termId);
-      if (result.status === 200) return result.data;
+      if (result.status === 200) {
+        return result.data;
+      }
     });
   }
 
@@ -26,6 +26,7 @@ class GroupAPI {
       'group/out-group-by-termId',
       async (termId: number, thunkAP) => {
         const result = await groupService.outGroup(termId);
+        console.log('API==== outMyGroup', result);
         if (result.status === 200) {
           return result.data;
         }
@@ -51,7 +52,6 @@ class GroupAPI {
   accpectJoinGroup() {
     return createAsyncThunk('group/accept-join-group', async (id: number) => {
       const result = await groupService.acceptRequest(id);
-      console.log('accpectJoinGroup result================', result);
 
       if (result.status === 200) {
         return result.data;

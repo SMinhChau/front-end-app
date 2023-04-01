@@ -19,8 +19,6 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from '../../../../utilities/sizeScreen';
-import {isEmpty} from '../../../../utilities/utils';
-import ModalInfoGroup from './../ModalInfoGroup';
 
 interface Props {
   studentName?: string;

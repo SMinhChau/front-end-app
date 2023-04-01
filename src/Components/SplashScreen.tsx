@@ -36,7 +36,7 @@ const SplashScreen = () => {
     const token = await tokenService.getRefreshToken();
     if (token && userState?.id !== null) {
       dispatch(authAPI.getInfo()());
-      navigation.navigate('TabNavigation');
+      navigation.navigate(RouteNames.TabNavigation);
     } else navigation.navigate(RouteNames.loginNavigation);
   };
 

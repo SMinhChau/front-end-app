@@ -40,11 +40,11 @@ import {isEmpty} from 'lodash';
 import termrAPI from '../../redux/apis/term';
 import {MENU} from './content';
 import {navigate} from '../utils';
+import topicAPI from '../../redux/apis/topic';
 
 const Group: React.FC<{}> = () => {
   const groupState = useAppSelector(state => state.group);
   const termState = useAppSelector(state => state.term);
-  const userState = useAppSelector(state => state.user);
 
   const [checkStartDate, setcheckStartDate] = useState(false);
 
@@ -110,19 +110,8 @@ const Group: React.FC<{}> = () => {
     );
   }, [groupState, topic]);
 
-  const getTopicForGroup = useCallback((id: any) => {
-    topicService
-      .getTopicId(id)
-      .then(result => {
-        setTopic(result?.data);
-      })
-      .catch(error => console.log('getTopicForGroup>>.. error', error));
-  }, []);
-
   const getInfoGroup = () => {
-    getTopicForGroup(
-      groupState?.group?.topic?.id ? groupState?.group?.topic?.id : null,
-    );
+    dispatch(topicAPI.getTopicById()(groupState?.group?.topic?.id as number));
   };
 
   const renderMenuItem = (item: any, index: any) => {

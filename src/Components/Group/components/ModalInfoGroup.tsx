@@ -1,13 +1,14 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
-  KeyboardAvoidingView,
   FlatList,
+  TouchableOpacity,
   Alert,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {Button, Dialog, Modal, Portal, TextInput} from 'react-native-paper';
 import Lottie from 'lottie-react-native';
 import CloseButton from '../../../common/CloseButton';
@@ -15,29 +16,31 @@ import IconView from '../../../common/IconView';
 import languages from '../../../languages';
 import Colors from '../../../Themes/Colors';
 import Group from '../../../utilities/Contant/Group';
-import User from '../../../utilities/contants';
+
 import {
   responsiveFont,
   responsiveHeight,
   responsiveWidth,
 } from '../../../utilities/sizeScreen';
 import TextItemAccount from '../../Account/component/TextItemAccount';
-import GlobalStyles from '../../../common/styles/GlobalStyles';
+
 import Topic from '../../../utilities/Contant/Topic';
-import topicService from '../../../services/topic';
+
 import NoneData from '../../Section/NoneData';
-import ButtonView from '../../../common/ButtonView';
+
 import ButtonHandle from '../../../common/ButtonHandle';
-import {log} from 'react-native-reanimated';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
-import {Images} from '../../../assets/images/Images';
+
 import groupService from '../../../services/group';
 import groupAPI from '../../../redux/apis/group';
-import {GroupSlices, setLoading} from '../../../redux/slices/GroupSlices';
+
 import Term from '../../../utilities/Contant/Term';
-import {isEmpty} from '../../../utilities/utils';
+
 import LoadingScreen from '../../../common/LoadingScreen';
+import GlobalStyles from '../../../common/styles/GlobalStyles';
+import RouteNames from '../../RouteNames';
+
 interface Props {
   title?: string;
   onPressClose?: () => void;
@@ -81,8 +84,9 @@ const ModalInfoGroup: React.FC<Props> = ({
 }) => {
   const [listMember, setListMember] = useState<Member[]>();
 
-  const [topic, setTopic] = useState<Topic>();
+  // const [topic, setTopic] = useState<Topic>();
   const groupState = useAppSelector(state => state.group);
+  const topicState = useAppSelector(state => state.topic);
   const [loading, setLoading] = useState(false);
   const [isRequest, setRequest] = useState(false);
 
@@ -91,6 +95,7 @@ const ModalInfoGroup: React.FC<Props> = ({
   const hideDialog = () => seModalRequestToJoinGroup(false);
 
   const dispatch = useAppDispatch();
+  const navigation = useNavigation();
 
   const [content, SetContent] = useState('');
 
@@ -98,12 +103,9 @@ const ModalInfoGroup: React.FC<Props> = ({
     SetContent(text);
   };
 
-  console.log('>>>>>>>>>>>>>>>>infoGroup?.members', infoGroup?.members);
-
   useEffect(() => {
     setListMember(infoGroup?.members);
-    setTopic(topicInfo);
-  });
+  }, [infoGroup]);
 
   const handleOutGroup = (id: any) => {
     setLoading(true);
@@ -119,7 +121,6 @@ const ModalInfoGroup: React.FC<Props> = ({
   };
 
   const sendRequestToGroup = async () => {
-    console.log('>>>>>>>>>>>>>>content', content);
     setRequest(true);
     await groupService
       .sendRequestGroup(infoGroup?.id as number, content)
@@ -177,34 +178,37 @@ const ModalInfoGroup: React.FC<Props> = ({
   const renderInfoTopic = useMemo(() => {
     return (
       <>
-        {topic?.id ? (
+        {topicState?.topic?.id ? (
           <View style={styles.contenTopic}>
             <TextItemAccount
               textLeft={languages['vi'].nameTopic}
-              textRight={topic?.name}></TextItemAccount>
-            <TextItemAccount
-              textLeft={languages['vi'].description}
-              textRight={topic?.description}></TextItemAccount>
-            <TextItemAccount
-              textLeft={languages['vi'].requireInput}
-              textRight={topic?.requireInput}></TextItemAccount>
-            <TextItemAccount
-              textLeft={languages['vi'].standradOutput}
-              textRight={topic?.standradOutput}></TextItemAccount>
-            <TextItemAccount
-              textLeft={languages['vi'].target}
-              textRight={topic?.target}></TextItemAccount>
-            <TextItemAccount
-              textLeft={languages['vi'].status}
-              textRight={topic?.status}></TextItemAccount>
+              textRight={topicState?.topic?.name}></TextItemAccount>
+
             {/* </View> */}
           </View>
         ) : (
-          <NoneData icon title="Nhóm chưa có Đề tài"></NoneData>
+          <>
+            <NoneData icon title="Nhóm chưa có Đề tài"></NoneData>
+            <View style={[styles.contentBtn, styles.contentTopic]}>
+              <Lottie
+                source={require('../../../assets/jsonAmination/right-arrow-seemore.json')}
+                autoPlay
+                loop
+                style={styles.btn}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  modalClose(false);
+                  navigation.navigate(RouteNames.TopicMenu);
+                }}>
+                <Text style={[styles.titleGroup]}>Chọn Đề tài</Text>
+              </TouchableOpacity>
+            </View>
+          </>
         )}
       </>
     );
-  }, [topic]);
+  }, [topicState]);
 
   const renderButton = useMemo(() => {
     return (
@@ -214,7 +218,7 @@ const ModalInfoGroup: React.FC<Props> = ({
             icon
             onPress={() => handleOutGroup(termInfoGroup?.id)}
             title="Rời nhóm"
-            style={styles.buttonOut}
+            style={[styles.buttonOut]}
           />
         ) : (
           <>
@@ -230,11 +234,9 @@ const ModalInfoGroup: React.FC<Props> = ({
         )}
       </View>
     );
-  }, [infoGroup, groupState]);
+  }, [infoGroup, groupState, termInfoGroup?.id]);
 
   const renderViewInfo = useMemo(() => {
-    console.log('>>>>>>>>>>>>>>>>>>>>>>renderViewInfo listMember', listMember);
-
     return (
       <View style={styles.contentTitle}>
         <View style={styles.nameGroup}>
@@ -249,13 +251,12 @@ const ModalInfoGroup: React.FC<Props> = ({
         </Text>
 
         {listMember?.length ? (
-          <View style={[styles.flatList]}>
-            <FlatList
-              data={listMember}
-              horizontal={true}
-              renderItem={(item: any) => renderListMember(item?.item)}
-            />
-          </View>
+          <FlatList
+            data={listMember}
+            initialNumToRender={20}
+            horizontal={true}
+            renderItem={(item: any) => renderListMember(item?.item)}
+          />
         ) : (
           <NoneData icon title="Nhóm không có sinh viên"></NoneData>
         )}
@@ -344,11 +345,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   contentTitle: {
-    width: '100%',
-    // height: '100%',
-    // borderColor: '#caf0f8',
-    // borderWidth: 1,
-    // shadowOpacity: 3,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-start',
@@ -379,7 +375,6 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   flatList: {
-    width: responsiveWidth(300),
     flexDirection: 'column',
   },
   contenMember: {
@@ -390,8 +385,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#cbdfbd',
     borderRadius: 10,
     borderColor: '#76c893',
-    width: '100%',
+    width: responsiveWidth(330),
     marginTop: responsiveHeight(10),
+    marginRight: 5,
   },
   contenTopic: {
     // width: '100%',
@@ -426,5 +422,16 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
     marginBottom: responsiveHeight(20),
+  },
+  contentTopic: {
+    justifyContent: 'flex-end',
+
+    paddingHorizontal: responsiveWidth(16),
+    marginTop: responsiveHeight(10),
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  btn: {
+    width: 50,
   },
 });

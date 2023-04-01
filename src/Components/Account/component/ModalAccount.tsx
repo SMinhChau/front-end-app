@@ -42,6 +42,7 @@ import {Images} from '../../../assets/images/Images';
 
 import authAPI from '../../../redux/apis/auth';
 import data from '../../Home/data';
+import ButtonHandle from '../../../common/ButtonHandle';
 
 interface Props {
   title: string;
@@ -265,11 +266,11 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
               })}
             </View>
             <View style={styles.viewBtn}>
-              <CustomButton
+              <ButtonHandle
                 onPress={() => handleSubmitForm()}
                 style={styles.btn}
                 icon
-                title={languages['vi'].update}></CustomButton>
+                title={languages['vi'].update}></ButtonHandle>
             </View>
           </View>
         </ScrollView>

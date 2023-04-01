@@ -29,20 +29,52 @@ import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 import majorAPI from '../../redux/apis/major';
 import termrAPI from '../../redux/apis/term';
 import groupAPI from '../../redux/apis/group';
-import {menu, menuBottom} from './content';
+
+const menu = [
+  {
+    name: 'Học kỳ',
+    key: 'term',
+    navigation: RouteNames.TermMenu,
+    icon: 'book-sharp',
+    color: '#bc6c25',
+    backgroundColor: '#f8edeb',
+  },
+  {
+    name: 'Đề tài',
+    key: 'topic',
+    navigation: RouteNames.TopicMenu,
+    icon: 'file-tray-full',
+    color: '#0077b6',
+    backgroundColor: '#caf0f8',
+  },
+];
+const menuBottom = [
+  {
+    name: 'Đánh giá',
+    key: 'check',
+    navigation: RouteNames.EvaluationMenu,
+    icon: 'people-circle',
+    color: '#a7c957',
+    backgroundColor: '#d4e09b',
+  },
+  {
+    name: 'Giảng Viên',
+    key: 'lecture',
+    navigation: RouteNames.LectureMenu,
+    icon: 'school',
+    color: '#f08080',
+    backgroundColor: '#ffcad4',
+  },
+];
 
 const HomeScreen: React.FC<{}> = () => {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
 
-  const majorState = useAppSelector(state => state.major.major);
   const userState = useAppSelector(state => state.user);
   const termState = useAppSelector(state => state.term.term);
-  const groupState = useAppSelector(state => state.group);
 
   useEffect(() => {
-    console.log('userState============= user', userState?.user);
-
     if (userState?.user?.majors?.id) {
       dispatch(majorAPI.getMajorById()(userState?.user?.majors?.id));
       dispatch(termrAPI.getLastTerm()(userState?.user?.majors?.id));
@@ -84,7 +116,7 @@ const HomeScreen: React.FC<{}> = () => {
                 <TouchViewMenu
                   backgroundColor={item?.backgroundColor}
                   borderColor={item?.color}
-                  onPress={item.navigation}
+                  onPress={() => navigation.navigate(item?.navigation)}
                   title={item.name}></TouchViewMenu>
               </View>
             ))}

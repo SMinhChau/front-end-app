@@ -71,7 +71,6 @@ export const GroupSlices = createSlice({
       state.is_loading = true;
     });
     builder.addCase(groupAPI.getMyGroup().fulfilled, (state, action) => {
-      console.log('GroupSlices action.payload', action);
       state.group = action.payload;
       state.is_loading = false;
       state.error = false;
@@ -87,7 +86,7 @@ export const GroupSlices = createSlice({
     });
 
     builder.addCase(groupAPI.outMyGroup().fulfilled, (state, action) => {
-      console.log('GroupSlices outMyGroup', action);
+      console.log('GroupSlices outMyGroup action', action);
       state.is_loading = false;
       state.group = action.payload;
       state.error = false;
@@ -99,30 +98,24 @@ export const GroupSlices = createSlice({
     });
 
     builder.addCase(groupAPI.createGroup().fulfilled, (state, action) => {
-      console.log('createGroup action', action);
       state.group = action.payload;
       state.is_loading = false;
     });
 
     builder.addCase(groupAPI.createGroup().rejected, (state, action) => {
-      console.log('createGroup action', action);
       state.is_loading = false;
       state.error = true;
     });
 
     builder.addCase(groupAPI.accpectJoinGroup().pending, (state, action) => {
-      console.log('accpectJoinGroup action', action);
-
       state.is_loading = true;
     });
     builder.addCase(groupAPI.accpectJoinGroup().fulfilled, (state, action) => {
-      console.log('accpectJoinGroup action', action);
       state.group = action.payload;
       state.is_loading = false;
     });
 
     builder.addCase(groupAPI.accpectJoinGroup().rejected, (state, action) => {
-      console.log('accpectJoinGroup action', action);
       state.is_loading = false;
       state.error = true;
     });

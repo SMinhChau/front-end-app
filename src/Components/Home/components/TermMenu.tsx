@@ -4,8 +4,12 @@ import Header from '../../../common/Header';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
 import Colors from '../../../Themes/Colors';
 import {responsiveWidth} from '../../../utilities/sizeScreen';
+import {useAppSelector} from '../../../redux/hooks';
 
 const TermMenu = () => {
+  const termState = useAppSelector(state => state.term);
+  console.log('termState', termState?.term?.id);
+
   return (
     <>
       <View style={GlobalStyles.container}>

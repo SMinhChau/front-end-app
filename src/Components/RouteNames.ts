@@ -1,7 +1,7 @@
 import languages from '../languages';
 
 export default {
-  rootTabNavigation: 'RootTabNavigation',
+  TabNavigation: 'TabNavigation',
   loginNavigation: 'Login',
 
   HonmeStack: 'Home',
@@ -23,4 +23,5 @@ export default {
   ItemStudents: 'ItemStudents',
   JoinGroupToOrther: 'JoinGroupToOrther',
   InviteJoinGroup: 'InviteJoinGroup',
+  ItemTopicMenu: 'ItemTopicMenu',
 };
