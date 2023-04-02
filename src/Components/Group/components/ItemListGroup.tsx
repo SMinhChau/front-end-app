@@ -45,6 +45,8 @@ const ItemListGroup = () => {
 
   const renderGroupList = useMemo(
     () => (item: any) => {
+      console.log('termState?.term', termState?.term);
+      console.log('?.item', item);
       return <GroupItem termInfoGroup={termState?.term} groupInfo={item} />;
     },
     [],

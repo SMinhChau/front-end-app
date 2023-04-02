@@ -7,14 +7,14 @@ import {
   StyleSheet,
   View,
   Text,
-  Image,
+  Alert,
   FlatList,
   TouchableOpacity,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import Header from '../../../common/Header';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
-import {useAppSelector} from '../../../redux/hooks';
+import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 
 import Colors from '../../../Themes/Colors';
 import {
@@ -26,24 +26,32 @@ import {
 import NoneData from '../../Section/NoneData';
 import {isEmpty, truncate} from 'lodash';
 import {Avatar, Banner, Card, IconButton} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 import IconView from '../../../common/IconView';
 import topicService from '../../../services/topic';
 import Topic from '../../../utilities/Contant/Topic';
 import ItemTopic from './ItemTopic';
+import {number} from 'yup';
+import {log} from 'react-native-reanimated';
+import LoadingScreen from '../../../common/LoadingScreen';
+import groupAPI from '../../../redux/apis/group';
 
 const TopicMenu = () => {
   const userState = useAppSelector(state => state.user.user);
   const termState = useAppSelector(state => state.term.term);
   const groupState = useAppSelector(state => state.group.group);
 
-  const [visible, setVisible] = useState(true);
-  const [myTopic, setMyTopic] = useState<Topic>();
+  const [isLoading, setLoading] = useState(false);
+
   const [topics, setTopics] = useState<Topic[]>();
 
   useEffect(() => {
     // getMyTopic();
     getToppicList();
   }, []);
+
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation();
 
   // const getMyTopic = useCallback(() => {
   //   topicService
@@ -62,7 +70,7 @@ const TopicMenu = () => {
       .then(result => {
         setTopics(result?.data);
       });
-  }, [groupState]);
+  }, [groupState, isLoading]);
 
   const isStartDateChooseTopic = () =>
     moment().isAfter(termState?.startDateChooseTopic);
@@ -138,6 +146,22 @@ const TopicMenu = () => {
     );
   }, []);
 
+  useEffect(() => {
+    if (termState?.id) {
+      dispatch(groupAPI.getMyGroup()(termState?.id));
+    }
+  }, [termState]);
+
+  const handleChosseTopic = async (id: any) => {
+    setLoading(true);
+    await topicService.chooseTopic(termState?.id, id).then(async result => {
+      console.log(' topicService.chooseTopic', result);
+      setLoading(false);
+      await dispatch(groupAPI.getMyGroup()(termState?.id));
+      Alert.alert('Thông báo', 'Đã chọn đề tài ');
+    });
+  };
+
   const renderTopicList = useMemo(() => {
     return (
       <>
@@ -162,20 +186,21 @@ const TopicMenu = () => {
             style={styles.logoList}
           />
         </View>
-
         <FlatList
           horizontal={true}
           data={topics}
           initialNumToRender={20}
           renderItem={(item: any) => (
-            <ItemTopic key={item?.item} topicInfo={item?.item} />
+            <ItemTopic
+              key={item?.item}
+              topicInfo={item?.item}
+              handleChosseTopic={() => handleChosseTopic(item?.item?.id)}
+            />
           )}
         />
-
-        {/* <ItemTopic topicInfo={myTopic} /> */}
       </>
     );
-  }, [topics]);
+  }, [topics, groupState]);
   return (
     <>
       <View style={GlobalStyles.container}>
@@ -227,6 +252,7 @@ const TopicMenu = () => {
           )}
         </View>
       </View>
+      {isLoading && <LoadingScreen />}
     </>
   );
 };

@@ -1,19 +1,11 @@
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useMemo, useState} from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {Button, Modal, Portal} from 'react-native-paper';
-import {color} from 'react-native-reanimated';
 import ButtonHandle from '../../../../common/ButtonHandle';
 import CloseButton from '../../../../common/CloseButton';
 import IconView from '../../../../common/IconView';
 import GlobalStyles from '../../../../common/styles/GlobalStyles';
-import {useAppSelector} from '../../../../redux/hooks';
-import groupService from '../../../../services/group';
-import topicService from '../../../../services/topic';
 import Colors from '../../../../Themes/Colors';
 import Group from '../../../../utilities/Contant/Group';
-import Term from '../../../../utilities/Contant/Term';
-import Topic from '../../../../utilities/Contant/Topic';
-import User from '../../../../utilities/contants';
 import {
   responsiveFont,
   responsiveHeight,
@@ -38,9 +30,6 @@ const ContentItemInvite: React.FC<Props> = ({
   accept,
   message,
 }) => {
-  const [infoGroupItem, setInfoGroupItem] = useState<Group>();
-  const [member, setMember] = useState('');
-
   const topContent = useMemo(() => {
     return (
       <>
@@ -79,7 +68,7 @@ const ContentItemInvite: React.FC<Props> = ({
               {accept && (
                 <ButtonHandle
                   style={styles.button}
-                  iconName="ios-close-outline"
+                  iconName="ios-checkmark"
                   title="Đồng ý"
                   onPress={onPressAccept}
                 />
@@ -89,7 +78,7 @@ const ContentItemInvite: React.FC<Props> = ({
         </View>
       </>
     );
-  }, [infoGroupItem, member]);
+  }, []);
 
   return <>{topContent}</>;
 };

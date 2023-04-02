@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+
 import {Button, Dialog, Modal, Portal, TextInput} from 'react-native-paper';
 import Lottie from 'lottie-react-native';
 import CloseButton from '../../../common/CloseButton';
@@ -38,8 +38,6 @@ import groupAPI from '../../../redux/apis/group';
 import Term from '../../../utilities/Contant/Term';
 
 import LoadingScreen from '../../../common/LoadingScreen';
-import GlobalStyles from '../../../common/styles/GlobalStyles';
-import RouteNames from '../../RouteNames';
 
 interface Props {
   title?: string;
@@ -84,7 +82,7 @@ const ModalInfoGroup: React.FC<Props> = ({
 }) => {
   const [listMember, setListMember] = useState<Member[]>();
 
-  // const [topic, setTopic] = useState<Topic>();
+  const [topic, setTopic] = useState<Topic>();
   const groupState = useAppSelector(state => state.group);
   const topicState = useAppSelector(state => state.topic);
   const [loading, setLoading] = useState(false);
@@ -95,7 +93,6 @@ const ModalInfoGroup: React.FC<Props> = ({
   const hideDialog = () => seModalRequestToJoinGroup(false);
 
   const dispatch = useAppDispatch();
-  const navigation = useNavigation();
 
   const [content, SetContent] = useState('');
 
@@ -105,7 +102,8 @@ const ModalInfoGroup: React.FC<Props> = ({
 
   useEffect(() => {
     setListMember(infoGroup?.members);
-  }, [infoGroup]);
+    setTopic(topicInfo);
+  }, [infoGroup, topicInfo]);
 
   const handleOutGroup = (id: any) => {
     setLoading(true);
@@ -178,13 +176,11 @@ const ModalInfoGroup: React.FC<Props> = ({
   const renderInfoTopic = useMemo(() => {
     return (
       <>
-        {topicState?.topic?.id ? (
+        {topic?.id ? (
           <View style={styles.contenTopic}>
             <TextItemAccount
               textLeft={languages['vi'].nameTopic}
-              textRight={topicState?.topic?.name}></TextItemAccount>
-
-            {/* </View> */}
+              textRight={topic?.name}></TextItemAccount>
           </View>
         ) : (
           <>
@@ -199,7 +195,7 @@ const ModalInfoGroup: React.FC<Props> = ({
               <TouchableOpacity
                 onPress={() => {
                   modalClose(false);
-                  navigation.navigate(RouteNames.TopicMenu);
+                  // navigation.navigate(RouteNames.TopicMenu);
                 }}>
                 <Text style={[styles.titleGroup]}>Chọn Đề tài</Text>
               </TouchableOpacity>
@@ -208,7 +204,7 @@ const ModalInfoGroup: React.FC<Props> = ({
         )}
       </>
     );
-  }, [topicState]);
+  }, [topic]);
 
   const renderButton = useMemo(() => {
     return (

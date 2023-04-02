@@ -37,7 +37,7 @@ const menu = [
     navigation: RouteNames.TermMenu,
     icon: 'book-sharp',
     color: '#bc6c25',
-    backgroundColor: '#f8edeb',
+    backgroundColor: Colors.white,
   },
   {
     name: 'Đề tài',
@@ -45,7 +45,7 @@ const menu = [
     navigation: RouteNames.TopicMenu,
     icon: 'file-tray-full',
     color: '#0077b6',
-    backgroundColor: '#caf0f8',
+    backgroundColor: Colors.white,
   },
 ];
 const menuBottom = [
@@ -55,7 +55,7 @@ const menuBottom = [
     navigation: RouteNames.EvaluationMenu,
     icon: 'people-circle',
     color: '#a7c957',
-    backgroundColor: '#d4e09b',
+    backgroundColor: Colors.white,
   },
   {
     name: 'Giảng Viên',
@@ -63,7 +63,7 @@ const menuBottom = [
     navigation: RouteNames.LectureMenu,
     icon: 'school',
     color: '#f08080',
-    backgroundColor: '#ffcad4',
+    backgroundColor: Colors.white,
   },
 ];
 
@@ -134,7 +134,7 @@ const HomeScreen: React.FC<{}> = () => {
                 <TouchViewMenu
                   backgroundColor={item?.backgroundColor}
                   borderColor={item?.color}
-                  onPress={item.navigation}
+                  onPress={() => navigation.navigate(item?.navigation)}
                   title={item.name}></TouchViewMenu>
               </View>
             ))}

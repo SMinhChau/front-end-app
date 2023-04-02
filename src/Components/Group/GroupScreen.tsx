@@ -111,7 +111,18 @@ const Group: React.FC<{}> = () => {
   }, [groupState, topic]);
 
   const getInfoGroup = () => {
-    dispatch(topicAPI.getTopicById()(groupState?.group?.topic?.id as number));
+    try {
+      topicService
+        .getTopicId(Number(groupState?.group?.topic?.id))
+        .then(result => {
+          console.log('getTopicForGroup', result.data);
+          setTopic(result?.data);
+        });
+    } catch (error) {
+      console.log('error>>', error);
+    }
+
+    // dispatch(topicAPI.getTopicById()(groupState?.group?.topic?.id as number));
   };
 
   const renderMenuItem = (item: any, index: any) => {

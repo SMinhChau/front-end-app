@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -18,13 +18,21 @@ import {
   responsiveWidth,
 } from '../../../utilities/sizeScreen';
 import ModalDes from './ModalDes';
+import ButtonHandle from '../../../common/ButtonHandle';
+import GlobalStyles from '../../../common/styles/GlobalStyles';
+import {useAppSelector} from '../../../redux/hooks';
+import {log} from 'react-native-reanimated';
 
 interface Props {
   topicInfo?: Topic;
+  handleChosseTopic(): void;
 }
 
-const ItemTopic = ({topicInfo}: Props) => {
+const ItemTopic = ({topicInfo, handleChosseTopic}: Props) => {
+  const groupState = useAppSelector(state => state.group.group);
   const [expanded, setExpanded] = useState(true);
+
+  console.log('>>>> ItemTopic groupState', groupState);
 
   const handlePress = () => setExpanded(!expanded);
   const [ismodal, showModal] = useState(false);
@@ -48,13 +56,37 @@ const ItemTopic = ({topicInfo}: Props) => {
     {name: topicInfo?.lecturer?.email, key: 'Email'},
   ];
 
+  const renderButton = useMemo(() => {
+    console.log('>>>>>>>>>>>>>groupState?.topic?.id ', groupState?.topic?.id);
+
+    return (
+      <>
+        {groupState?.id ? (
+          <>
+            {groupState?.topic?.id ? null : (
+              <View style={GlobalStyles.centerView}>
+                <ButtonHandle
+                  style={styles.btn}
+                  iconName="md-arrow-redo-outline"
+                  title="Chọn đề tài"
+                  onPress={handleChosseTopic}
+                />
+              </View>
+            )}
+          </>
+        ) : null}
+      </>
+    );
+  }, [groupState?.topic?.id, groupState?.id]);
+
   return (
     <>
       <View style={styles.mainTopic}>
         <View style={{flexDirection: 'row'}}>
-          <Text style={styles.contentName}>Tên: </Text>
+          <Text style={styles.contentName}>Tên đề tài: </Text>
           <Text style={styles.contentName}>{topicInfo?.name}</Text>
         </View>
+        {renderButton}
         <List.Section style={styles.content}>
           <List.Accordion
             title={<Text>Thông tin</Text>}
@@ -195,10 +227,11 @@ const styles = StyleSheet.create({
     width: 50,
   },
   contentName: {
-    fontSize: responsiveFont(18),
+    fontSize: responsiveFont(17),
+    color: Colors.textPrimary,
     fontWeight: '500',
-    paddingVertical: responsiveHeight(5),
-    color: Colors.rosyBrown,
+    paddingTop: responsiveHeight(10),
+    textTransform: 'uppercase',
   },
   subTitle: {
     fontSize: responsiveFont(14),
@@ -219,5 +252,8 @@ const styles = StyleSheet.create({
     // shadowOpacity: 0.02,
     position: 'absolute',
     top: -10,
+  },
+  btn: {
+    width: '40%',
   },
 });

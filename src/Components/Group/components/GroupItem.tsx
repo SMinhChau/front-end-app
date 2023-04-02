@@ -1,10 +1,10 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {Button, Modal, Portal} from 'react-native-paper';
-import CloseButton from '../../../common/CloseButton';
+
 import IconView from '../../../common/IconView';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
-import {useAppSelector} from '../../../redux/hooks';
+
 import groupService from '../../../services/group';
 import topicService from '../../../services/topic';
 import Colors from '../../../Themes/Colors';
@@ -19,6 +19,8 @@ import {
 } from '../../../utilities/sizeScreen';
 import {isEmpty} from '../../../utilities/utils';
 import ModalInfoGroup from './ModalInfoGroup';
+import {useSelector} from 'react-redux';
+import {useAppSelector} from '../../../redux/hooks';
 
 interface Props {
   title?: string;
@@ -42,7 +44,8 @@ const GroupItem: React.FC<Props> = ({
 }) => {
   const [infoGroupItem, setInfoGroupItem] = useState<Group>();
   const [member, setMember] = useState('');
-  const [topic, setTopic] = useState<Topic>();
+  const [topic, setTopic] = useState<Topic | null>();
+  const termState = useAppSelector(state => state.term);
 
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -51,26 +54,26 @@ const GroupItem: React.FC<Props> = ({
   }, []);
 
   const handleGetInforGroup = useCallback(() => {
-    console.log('handleGetInforGroup groupInfo', groupInfo);
     if (!isEmpty(groupInfo)) {
       groupService.getGroupById(groupInfo?.id as number).then(result => {
         setInfoGroupItem(result.data);
-        console.log('handleGetInforGroup result?.data', result?.data);
         setMember(result?.data?.members);
       });
     }
   }, [infoGroupItem]);
 
   const getTopicForGroup = useCallback(() => {
-    if (!isEmpty(groupInfo)) {
-      topicService
-        .getTopicId(groupInfo?.topic?.id as number)
-        .then(result => {
-          setTopic(result?.data);
-        })
-        .catch(error => console.log('getTopic error', error));
+    console.log('getTopicForGroup', groupInfo);
+    try {
+      topicService.getTopicId(Number(groupInfo?.topic?.id)).then(result => {
+        console.log('getTopicForGroup', result.data);
+        setTopic(result?.data);
+      });
+    } catch (error) {
+      console.log('error>>', error);
     }
   }, [groupInfo]);
+
   const topContent = useMemo(() => {
     return (
       <>
@@ -95,8 +98,6 @@ const GroupItem: React.FC<Props> = ({
             <Text style={styles.nemberMember}>Số lượng: {member?.length} </Text>
             <TouchableOpacity
               onPress={() => {
-                console.log('GroupItem infoGroupItem', infoGroupItem?.id);
-
                 setVisible(true);
               }}>
               <IconView
@@ -118,10 +119,10 @@ const GroupItem: React.FC<Props> = ({
       <Portal>
         <ModalInfoGroup
           visible={visible}
-          infoGroup={infoGroupItem as Group}
           title={'Thông tin nhóm'}
           topicInfo={topic as Topic}
-          termInfoGroup={termInfoGroup}
+          termInfoGroup={termState?.term}
+          infoGroup={infoGroupItem as Group}
           modalClose={setVisible}></ModalInfoGroup>
       </Portal>
     </>

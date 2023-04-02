@@ -28,6 +28,7 @@ import ContentItemInvite from '../components/content/ContentItemInvite';
 import LoadingScreen from '../../../common/LoadingScreen';
 import {log} from 'react-native-reanimated';
 import groupAPI from '../../../redux/apis/group';
+import NoneData from '../../Section/NoneData';
 
 const InviteJoinGroup = () => {
   const layout = useWindowDimensions();
@@ -95,7 +96,6 @@ const InviteJoinGroup = () => {
 
   const handleCancel = (id: number) => {
     setLoading(true);
-    console.log('id=====', id);
 
     groupService
       .deleteRequest(id)
@@ -143,6 +143,8 @@ const InviteJoinGroup = () => {
   };
 
   const renderInvitedStudentJionGroup = useMemo(() => {
+    console.log('listInvitedToStudent', listInvitedToStudent);
+
     return (
       <>
         <>
@@ -188,7 +190,7 @@ const InviteJoinGroup = () => {
       <View style={GlobalStyles.container}>
         <View style={styles.containner}>
           <Header
-            title="Yêu cầu tham gia nhóm"
+            title="Lời mời tham gia nhóm"
             iconLeft={true}
             home={false}
             style={styles.header}

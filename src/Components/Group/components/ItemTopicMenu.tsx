@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Lottie from 'lottie-react-native';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
@@ -15,12 +15,28 @@ import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import ItemTopic from '../../Home/components/ItemTopic';
 import {useNavigation} from '@react-navigation/native';
 import RouteNames from '../../RouteNames';
+import Topic from '../../../utilities/Contant/Topic';
+import topicService from '../../../services/topic';
 
 const ItemTopicMenu = () => {
-  const topicState = useAppSelector(state => state.topic);
+  const groupState = useAppSelector(state => state.group.group);
+
+  const [topic, setTopic] = useState<Topic>();
 
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
+
+  useEffect(() => {
+    getInfoGroup();
+  }, [groupState?.topic?.id]);
+
+  const getInfoGroup = () => {
+    topicService.getTopicId(Number(groupState?.topic?.id)).then(result => {
+      console.log('>>>>>>>>>>>>>>>>>groupState?.topic?.id', result.data);
+      setTopic(result?.data);
+    });
+  };
+
   return (
     <View style={[GlobalStyles.container]}>
       <Header
@@ -31,16 +47,21 @@ const ItemTopicMenu = () => {
         back={true}
         iconRight={false}></Header>
 
-      {topicState?.topic?.id ? (
+      {topic?.id ? (
         <View style={styles.containner}>
           <ItemTopic
-            key={topicState?.topic?.id}
-            topicInfo={topicState?.topic}
+            key={groupState?.topic?.id}
+            topicInfo={topic}
+            handleChosseTopic={function (): void {
+              throw new Error('Function not implemented.');
+            }}
           />
         </View>
       ) : (
-        <>
-          <NoneData icon title="Nhóm chưa có Đề tài"></NoneData>
+        <View style={[GlobalStyles.centerView, styles.center]}>
+          <View style={styles.nonData}>
+            <NoneData icon title="Nhóm chưa có Đề tài"></NoneData>
+          </View>
           <View style={[styles.contentBtn, styles.contentTopic]}>
             <Lottie
               source={require('../../../assets/jsonAmination/right-arrow-seemore.json')}
@@ -50,12 +71,12 @@ const ItemTopicMenu = () => {
             />
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate(RouteNames.TopicMenu);
+                navigation.navigate(RouteNames.TopicMenus);
               }}>
               <Text style={[styles.titleGroup]}>Chọn Đề tài</Text>
             </TouchableOpacity>
           </View>
-        </>
+        </View>
       )}
 
       {/* {isLoading && <LoadingScreen />} */}
@@ -69,25 +90,27 @@ const styles = StyleSheet.create({
   containner: {
     marginTop: responsiveHeight(20),
     flex: 1,
-    backgroundColor: Colors.white,
+  },
+  center: {
+    flex: 1,
+    backgroundColor: '#eaf4f4',
   },
   header: {
     paddingHorizontal: responsiveWidth(10),
   },
   contentBtn: {
     paddingHorizontal: responsiveWidth(16),
-    backgroundColor: Colors.bg,
+    backgroundColor: '#eaf4f4',
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
     marginBottom: responsiveHeight(20),
   },
   contentTopic: {
+    width: '100%',
+    paddingVertical: responsiveHeight(10),
     justifyContent: 'center',
     backgroundColor: '#d9bcbc',
-
-    paddingBottom: responsiveHeight(30),
     flexDirection: 'row',
-    alignItems: 'center',
   },
   btn: {
     width: 50,
@@ -98,5 +121,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     paddingHorizontal: responsiveWidth(10),
     textTransform: 'uppercase',
+  },
+  nonData: {
+    width: '100%',
+    height: responsiveHeight(100),
   },
 });

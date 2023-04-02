@@ -1,7 +1,10 @@
+import {log} from 'react-native-reanimated';
 import {axiosAuth} from '../utilities/axiosConfig';
 
 class TopicService {
   getTopicId(id: number) {
+    console.log('TopicService getTopicId', id);
+
     return axiosAuth({
       url: `api/student/topics/${id}`,
       method: 'get',
@@ -13,11 +16,14 @@ class TopicService {
       method: 'get',
     });
   }
-  chooseTopic(data: {termId: number; topicId: number}) {
+  chooseTopic(termId: number, topicId: number) {
+    console.log(' termId', termId);
+    console.log(' topicId', topicId);
+
     return axiosAuth({
       url: `api/student/groups/topic`,
       method: 'post',
-      data,
+      data: {termId, topicId},
     });
   }
   cancelTopic(termId: number) {

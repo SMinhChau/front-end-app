@@ -27,7 +27,7 @@ import ContentItemInvite from '../components/content/ContentItemInvite';
 
 const JoinGroupToOrther = () => {
   const layout = useWindowDimensions();
-
+  const groupState = useAppSelector(state => state.group.group);
   const termState = useAppSelector(state => state.term);
 
   const [listRecied, setListRevied] = useState();
@@ -135,22 +135,26 @@ const JoinGroupToOrther = () => {
   const renderRequestSentToGroup = useMemo(() => {
     return (
       <>
-        <>
-          {!isEmpty(listRequested) ? (
-            <View style={[styles.bottomContent]}>
-              <View style={[styles.flatList]}>
-                <FlatList
-                  data={listRequested}
-                  initialNumToRender={20}
-                  renderItem={(item: any) => renderListInvite(item?.item)}
-                  keyExtractor={item => item.id}
-                />
+        {groupState?.id ? (
+          <NoneData icon title="Bạn đã có nhóm"></NoneData>
+        ) : (
+          <>
+            {!isEmpty(listRequested) ? (
+              <View style={[styles.bottomContent]}>
+                <View style={[styles.flatList]}>
+                  <FlatList
+                    data={listRequested}
+                    initialNumToRender={20}
+                    renderItem={(item: any) => renderListInvite(item?.item)}
+                    keyExtractor={item => item.id}
+                  />
+                </View>
               </View>
-            </View>
-          ) : (
-            <NoneData icon title="Chưa gửi yêu cầu nào!"></NoneData>
-          )}
-        </>
+            ) : (
+              <NoneData icon title="Chưa gửi yêu cầu nào!"></NoneData>
+            )}
+          </>
+        )}
       </>
     );
   }, [listRequested]);
@@ -158,22 +162,26 @@ const JoinGroupToOrther = () => {
   const renderRequesReciedFromGroup = useMemo(() => {
     return (
       <>
-        <>
-          {!isEmpty(listRecied) ? (
-            <View style={[styles.bottomContent]}>
-              <View style={[styles.flatList]}>
-                <FlatList
-                  data={listRecied}
-                  initialNumToRender={20}
-                  renderItem={(item: any) => renderListRevied(item?.item)}
-                  keyExtractor={item => item.id}
-                />
+        {groupState?.id ? (
+          <NoneData icon title="Bạn đã có nhóm"></NoneData>
+        ) : (
+          <>
+            {!isEmpty(listRecied) ? (
+              <View style={[styles.bottomContent]}>
+                <View style={[styles.flatList]}>
+                  <FlatList
+                    data={listRecied}
+                    initialNumToRender={20}
+                    renderItem={(item: any) => renderListRevied(item?.item)}
+                    keyExtractor={item => item.id}
+                  />
+                </View>
               </View>
-            </View>
-          ) : (
-            <NoneData icon title="Không có lời mời tham gia nhóm!"></NoneData>
-          )}
-        </>
+            ) : (
+              <NoneData icon title="Không có lời mời tham gia nhóm!"></NoneData>
+            )}
+          </>
+        )}
       </>
     );
   }, [listRecied]);

@@ -6,9 +6,7 @@ class TopicAPI {
   getTopicById() {
     return createAsyncThunk('topic/get-topic-by-id', async (id: number) => {
       const result = await topicService.getTopicId(id);
-
       if (result.status === 200) return result.data;
-      setTopic(result.data);
     });
   }
 

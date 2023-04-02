@@ -8,7 +8,7 @@ import SplashScreen from './SplashScreen';
 import TermMenu from './Home/components/TermMenu';
 import TopicMenu from './Home/components/TopicMenu';
 import EvaluationMenu from './Home/components/GroupMenu';
-import LectureMenu from './Home/components/LectureMenu';
+
 import ItemStudents from './Group/components/ItemStudents';
 import ItemListGroup from './Group/components/ItemListGroup';
 import RequestJoinMyGroup from './Group/components/RequestJoinMyGroup';
@@ -16,6 +16,7 @@ import InviteJoinGroup from './Group/components/InviteJoinGroup';
 import JoinGroupToOrther from './Group/components/JoinGroupToOrther';
 import ItemTopic from './Group/components/ItemTopic';
 import ItemTopicMenu from './Group/components/ItemTopicMenu';
+import LectureMenu from './Home/components/LectureMenu';
 
 const Stack = createNativeStackNavigator();
 
