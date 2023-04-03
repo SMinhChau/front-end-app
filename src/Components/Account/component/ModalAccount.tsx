@@ -21,7 +21,7 @@ import {
 } from '../../../utilities/sizeScreen';
 
 import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
-
+import DocumentPicker from 'react-native-document-picker';
 import {
   HelperText,
   Modal,
@@ -57,7 +57,7 @@ interface ImagePicker {
 }
 const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
   const userState = useAppSelector(state => state.user);
-  const [selectedAvatar, setSelectedAvatar] = useState<ImagePicker>();
+  const [selectedAvatar, setSelectedAvatar] = useState<ImagePicker | any>();
   const dispatch = useAppDispatch();
 
   const BASIC_INFO = [
@@ -118,12 +118,10 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
     formData.append('typeTraining', basicInfo.typeTraining);
     formData.append('phoneNumber', basicInfo.phoneNumber);
     formData.append('email', basicInfo.email);
-    if (selectedAvatar?.uri) {
-      formData.append('avatar', {
-        uri: selectedAvatar?.uri,
-        type: selectedAvatar?.type,
-        fileName: selectedAvatar?.fileName,
-      });
+    if (selectedAvatar) {
+      console.log("=========================================")
+      console.log(selectedAvatar?.length)
+      formData.append('avatar', selectedAvatar[0]);
     } else {
       formData.append('avatar', basicInfo?.avatar);
     }
@@ -192,16 +190,30 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
   };
 
   const openPicker = async () => {
+    // try {
+    //   const response = await MultipleImagePicker.openPicker({
+    //     mediaType: 'image',
+    //   });
+    //   console.log
+    //   console.log('response', response[0]);
+    //   setSelectedAvatar(response);
+    // } catch (e: any) {
+    //   console.log(e.code, e.message);
+    // }
     try {
-      const response = await MultipleImagePicker.openPicker({
-        mediaType: 'image',
+       const res = await DocumentPicker.pick({
+        // Provide which type of file you want user to pick
+        type: [DocumentPicker.types.images],
+        // There can me more options as well
+        // DocumentPicker.types.allFiles
+        // DocumentPicker.types.images
+        // DocumentPicker.types.plainText
+        // DocumentPicker.types.audio
+        // DocumentPicker.types.pdf
       });
-      console.log('response', response[0]);
-      setSelectedAvatar({
-        uri: `file://${response[0].realPath}`,
-        type: response[0].mime,
-        fileName: response[0].fileName,
-      });
+      // Printing the log realted to the file
+      console.log('res : ' + JSON.stringify(res));
+      setSelectedAvatar(res);
     } catch (e: any) {
       console.log(e.code, e.message);
     }
