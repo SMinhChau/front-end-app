@@ -29,18 +29,11 @@ import {
   responsiveWidth,
 } from '../../utilities/sizeScreen';
 import NoneData from '../Section/NoneData';
-import GroupItem from './components/GroupItem';
 import ModalInfoGroup from './components/ModalInfoGroup';
 import topicService from '../../services/topic';
 import Topic from '../../utilities/Contant/Topic';
-import {To} from 'react-router-dom';
 import ModelCreateGroup from './components/ModelCreateGroup';
-import {GroupSlices} from '../../redux/slices/GroupSlices';
-import {isEmpty} from 'lodash';
-import termrAPI from '../../redux/apis/term';
 import {MENU} from './content';
-import {navigate} from '../utils';
-import topicAPI from '../../redux/apis/topic';
 
 const Group: React.FC<{}> = () => {
   const groupState = useAppSelector(state => state.group);
@@ -111,18 +104,11 @@ const Group: React.FC<{}> = () => {
   }, [groupState, topic]);
 
   const getInfoGroup = () => {
-    try {
-      topicService
-        .getTopicId(Number(groupState?.group?.topic?.id))
-        .then(result => {
-          console.log('getTopicForGroup', result.data);
-          setTopic(result?.data);
-        });
-    } catch (error) {
-      console.log('error>>', error);
-    }
-
-    // dispatch(topicAPI.getTopicById()(groupState?.group?.topic?.id as number));
+    topicService
+      .getTopicId(Number(groupState?.group?.topic?.id))
+      .then(result => {
+        setTopic(result?.data);
+      });
   };
 
   const renderMenuItem = (item: any, index: any) => {

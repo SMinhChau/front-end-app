@@ -123,7 +123,6 @@ const ModalInfoGroup: React.FC<Props> = ({
     await groupService
       .sendRequestGroup(infoGroup?.id as number, content)
       .then(result => {
-        console.log('sendRequestGroup result ====', result);
         setRequest(false);
         Alert.alert('Thông báo', 'Đã gửi yêu cầu tham gia nhóm');
         seModalRequestToJoinGroup(false);

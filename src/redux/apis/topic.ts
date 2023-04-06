@@ -9,19 +9,6 @@ class TopicAPI {
       if (result.status === 200) return result.data;
     });
   }
-
-  chooseTopic() {
-    return createAsyncThunk(
-      'topic/chosse-topic',
-      async (data: {termId: number; topicId: number}, thunkAP) => {
-        const result = await topicService.chooseTopic(data);
-
-        if (result.status === 200) {
-          return result.data;
-        }
-      },
-    );
-  }
 }
 
 const topicAPI = new TopicAPI();

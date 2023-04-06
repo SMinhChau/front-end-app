@@ -57,19 +57,6 @@ export const TopicSlices = createSlice({
     },
   },
   extraReducers: builder => {
-    builder.addCase(topicAPI.chooseTopic().pending, state => {
-      state.is_loading = true;
-    });
-    builder.addCase(topicAPI.chooseTopic().fulfilled, (state, action) => {
-      console.log('action chooseTopic ', action);
-      state.topic = action.payload;
-      state.is_loading = false;
-      state.error = false;
-    });
-    builder.addCase(topicAPI.chooseTopic().rejected, state => {
-      state.error = true;
-      state.is_loading = false;
-    });
     builder.addCase(topicAPI.getTopicById().pending, state => {
       state.is_loading = true;
     });

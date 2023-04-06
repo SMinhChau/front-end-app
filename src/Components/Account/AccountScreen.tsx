@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from 'react';
+import {useMemo, useReducer, useState} from 'react';
 import {TouchableOpacity, View, Text, StyleSheet, Image} from 'react-native';
 import Lottie from 'lottie-react-native';
 import Header from '../../common/Header';
@@ -10,30 +10,11 @@ import languages from '../../languages';
 import Colors from '../../Themes/Colors';
 import IconView from '../../common/IconView';
 import tokenService from '../../services/token';
-
 import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 import RouteNames from '../RouteNames';
-import majorService from '../../services/major';
-import data from '../Home/data';
-import {dispatch} from '@backpackapp-io/react-native-toast/lib/typescript/core/store';
-import majorAPI from '../../redux/apis/major';
-import Major from '../../utilities/contants';
 import ModalAccount from './component/ModalAccount';
 import {responsiveFont, responsiveWidth} from '../../utilities/sizeScreen';
-
-// interface Major {
-//   id: string;
-//   name: string;
-//   headLecturer: {
-//     id: number;
-//     majors: Object;
-//     degree: string;
-//     isAdmin: string;
-//     createdAt: Date;
-//     updatedAt: string;
-//   };
-// }
 
 const Account: React.FC<{}> = () => {
   const navigation = useNavigation();
@@ -43,15 +24,10 @@ const Account: React.FC<{}> = () => {
   const majorState = useAppSelector(state => state.major.major);
   const userState = useAppSelector(state => state.user.user);
 
-  // useEffect(() => {
-  //   dispatch(majorAPI.getMajorById()(userState?.majors?.id));
-  //   setMajorById(majorState?.name);
-  // }, []);
-
-  // const getMajor = async () => {
-  //   dispatch(await majorAPI.getMajorById()(userState?.majors?.id));
-  //   console.log('majorState', majorState);
-  // };
+  const handleLogout = async () => {
+    await tokenService.reset();
+    navigation.navigate(RouteNames.loginNavigation);
+  };
 
   const [showModal, setShowModal] = useState(false);
 
@@ -82,7 +58,7 @@ const Account: React.FC<{}> = () => {
         <View style={styles.main}>
           <TextItemAccount
             textLeft={languages['vi'].gender}
-            textRight={userState?.gender === 'male' ? 'Nam' : 'Nữ'}
+            textRight={userState?.gender === 'MALE' ? 'Nam' : 'Nữ'}
             line={true}></TextItemAccount>
 
           <TextItemAccount
@@ -144,11 +120,7 @@ const Account: React.FC<{}> = () => {
         {renderMain()}
         <TouchableOpacity
           style={[GlobalStyles.flexDirectionRow]}
-          onPress={async () => {
-            await tokenService.reset();
-            console.log('Token - reset', tokenService.getAccessToken);
-            navigation.navigate(RouteNames.loginNavigation);
-          }}>
+          onPress={handleLogout}>
           <Text style={styles.logout}>{languages['vi'].logout}</Text>
           <IconView name={'ios-log-out-outline'} size={24} color={Colors.red} />
         </TouchableOpacity>

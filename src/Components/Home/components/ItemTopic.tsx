@@ -21,7 +21,7 @@ import ModalDes from './ModalDes';
 import ButtonHandle from '../../../common/ButtonHandle';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
 import {useAppSelector} from '../../../redux/hooks';
-import {log} from 'react-native-reanimated';
+
 
 interface Props {
   topicInfo?: Topic;
@@ -31,8 +31,6 @@ interface Props {
 const ItemTopic = ({topicInfo, handleChosseTopic}: Props) => {
   const groupState = useAppSelector(state => state.group.group);
   const [expanded, setExpanded] = useState(true);
-
-  console.log('>>>> ItemTopic groupState', groupState);
 
   const handlePress = () => setExpanded(!expanded);
   const [ismodal, showModal] = useState(false);
@@ -57,8 +55,7 @@ const ItemTopic = ({topicInfo, handleChosseTopic}: Props) => {
   ];
 
   const renderButton = useMemo(() => {
-    console.log('>>>>>>>>>>>>>groupState?.topic?.id ', groupState?.topic?.id);
-
+  
     return (
       <>
         {groupState?.id ? (
@@ -90,7 +87,7 @@ const ItemTopic = ({topicInfo, handleChosseTopic}: Props) => {
         <List.Section style={styles.content}>
           <List.Accordion
             title={<Text>Thông tin</Text>}
-            right={props => <></>}
+            right={props => null}
             left={props => (
               <Lottie
                 {...props}
@@ -143,7 +140,7 @@ const ItemTopic = ({topicInfo, handleChosseTopic}: Props) => {
                 style={styles.iconMenu}
               />
             )}
-            right={props => <></>}
+            right={props => null}
             expanded={expanded}
             onPress={handlePress}>
             <ScrollView style={{height: 300}}>

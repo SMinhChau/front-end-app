@@ -16,7 +16,7 @@ import {
 } from '../utilities/sizeScreen';
 
 interface Props {
-  value?: string;
+  value?: string | [];
   onChangeText(text: any): any;
   title?: string;
   secureTextEntry?: boolean;
@@ -50,7 +50,6 @@ const TextInputView = ({
   placeholder,
   messageError,
   isRequire,
-  pointerEvents,
   autoFocus,
   onChangeText,
   onEndEditing,

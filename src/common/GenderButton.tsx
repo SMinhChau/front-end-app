@@ -14,11 +14,11 @@ import {
 } from '../utilities/sizeScreen';
 
 interface Props {
-  onPress: () => void;
-  selected: boolean;
-  style: any;
-  text: string;
-  icon: string;
+  onPress?: () => void;
+  selected?: boolean;
+  style?: any;
+  text?: string;
+  icon?: string;
   male?: boolean;
 }
 

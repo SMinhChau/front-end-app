@@ -1,7 +1,3 @@
-/**
- * Created by Hong HP on 3/16/20.
- */
-
 import {TouchableOpacity, StyleSheet, Text, View, Button} from 'react-native';
 import React from 'react';
 

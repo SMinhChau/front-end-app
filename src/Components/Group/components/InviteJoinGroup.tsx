@@ -74,8 +74,6 @@ const InviteJoinGroup = () => {
           TypeRequestGroup.REQUEST_JOIN,
         )
         .then(result => {
-          console.log('listRevied', result?.data);
-
           setInviteReceidFromStudent(result?.data);
         })
         .catch(error => console.log('error', error));

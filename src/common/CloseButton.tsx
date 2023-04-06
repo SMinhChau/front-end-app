@@ -1,6 +1,3 @@
-/**
- * Created by NganLang on 04/12/20.
- */
 import React from 'react';
 import {Text, StyleSheet, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';

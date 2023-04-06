@@ -1,13 +1,7 @@
-/**
- * Created by Hong HP on 3/16/20.
- */
-
 import {TouchableOpacity, StyleSheet, Text, View, Button} from 'react-native';
 import React from 'react';
-
 import Colors from '../Themes/Colors';
 import {responsiveHeight, responsiveWidth} from '../utilities/sizeScreen';
-import Icon from 'react-native-paper/lib/typescript/components/Icon';
 import IconView from './IconView';
 
 interface Props {

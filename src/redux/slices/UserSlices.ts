@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import authAPI from '../apis/auth';
 import User from '../../utilities/contants';
 import tokenService from '../../services/token';
@@ -40,13 +40,9 @@ const initialState = {
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    //
-  },
+  reducers: {},
   extraReducers: builder => {
     builder.addCase(authAPI.login().fulfilled, (state, action) => {
-      console.log('action user login', action);
-
       state.user = action.payload.user;
       state.error = false;
       state.is_login = true;
@@ -57,24 +53,20 @@ export const userSlice = createSlice({
     });
 
     builder.addCase(authAPI.getInfo().fulfilled, (state, action) => {
-      console.log('action getInfo', action.payload);
-
       state.user = action.payload;
     });
 
-    builder.addCase(authAPI.updateUserInfo().pending, (state, action) => {
-      console.log('action updateUserInfo pending', action);
+    builder.addCase(authAPI.updateUserInfo().pending, state => {
+      state.updated = false;
       state.error = false;
     });
     builder.addCase(authAPI.updateUserInfo().fulfilled, (state, action) => {
-      console.log('action updateUserInfo fulfilled', action);
-
       state.user = action.payload;
       state.updated = true;
-
       state.updateError = false;
     });
     builder.addCase(authAPI.updateUserInfo().rejected, state => {
+      state.updated = false;
       state.updateError = true;
     });
   },

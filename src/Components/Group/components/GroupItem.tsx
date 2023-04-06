@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {Button, Modal, Portal} from 'react-native-paper';
+import {Portal} from 'react-native-paper';
 
 import IconView from '../../../common/IconView';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
@@ -11,7 +11,6 @@ import Colors from '../../../Themes/Colors';
 import Group from '../../../utilities/Contant/Group';
 import Term from '../../../utilities/Contant/Term';
 import Topic from '../../../utilities/Contant/Topic';
-import User from '../../../utilities/contants';
 import {
   responsiveFont,
   responsiveHeight,
@@ -19,7 +18,6 @@ import {
 } from '../../../utilities/sizeScreen';
 import {isEmpty} from '../../../utilities/utils';
 import ModalInfoGroup from './ModalInfoGroup';
-import {useSelector} from 'react-redux';
 import {useAppSelector} from '../../../redux/hooks';
 
 interface Props {
@@ -63,15 +61,11 @@ const GroupItem: React.FC<Props> = ({
   }, [infoGroupItem]);
 
   const getTopicForGroup = useCallback(() => {
-    console.log('getTopicForGroup', groupInfo);
     try {
       topicService.getTopicId(Number(groupInfo?.topic?.id)).then(result => {
-        console.log('getTopicForGroup', result.data);
         setTopic(result?.data);
       });
-    } catch (error) {
-      console.log('error>>', error);
-    }
+    } catch (error) {}
   }, [groupInfo]);
 
   const topContent = useMemo(() => {

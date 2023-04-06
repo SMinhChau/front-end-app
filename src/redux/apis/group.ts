@@ -1,8 +1,5 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import groupService from '../../services/group';
-import {setTopic} from '../slices/TopicSlices';
-import Topic from '../../utilities/Contant/Topic';
-
 class GroupAPI {
   getMyGroup() {
     return createAsyncThunk('group/get-my-group', async (termId: number) => {

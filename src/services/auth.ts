@@ -21,16 +21,11 @@ class AuthService {
   }
 
   updateUserInfo = async (data: FormData) => {
-    try {
-      const result = await axiosFormData({
-        url: 'api/student/me',
-        method: 'put',
-        data,
-      });
-      return result;
-    } catch (error) {
-      console.log('updateUserInfo', error);
-    }
+    return axiosFormData({
+      url: 'api/student/me',
+      method: 'put',
+      data,
+    });
   };
 
   getStudent(termId: number, groupExists: boolean) {

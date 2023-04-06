@@ -111,12 +111,9 @@ const ItemStudents = () => {
           TypeRequestGroup.REQUEST_INVITE,
         )
         .then(async result => {
-          console.log('>>>>>getListInvitedJoinGroup', result?.data);
-
           setStudentInvitedJoinGroup(result?.data);
           await getListStdentsNonGroup(result?.data);
-        })
-        .catch(error => console.log('error', error));
+        });
     }
   };
 

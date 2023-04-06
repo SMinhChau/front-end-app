@@ -54,3 +54,11 @@ export const TypeRequestGroup = {
   REQUEST_JOIN: 'REQUEST_JOIN',
   REQUEST_INVITE: 'REQUEST_INVITE',
 };
+
+export const validateEmail = (email: string) => {
+  var re =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+};
+
+export const PASSWORD_REGEX = /^[5,]$/;

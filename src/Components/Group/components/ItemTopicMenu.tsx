@@ -32,7 +32,6 @@ const ItemTopicMenu = () => {
 
   const getInfoGroup = () => {
     topicService.getTopicId(Number(groupState?.topic?.id)).then(result => {
-      console.log('>>>>>>>>>>>>>>>>>groupState?.topic?.id', result.data);
       setTopic(result?.data);
     });
   };

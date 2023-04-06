@@ -10,10 +10,8 @@ import {
 
 import Lottie from 'lottie-react-native';
 import Header from '../../common/Header';
-import Logo from '../../common/logo';
 import GlobalStyles from '../../common/styles/GlobalStyles';
 import TouchViewMenu from '../../common/TouchViewMenu';
-import languages from '../../languages';
 import Colors from '../../Themes/Colors';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';

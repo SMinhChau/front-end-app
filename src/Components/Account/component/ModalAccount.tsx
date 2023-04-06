@@ -5,16 +5,13 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  FlatList,
   Alert,
   Image,
 } from 'react-native';
-import MultipleImagePicker from '@baronha/react-native-multiple-image-picker';
-
+import DocumentPicker from 'react-native-document-picker';
 import CloseButton from '../../../common/CloseButton';
 import Colors from '../../../Themes/Colors';
 import {
-  deviceWidth,
   responsiveFont,
   responsiveHeight,
   responsiveWidth,
@@ -41,8 +38,10 @@ import GenderButton from '../../../common/GenderButton';
 import {Images} from '../../../assets/images/Images';
 
 import authAPI from '../../../redux/apis/auth';
-import data from '../../Home/data';
+
 import ButtonHandle from '../../../common/ButtonHandle';
+import LoadingScreen from '../../../common/LoadingScreen';
+import {log} from 'react-native-reanimated';
 
 interface Props {
   title: string;
@@ -59,6 +58,8 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
   const userState = useAppSelector(state => state.user);
   const [selectedAvatar, setSelectedAvatar] = useState<ImagePicker | any>();
   const dispatch = useAppDispatch();
+
+  const [isLoading, setLoading] = useState(false);
 
   const BASIC_INFO = [
     {
@@ -94,7 +95,7 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
   ];
 
   const [basicInfo, setBasicInfo] = useState({
-    avatar: userState?.user?.avatar,
+    avatar: selectedAvatar ? selectedAvatar : userState?.user?.avatar,
     username: userState?.user?.username,
     name: userState?.user?.name,
     gender: userState?.user?.gender || '',
@@ -105,7 +106,7 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
   });
 
   const handleSubmitForm = async () => {
-    console.log('handleSubmitForm >>>>>>selectedAvatar', selectedAvatar);
+    setLoading(true);
     setBasicInfo({
       ...basicInfo,
     });
@@ -113,26 +114,27 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
     const formData = new FormData();
     formData.append('username', basicInfo.username);
     formData.append('name', basicInfo.name);
-    formData.append('gemder', basicInfo.gender);
+    formData.append('gender', basicInfo.gender);
     formData.append('schoolYear', basicInfo.schoolYear);
     formData.append('typeTraining', basicInfo.typeTraining);
     formData.append('phoneNumber', basicInfo.phoneNumber);
     formData.append('email', basicInfo.email);
+
     if (selectedAvatar) {
-      console.log("=========================================")
-      console.log(selectedAvatar?.length)
+      console.log(selectedAvatar?.length);
       formData.append('avatar', selectedAvatar[0]);
     } else {
       formData.append('avatar', basicInfo?.avatar);
     }
 
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>formData', formData);
-    dispatch(authAPI.updateUserInfo()(formData));
-    if (userState?.updated) {
+    await dispatch(authAPI.updateUserInfo()(formData));
+    if (userState?.updated === true) {
+      setLoading(false);
       onPressClose(false);
       Alert.alert('Thông báo!', 'Cập nhật thành công!');
     }
-    if (userState?.updateError) {
+    if (userState?.updateError === true) {
+      setLoading(false);
       onPressClose(false);
       Alert.alert('Thông báo!', 'Cập nhật không thành công!');
     }
@@ -152,12 +154,12 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
                 text="Nam"
                 male={true}
                 style={
-                  basicInfo.gender === 'Male'
+                  basicInfo.gender === 'MALE'
                     ? Colors.rosyBrown
                     : Colors.primaryButton
                 }
-                selected={basicInfo.gender === 'Male'}
-                onPress={() => setBasicInfo({...basicInfo, gender: 'Male'})}
+                selected={basicInfo.gender === 'MALE'}
+                onPress={() => setBasicInfo({...basicInfo, gender: 'MALE'})}
               />
             </View>
 
@@ -165,12 +167,12 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
               <GenderButton
                 text="Nữ"
                 style={
-                  basicInfo.gender === 'Female'
+                  basicInfo.gender === 'FEMALE'
                     ? Colors.rosyBrown
                     : Colors.primaryButton
                 }
-                selected={basicInfo.gender === 'Female'}
-                onPress={() => setBasicInfo({...basicInfo, gender: 'Female'})}
+                selected={basicInfo.gender === 'FEMALE'}
+                onPress={() => setBasicInfo({...basicInfo, gender: 'FEMALE'})}
               />
             </View>
           </View>
@@ -180,13 +182,13 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
   };
 
   const handleGetAvatar = () => {
-    console.log('selectedAvatar', selectedAvatar);
+    console.log('basicInfo?.avatar', basicInfo?.avatar);
 
-    if (selectedAvatar?.uri) {
-      return {uri: selectedAvatar?.uri};
+    if (selectedAvatar?.[0]?.uri) {
+      return {uri: selectedAvatar?.[0]?.uri};
     }
 
-    return basicInfo.avatar ? {uri: basicInfo.avatar} : Images.avatar;
+    return basicInfo?.avatar ? {uri: basicInfo?.avatar} : Images.avatar;
   };
 
   const openPicker = async () => {
@@ -201,9 +203,10 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
     //   console.log(e.code, e.message);
     // }
     try {
-       const res = await DocumentPicker.pick({
+      const res = await DocumentPicker.pick({
         // Provide which type of file you want user to pick
         type: [DocumentPicker.types.images],
+        allowMultiSelection: true,
         // There can me more options as well
         // DocumentPicker.types.allFiles
         // DocumentPicker.types.images
@@ -218,7 +221,6 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
       console.log(e.code, e.message);
     }
   };
-
   const renderImage = useMemo(() => {
     return (
       <>
@@ -233,61 +235,66 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
   }, [selectedAvatar]);
 
   return (
-    <Portal>
-      <Modal visible={visible} style={{marginHorizontal: responsiveWidth(10)}}>
-        <View style={{backgroundColor: Colors.white}}>
-          <Text style={styles.title}>{title}</Text>
-          <CloseButton
-            style={styles.logo}
-            onPress={() => onPressClose(false)}
-          />
-        </View>
-        <ScrollView>
-          <View style={styles.contentForm}>
-            {renderImage}
-            <View style={styles.content}>
-              {BASIC_INFO.map((item, index) => {
-                if (item?.key === 'gender') {
-                  return genderBlock(index);
-                }
-
-                const isUserName = () => item?.key === 'username';
-                return (
-                  <TextInputView
-                    inputStyle={{
-                      borderColor: Colors.blueBoder,
-                      borderRadius: 6,
-                    }}
-                    isRequire={!isUserName()}
-                    editable={!isUserName()}
-                    title={item.title}
-                    titleStyle={[styles.lable]}
-                    textInputStyle={{
-                      fontSize: responsiveFont(14),
-                      color: Colors.black,
-                    }}
-                    key={index.toString()}
-                    placeholder={item.placeholder}
-                    onChangeText={text =>
-                      setBasicInfo({...basicInfo, [item.key]: text})
-                    }
-                    style={{marginBottom: responsiveHeight(20)}}
-                    messageError={item.key === 'email' && isError}
-                  />
-                );
-              })}
-            </View>
-            <View style={styles.viewBtn}>
-              <ButtonHandle
-                onPress={() => handleSubmitForm()}
-                style={styles.btn}
-                icon
-                title={languages['vi'].update}></ButtonHandle>
-            </View>
+    <>
+      <Portal>
+        <Modal
+          visible={visible}
+          style={{marginHorizontal: responsiveWidth(10)}}>
+          <View style={{backgroundColor: Colors.white}}>
+            <Text style={styles.title}>{title}</Text>
+            <CloseButton
+              style={styles.logo}
+              onPress={() => onPressClose(false)}
+            />
           </View>
-        </ScrollView>
-      </Modal>
-    </Portal>
+          <ScrollView>
+            <View style={styles.contentForm}>
+              {renderImage}
+              <View style={styles.content}>
+                {BASIC_INFO.map((item, index) => {
+                  if (item?.key === 'gender') {
+                    return genderBlock(index);
+                  }
+
+                  const isUserName = () => item?.key === 'username';
+                  return (
+                    <TextInputView
+                      inputStyle={{
+                        borderColor: Colors.blueBoder,
+                        borderRadius: 6,
+                      }}
+                      isRequire={!isUserName()}
+                      editable={!isUserName()}
+                      title={item.title}
+                      titleStyle={[styles.lable]}
+                      textInputStyle={{
+                        fontSize: responsiveFont(14),
+                        color: Colors.black,
+                      }}
+                      key={index.toString()}
+                      placeholder={item.placeholder}
+                      onChangeText={text =>
+                        setBasicInfo({...basicInfo, [item.key]: text})
+                      }
+                      style={{marginBottom: responsiveHeight(20)}}
+                      messageError={item.key === 'email' && isError}
+                    />
+                  );
+                })}
+              </View>
+              <View style={styles.viewBtn}>
+                <ButtonHandle
+                  onPress={() => handleSubmitForm()}
+                  style={styles.btn}
+                  icon
+                  title={languages['vi'].update}></ButtonHandle>
+              </View>
+            </View>
+          </ScrollView>
+        </Modal>
+      </Portal>
+      {isLoading && <LoadingScreen />}
+    </>
   );
 };
 export default ModalAccount;

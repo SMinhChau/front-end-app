@@ -1,5 +1,4 @@
 import {
-  Button,
   StatusBar,
   Text,
   TextInput,
@@ -7,17 +6,14 @@ import {
   View,
   StyleSheet,
   Alert,
-  Image,
   KeyboardAvoidingView,
   ScrollView,
-  ActivityIndicator,
 } from 'react-native';
-import * as yup from 'yup';
 
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Colors from '../../Themes/Colors';
 import Header from '../../common/Header';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Formik, FormikErrors, FormikProps, withFormik} from 'formik';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Lottie from 'lottie-react-native';
@@ -27,13 +23,22 @@ import GlobalStyles from '../../common/styles/GlobalStyles';
 
 import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 import authAPI from '../../redux/apis/auth';
-import NotifyModel from '../../common/NotifyModel';
-import {
-  isIOS,
-  responsiveHeight,
-  responsiveWidth,
-} from '../../utilities/sizeScreen';
-import {Modal, Portal} from 'react-native-paper';
+
+import {responsiveHeight, responsiveWidth} from '../../utilities/sizeScreen';
+// Shape of form values
+interface FormValues {
+  username: string;
+  password: string;
+}
+
+interface OtherProps {}
+
+interface MyFormProps {
+  initialUserName?: string;
+  initialPassword?: string;
+  login?: any;
+}
+
 import LoadingScreen from '../../common/LoadingScreen';
 import RouteNames from '../RouteNames';
 
@@ -41,154 +46,127 @@ const Login: React.FC<{}> = () => {
   const userState = useAppSelector(state => state.user);
 
   const userNameRef = useRef();
-  const [textPass, setTextPass] = useState(false);
-  const [getPassVisible, setPassVisible] = useState(false);
-
-  useEffect(() => {
-    console.log('userState', userState);
-
-    if (userState.is_login) {
-      setLoading(false);
-      navigation.navigate(RouteNames.TabNavigation);
-    }
-    if (userState.is_loading) {
-    } else {
-      if (userState.error) {
-        setLoading(false);
-        Alert.alert('Thông báo!', 'Thông tin đăng nhập không đúng');
-      }
-    }
-  }, [userState, isLoading]);
 
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
   const [isLoading, setLoading] = useState(false);
+  const [isPassWord, setPassword] = useState(true);
+  const [inputUsername, setUserName] = useState('');
+  const [inputPassword, setPass] = useState('');
+  const [errorPass, setErrorPass] = useState('');
 
-  // Shape of form values
-  interface FormValues {
-    username: string;
-    password: string;
-  }
+  useFocusEffect(
+    useCallback(() => {
+      setUserName('');
+      setPass('');
+    }, []),
+  );
 
-  interface OtherProps {}
+  useEffect(() => {
+    if (userState.is_login) {
+      setLoading(false);
+      navigation.navigate(RouteNames.TabNavigation);
+    }
+    if (userState.error) {
+      setLoading(false);
+      Alert.alert('Thông báo!', 'Thông tin đăng nhập không đúng');
+    }
+  }, [userState]);
 
-  interface MyFormProps {
-    initialUserName?: string;
-    initialPassword?: string;
-    login?: any;
-  }
-
-  const initialValues = {
-    email: '',
-    password: '',
+  const handleCheck = () => {
+    setPassword(!isPassWord);
   };
 
-  const handleChanText = () => {
-    setTextPass(!textPass);
+  const handleSubmit = async () => {
+    if (inputPassword.length < 6) {
+      setErrorPass('Mật khẩu phải lớn hơn 5 ký tự!');
+    } else {
+      setErrorPass('');
+      setLoading(true);
+      await dispatch(
+        authAPI.login()({
+          username: inputUsername,
+          password: inputPassword,
+        }),
+      );
+    }
   };
 
-  const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
-    const {touched, errors, values, handleChange, handleBlur, handleSubmit} =
-      props;
+  const formLogin = useMemo(() => {
     return (
-      <Formik
-        initialValues={initialValues}
-        onSubmit={values => console.log(values)}>
-        {() => (
-          <>
-            <View style={styles.contentForm}>
-              <View style={styles.viewInput}>
-                <Ionicons name={'md-person'} color={Colors.iconbr} size={16} />
-              </View>
-
-              <TextInput
-                onChangeText={handleChange('username')}
-                onBlur={handleBlur('username')}
-                placeholder={'Tên đăng nhập'}
-                value={values.username}
-                style={styles.input}
-                ref={userNameRef.current}
-              />
-
-              {touched.username && errors.username && (
-                <Text style={GlobalStyles.textError}>{errors.username}</Text>
-              )}
-
-              <View style={styles.viewInput}>
-                <Ionicons name={'key'} color={Colors.iconbr} size={16} />
-              </View>
-
-              <TextInput
-                onChangeText={handleChange('password')}
-                placeholder={'Mật khẩu'}
-                onBlur={handleBlur('password')}
-                secureTextEntry={true}
-                style={styles.input}
-                autoCapitalize="none"
-                keyboardAppearance="dark"
-                returnKeyType="go"
-                returnKeyLabel="go"
-              />
-
-              {touched.password && errors.password && (
-                <Text style={GlobalStyles.textError}>{errors.password}</Text>
-              )}
-
-              <View style={[GlobalStyles.flexEnd]}>
-                <TouchableOpacity style={[styles.btnPass]}>
-                  <Text style={GlobalStyles.rememberText}>Quên mật khẩu?</Text>
-                </TouchableOpacity>
-              </View>
+      <>
+        <View style={styles.contentForm}>
+          <View style={[styles.contentInputTop]}>
+            <View style={styles.viewInputTop}>
+              <Ionicons name={'md-person'} color={Colors.iconbr} size={16} />
             </View>
-            <ButtonView
-              onPress={handleSubmit}
-              title="Đăng nhập"
-              disabled={false}
-              textStyle={Colors.rosyBrown}
+            <TextInput
+              placeholder={'Tên đăng nhập'}
+              value={inputUsername}
+              onChangeText={text => setUserName(text)}
+              style={styles.input}
+              ref={userNameRef.current}
             />
-          </>
-        )}
-      </Formik>
+          </View>
+
+          <View style={[styles.contentInput, GlobalStyles.centerView]}>
+            <View style={styles.viewInput}>
+              <Ionicons name={'key'} color={Colors.iconbr} size={16} />
+            </View>
+            <TextInput
+              placeholder={'Mật khẩu'}
+              value={inputPassword}
+              onChangeText={text => setPass(text)}
+              secureTextEntry={isPassWord}
+              style={styles.input}
+              autoCapitalize="none"
+              keyboardAppearance="dark"
+              returnKeyType="go"
+              returnKeyLabel="go"
+            />
+
+            <TouchableOpacity style={styles.iconRight} onPress={handleCheck}>
+              {isPassWord === true ? (
+                <Ionicons
+                  name={'ios-eye-off-outline'}
+                  color={Colors.iconbr}
+                  size={16}
+                />
+              ) : (
+                <Ionicons
+                  name={'ios-eye-outline'}
+                  color={Colors.iconbr}
+                  size={16}
+                />
+              )}
+            </TouchableOpacity>
+          </View>
+          {errorPass && <Text style={GlobalStyles.textError}>{errorPass}</Text>}
+          <View style={[GlobalStyles.flexEnd]}>
+            <TouchableOpacity style={[styles.btnPass]}>
+              <Text style={GlobalStyles.rememberText}>Quên mật khẩu?</Text>
+            </TouchableOpacity>
+          </View>
+
+          <ButtonView
+            onPress={handleSubmit}
+            title="Đăng nhập"
+            disabled={false}
+            style={styles.btn}
+            textStyle={Colors.rosyBrown}
+          />
+        </View>
+      </>
     );
-  };
-
-  const handleSubmitForm = (value: any) => {
-    setLoading(true);
-    dispatch(
-      authAPI.login()({
-        username: value.username,
-        password: value.password,
-      }),
-    );
-  };
-
-  const MyForm = withFormik<MyFormProps, FormValues>({
-    // Transform outer props into form values
-    mapPropsToValues: props => {
-      return {
-        username: props.initialUserName || '',
-        password: '',
-      };
-    },
-
-    // Add a custom validation function (this can be async too!)
-    validate: (values: FormValues) => {
-      let errors: FormikErrors<FormValues> = {};
-      if (!values.username) {
-        errors.username = 'Vui lòng nhập tên đăng nhập!';
-      }
-      if (!values.password) {
-        errors.password = 'Vui lòng nhập mật khẩu!';
-      } else if (values.password.length < 6) {
-        errors.password = 'Mật khẩu phải lớn hơn 5 ký tự!';
-      }
-      return errors;
-    },
-
-    handleSubmit: values => {
-      handleSubmitForm(values);
-    },
-  })(InnerForm);
+  }, [
+    errorPass,
+    inputPassword,
+    inputUsername,
+    handleCheck,
+    handleSubmit,
+    userNameRef,
+    userState,
+  ]);
 
   return (
     <View style={[GlobalStyles.container, {backgroundColor: Colors.white}]}>
@@ -212,7 +190,8 @@ const Login: React.FC<{}> = () => {
                 style={styles.logo}
               />
             </View>
-            <MyForm />
+
+            {formLogin}
           </View>
         </KeyboardAvoidingView>
       </ScrollView>
@@ -230,11 +209,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   input: {
+    width: '100%',
     borderRadius: 10,
     borderWidth: 2,
     borderColor: '#fae1dd',
     paddingHorizontal: responsiveWidth(30),
-    marginTop: 25,
     fontSize: 16,
     backgroundColor: Colors.white,
   },
@@ -245,29 +224,57 @@ const styles = StyleSheet.create({
   btnPass: {
     marginTop: 5,
   },
-  viewInput: {
+  viewInputTop: {
     width: responsiveWidth(13),
     position: 'relative',
-    top: responsiveHeight(60),
-    left: 9,
+    left: 10,
+    top: 35,
     zIndex: 99999,
     backgroundColor: Colors.white,
   },
+  viewInput: {
+    width: responsiveWidth(13),
+    position: 'relative',
+    left: 22,
+    zIndex: 99999,
+    backgroundColor: Colors.white,
+  },
+  seconIcon: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   contentForm: {
-    paddingHorizontal: responsiveHeight(20),
-    paddingBottom: responsiveHeight(20),
+    flexDirection: 'column',
+    paddingHorizontal: responsiveHeight(15),
+    paddingVertical: responsiveHeight(5),
+    // paddingBottom: responsiveHeight(20),
     backgroundColor: Colors.blueBoder,
     borderColor: '#fec89a',
-
     borderWidth: 1,
     shadowOpacity: 3,
     borderRadius: 10,
     shadowOffset: {width: 2, height: 3},
+  },
+  contentInput: {
+    flexDirection: 'row',
+    marginTop: responsiveHeight(15),
+  },
+  contentInputTop: {
+    flexDirection: 'column',
+    marginTop: responsiveHeight(15),
   },
   logo: {
     width: responsiveWidth(150),
     height: responsiveHeight(150),
     marginBottom: responsiveHeight(10),
     alignContent: 'center',
+  },
+  iconRight: {
+    position: 'relative',
+    right: 30,
+  },
+  btn: {
+    borderColor: Colors.blueBoder,
   },
 });
