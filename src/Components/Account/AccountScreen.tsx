@@ -15,6 +15,7 @@ import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 import RouteNames from '../RouteNames';
 import ModalAccount from './component/ModalAccount';
 import {responsiveFont, responsiveWidth} from '../../utilities/sizeScreen';
+import {log} from 'react-native-reanimated';
 
 const Account: React.FC<{}> = () => {
   const navigation = useNavigation();

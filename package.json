@@ -32,6 +32,7 @@
     "lottie-react-native": "^6.0.0-rc.2",
     "moment": "^2.29.4",
     "npm": "^9.4.0",
+    "popup-ui": "^1.2.2",
     "react": "18.2.0",
     "react-native": "0.71.0",
     "react-native-asset": "^2.0.1",

@@ -8,7 +8,7 @@ import {
   Alert,
   Image,
 } from 'react-native';
-import DocumentPicker from 'react-native-document-picker';
+
 import CloseButton from '../../../common/CloseButton';
 import Colors from '../../../Themes/Colors';
 import {

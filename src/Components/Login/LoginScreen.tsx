@@ -14,7 +14,7 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Colors from '../../Themes/Colors';
 import Header from '../../common/Header';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Formik, FormikErrors, FormikProps, withFormik} from 'formik';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Lottie from 'lottie-react-native';
 
@@ -25,19 +25,6 @@ import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 import authAPI from '../../redux/apis/auth';
 
 import {responsiveHeight, responsiveWidth} from '../../utilities/sizeScreen';
-// Shape of form values
-interface FormValues {
-  username: string;
-  password: string;
-}
-
-interface OtherProps {}
-
-interface MyFormProps {
-  initialUserName?: string;
-  initialPassword?: string;
-  login?: any;
-}
 
 import LoadingScreen from '../../common/LoadingScreen';
 import RouteNames from '../RouteNames';
@@ -143,7 +130,9 @@ const Login: React.FC<{}> = () => {
           </View>
           {errorPass && <Text style={GlobalStyles.textError}>{errorPass}</Text>}
           <View style={[GlobalStyles.flexEnd]}>
-            <TouchableOpacity style={[styles.btnPass]}>
+            <TouchableOpacity
+              style={[styles.btnPass]}
+              onPress={() => navigation.navigate('ChangePassword')}>
               <Text style={GlobalStyles.rememberText}>Quên mật khẩu?</Text>
             </TouchableOpacity>
           </View>

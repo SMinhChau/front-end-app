@@ -1,27 +1,16 @@
 import {is} from 'immer/dist/internal';
-import {useCallback, useEffect, useMemo, useState} from 'react';
-import {
-  TouchableOpacity,
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  ScrollView,
-} from 'react-native';
+import {useEffect, useMemo, useState} from 'react';
+import {TouchableOpacity, View, Text, StyleSheet, FlatList} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
-import Lottie from 'lottie-react-native';
+
 import Header from '../../common/Header';
 import IconView from '../../common/IconView';
-import Logo from '../../common/logo';
+
 import GlobalStyles from '../../common/styles/GlobalStyles';
-import languages from '../../languages';
-import groupAPI from '../../redux/apis/group';
+
 import {useAppDispatch, useAppSelector} from '../../redux/hooks';
-import {TermSlices} from '../../redux/slices/TermSlices';
-import groupService from '../../services/group';
+
 import Colors from '../../Themes/Colors';
-import User from '../../utilities/contants';
 
 import {
   responsiveFont,

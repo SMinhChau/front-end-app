@@ -62,3 +62,17 @@ export const validateEmail = (email: string) => {
 };
 
 export const PASSWORD_REGEX = /^[5,]$/;
+
+export const checkRole = (role: string) => {
+  if (role === 'LECTURER') return 'Giảng Viên';
+  if (role === 'SUB_HEAD_LECTURER') return 'Phó Khoa';
+  if (role === 'HEAD_LECTURER') return 'Trưởng Khoa';
+};
+export const checkGenger = (role: string) => {
+  if (role === 'MALE') return 'Nam';
+  if (role === 'FEMALE') return 'Nữ';
+};
+export const checkDegree = (role: string) => {
+  if (role === 'MASTERS') return 'Tiến sĩ';
+  if (role === 'DOCTER') return 'Thạc sĩ';
+};
