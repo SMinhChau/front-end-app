@@ -23,7 +23,7 @@ class GroupAPI {
       'group/out-group-by-termId',
       async (termId: number, thunkAP) => {
         const result = await groupService.outGroup(termId);
-        console.log('API==== outMyGroup', result);
+
         if (result.status === 200) {
           return result.data;
         }

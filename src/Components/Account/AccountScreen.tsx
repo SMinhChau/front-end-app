@@ -11,16 +11,19 @@ import Colors from '../../Themes/Colors';
 import IconView from '../../common/IconView';
 import tokenService from '../../services/token';
 import {useNavigation} from '@react-navigation/native';
-import {useAppDispatch, useAppSelector} from '../../redux/hooks';
+import {useAppSelector} from '../../redux/hooks';
 import RouteNames from '../RouteNames';
 import ModalAccount from './component/ModalAccount';
-import {responsiveFont, responsiveWidth} from '../../utilities/sizeScreen';
-import {log} from 'react-native-reanimated';
+import {
+  responsiveFont,
+  responsiveHeight,
+  responsiveWidth,
+} from '../../utilities/sizeScreen';
 
-const Account: React.FC<{}> = () => {
+import {checkGenger, checkTypeTraining} from '../../utilities/contants';
+
+const Account: React.FC<{}> = ({}) => {
   const navigation = useNavigation();
-
-  const dispatch = useAppDispatch();
 
   const majorState = useAppSelector(state => state.major.major);
   const userState = useAppSelector(state => state.user.user);
@@ -59,7 +62,7 @@ const Account: React.FC<{}> = () => {
         <View style={styles.main}>
           <TextItemAccount
             textLeft={languages['vi'].gender}
-            textRight={userState?.gender === 'MALE' ? 'Nam' : 'Nữ'}
+            textRight={checkGenger(userState?.gender)}
             line={true}></TextItemAccount>
 
           <TextItemAccount
@@ -74,7 +77,7 @@ const Account: React.FC<{}> = () => {
 
           <TextItemAccount
             textLeft={languages['vi'].typeTraining}
-            textRight={userState?.typeTraining}
+            textRight={checkTypeTraining(userState?.typeTraining)}
             line={true}></TextItemAccount>
 
           <TextItemAccount
@@ -120,7 +123,13 @@ const Account: React.FC<{}> = () => {
 
         {renderMain()}
         <TouchableOpacity
-          style={[GlobalStyles.flexDirectionRow]}
+          style={[GlobalStyles.flexDirectionRow, styles.btnAction]}
+          onPress={() => navigation.navigate('ChangePassword')}>
+          <Text style={styles.itemAction}>Đổi mật khẩu</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[GlobalStyles.flexDirectionRow, styles.btnAction]}
           onPress={handleLogout}>
           <Text style={styles.logout}>{languages['vi'].logout}</Text>
           <IconView name={'ios-log-out-outline'} size={24} color={Colors.red} />
@@ -168,7 +177,13 @@ const styles = StyleSheet.create({
   },
   logout: {
     color: Colors.red,
-    fontSize: 15,
+    fontSize: responsiveFont(15),
+    paddingRight: 20,
+    marginLeft: 20,
+  },
+  itemAction: {
+    color: Colors.textPrimary,
+    fontSize: responsiveFont(15),
     paddingRight: 20,
     marginLeft: 20,
   },
@@ -195,5 +210,8 @@ const styles = StyleSheet.create({
   textPrimary: {
     fontSize: responsiveFont(16),
     color: Colors.drakCyonBoder,
+  },
+  btnAction: {
+    paddingVertical: responsiveHeight(10),
   },
 });

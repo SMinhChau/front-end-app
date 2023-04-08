@@ -17,32 +17,39 @@ import {FlatList} from 'react-native-gesture-handler';
 import {Images} from '../../../assets/images/Images';
 import {checkDegree, checkGenger, checkRole} from '../../../utilities/contants';
 import {isEmpty} from '../../../utilities/utils';
+import LoadingScreen from '../../../common/LoadingScreen';
+import {log} from 'react-native-reanimated';
 
 const LectureMenu = () => {
   const majorState = useAppSelector(state => state.major.major);
   const [lecturer, setLecturer] = useState<Lecturer[]>();
+  const [list, setList] = useState();
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     getLecturersOfmajor();
   }, [majorState]);
 
   const getLecturersOfmajor = async () => {
+    setLoading(true);
     if (!isEmpty(majorState?.id)) {
+      console.log('majorState?.id', majorState?.id);
       await majorService
         .getLecturerByMajor(Number(majorState?.id))
         .then(result => {
+          setLoading(false);
+          console.log('result?.data', result?.data);
           setLecturer(result?.data);
+          setList(result?.data?.length);
         });
     }
   };
 
   const rednderItem = (item: any) => {
-    console.log(' rednderItem', item);
-
     const LECTURER_DATA = [
       {name: item.avatar, key: ''},
-      {name: checkRole(item.role), key: 'Chức vụ'},
       {name: item.name, key: 'Tên Giảng viên'},
+      {name: checkRole(item.role), key: 'Chức vụ'},
       {name: checkGenger(item.gender), key: 'Giới tính'},
       {name: item.phoneNumber, key: 'Số điện thoại'},
       {name: checkDegree(item.degree), key: 'Trình độ'},
@@ -65,11 +72,9 @@ const LectureMenu = () => {
                       </>
                     }
                     description={
-                      <View style={styles.contenItem}>
-                        <Text numberOfLines={1} style={[styles.titleGroup]}>
-                          {item?.username}
-                        </Text>
-                      </View>
+                      <Text numberOfLines={1} style={[styles.titleGroup]}>
+                        {item?.username}
+                      </Text>
                     }
                     left={props => (
                       <Image
@@ -93,11 +98,9 @@ const LectureMenu = () => {
                     </>
                   }
                   description={
-                    <View style={styles.contenItem}>
-                      <Text numberOfLines={1} style={[styles.titleGroup]}>
-                        {i?.name}
-                      </Text>
-                    </View>
+                    <Text numberOfLines={1} style={[styles.titleGroup]}>
+                      {i?.name}
+                    </Text>
                   }
                   left={props => <View style={styles.iconContentView}></View>}
                 />
@@ -112,6 +115,9 @@ const LectureMenu = () => {
   const renderLecturerInfo = useMemo(() => {
     return (
       <>
+        <View style={styles.list}>
+          <Text style={styles.numberList}>Số lượng: {list}</Text>
+        </View>
         <FlatList
           horizontal={true}
           data={lecturer}
@@ -119,7 +125,7 @@ const LectureMenu = () => {
         />
       </>
     );
-  }, [lecturer]);
+  }, [lecturer, list]);
   return (
     <>
       <View style={GlobalStyles.container}>
@@ -138,7 +144,7 @@ const LectureMenu = () => {
             iconRight={true}></Header>
 
           <View style={styles.content}>
-            <View style={[styles.listTitle, GlobalStyles.centerView]}>
+            <View style={[styles.listTitle]}>
               <Text style={styles.contentName}>Chuyên ngành</Text>
               <Text style={styles.contentName}>{majorState?.name}</Text>
             </View>
@@ -146,6 +152,7 @@ const LectureMenu = () => {
           </View>
         </View>
       </View>
+      {isLoading && <LoadingScreen />}
     </>
   );
 };
@@ -155,6 +162,7 @@ export default LectureMenu;
 const styles = StyleSheet.create({
   containner: {
     flex: 1,
+    backgroundColor: '#fde2e4',
     justifyContent: 'space-between',
     alignContent: 'space-between',
   },
@@ -163,19 +171,21 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    marginVertical: responsiveHeight(20),
+    marginVertical: responsiveHeight(10),
     borderTopRightRadius: 10,
-
-    justifyContent: 'flex-start',
-    alignItems: 'center',
   },
   listTitle: {
+    width: '90%',
     borderRadius: 3,
     flexDirection: 'column',
-    // backgroundColor: '#a3b18a',
-
-    width: '100%',
-    paddingVertical: responsiveHeight(10),
+    borderLeftColor: '#c9184a',
+    borderLeftWidth: 7,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    marginLeft: responsiveWidth(20),
+    paddingHorizontal: responsiveWidth(10),
+    marginHorizontal: responsiveWidth(5),
+    paddingBottom: responsiveHeight(10),
     shadowOffset: {width: 2, height: 3},
   },
   contentName: {
@@ -188,19 +198,20 @@ const styles = StyleSheet.create({
   contentListItem: {
     flexDirection: 'column',
     width: responsiveWidth(330),
-    borderRadius: 5,
+    borderRadius: 10,
     marginHorizontal: responsiveWidth(10),
-    borderColor: Colors.blueBoder,
-    borderWidth: 1,
+    borderColor: '#c9184a',
+    borderWidth: 2,
+    backgroundColor: Colors.white,
     shadowOpacity: 0.02,
   },
   titleMain: {
     fontSize: responsiveFont(18),
-    color: Colors.textPrimary,
+    color: Colors.grayLight,
   },
   title: {
     fontSize: responsiveFont(18),
-    color: Colors.textPrimary,
+    color: '#c9184a',
     fontWeight: '600',
   },
   lecturerName: {
@@ -209,9 +220,9 @@ const styles = StyleSheet.create({
   },
   viewIcon: {
     borderRadius: 10,
-    borderColor: '#a3b18a',
     marginLeft: responsiveWidth(10),
-    borderWidth: 1,
+    borderLeftWidth: 1,
+
     paddingHorizontal: responsiveWidth(9),
     paddingVertical: responsiveHeight(9),
   },
@@ -236,5 +247,19 @@ const styles = StyleSheet.create({
   iconContentView: {
     margin: 5,
   },
-  contenItem: {},
+  list: {
+    width: '95%',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    marginBottom: responsiveHeight(5),
+  },
+  numberList: {
+    fontSize: responsiveFont(14),
+    color: Colors.primaryButton,
+    backgroundColor: '#f8ad9d',
+    borderRadius: 3,
+    borderWidth: 1,
+    borderColor: '#ff4d6d',
+    paddingHorizontal: responsiveHeight(10),
+  },
 });

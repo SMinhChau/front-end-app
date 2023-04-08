@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, ScrollView, TextInput, Alert} from 'react-native';
 import {Modal, Portal, Text} from 'react-native-paper';
 import CloseButton from '../../../common/CloseButton';
@@ -8,7 +8,7 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from '../../../utilities/sizeScreen';
-import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
+import {useAppDispatch} from '../../../redux/hooks';
 import languages from '../../../languages';
 import ButtonHandle from '../../../common/ButtonHandle';
 import groupAPI from '../../../redux/apis/group';

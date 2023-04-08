@@ -76,3 +76,7 @@ export const checkDegree = (role: string) => {
   if (role === 'MASTERS') return 'Tiến sĩ';
   if (role === 'DOCTER') return 'Thạc sĩ';
 };
+export const checkTypeTraining = (role: string) => {
+  if (role === 'COLLEGE') return 'Đại học';
+  if (role === 'UNIVERSITY') return 'Cao đẳng';
+};

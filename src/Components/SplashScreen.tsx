@@ -17,9 +17,8 @@ import {Images} from '../assets/images/Images';
 import RouteNames from './RouteNames';
 import tokenService from '../services/token';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
-import {useDispatch} from 'react-redux';
+
 import authAPI from '../redux/apis/auth';
-import {responsiveFont, responsiveHeight} from '../utilities/sizeScreen';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
@@ -35,7 +34,7 @@ const SplashScreen = () => {
 
     const token = await tokenService.getRefreshToken();
     if (token && userState?.id !== null) {
-      dispatch(authAPI.getInfo()());
+      await dispatch(authAPI.getInfo()());
       navigation.navigate(RouteNames.TabNavigation);
     } else navigation.navigate(RouteNames.loginNavigation);
   };

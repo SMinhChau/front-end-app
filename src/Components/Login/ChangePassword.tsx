@@ -19,7 +19,7 @@ import React, {useState} from 'react';
 
 import GlobalStyles from '../../common/styles/GlobalStyles';
 import {responsiveHeight, responsiveWidth} from '../../utilities/sizeScreen';
-import LoadingScreen from '../../common/LoadingScreen';
+
 import ButtonView from '../../common/ButtonView';
 import Lottie from 'lottie-react-native';
 const ChangePassword: React.FC<{}> = () => {
@@ -27,6 +27,7 @@ const ChangePassword: React.FC<{}> = () => {
   const [isLoading, setLoading] = useState(false);
   const [errorPassConfirm, setErrorPassConfirm] = useState('');
   const [errorPass, setErrorPass] = useState('');
+  const [errorPasswordOld, setErrorPasswordOld] = useState('');
   const [isPassWord, setPassword] = useState(true);
 
   const [inputPasswordOld, setInputPasswordOld] = useState('');

@@ -1,6 +1,5 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Login from './Login/LoginScreen';
 import TabNavigation from './TabNavigation';
@@ -11,13 +10,13 @@ import EvaluationMenu from './Home/components/GroupMenu';
 
 import ItemStudents from './Group/components/ItemStudents';
 import ItemListGroup from './Group/components/ItemListGroup';
-import RequestJoinMyGroup from './Group/components/RequestJoinMyGroup';
+
 import InviteJoinGroup from './Group/components/InviteJoinGroup';
 import JoinGroupToOrther from './Group/components/JoinGroupToOrther';
-import ItemTopic from './Group/components/ItemTopic';
+
 import ItemTopicMenu from './Group/components/ItemTopicMenu';
 import LectureMenu from './Home/components/LectureMenu';
-import Register from './Login/Register';
+
 import ChangePassword from './Login/ChangePassword';
 
 const Stack = createNativeStackNavigator();

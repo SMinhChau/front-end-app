@@ -1,7 +1,5 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import topicService from '../../services/topic';
-import {setTopic} from '../slices/TopicSlices';
-
 class TopicAPI {
   getTopicById() {
     return createAsyncThunk('topic/get-topic-by-id', async (id: number) => {

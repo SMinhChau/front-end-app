@@ -31,13 +31,12 @@ import IconView from '../../../common/IconView';
 import topicService from '../../../services/topic';
 import Topic from '../../../utilities/Contant/Topic';
 import ItemTopic from './ItemTopic';
-import {number} from 'yup';
+
 import {log} from 'react-native-reanimated';
 import LoadingScreen from '../../../common/LoadingScreen';
 import groupAPI from '../../../redux/apis/group';
 
 const TopicMenu = () => {
-  const userState = useAppSelector(state => state.user.user);
   const termState = useAppSelector(state => state.term.term);
   const groupState = useAppSelector(state => state.group.group);
 

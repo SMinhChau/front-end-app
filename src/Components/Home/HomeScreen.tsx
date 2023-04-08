@@ -1,12 +1,5 @@
 import {useEffect} from 'react';
-import {
-  StatusBar,
-  View,
-  Text,
-  StyleSheet,
-  LogBox,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 
 import Lottie from 'lottie-react-native';
 import Header from '../../common/Header';

@@ -32,7 +32,6 @@ const Group: React.FC<{}> = () => {
 
   const [topic, setTopic] = useState<Topic>();
 
-  const dispatch = useAppDispatch();
   const navigation = useNavigation();
 
   const [showModal, setShowModal] = useState(false);

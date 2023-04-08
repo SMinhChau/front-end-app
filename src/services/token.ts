@@ -43,9 +43,8 @@ class TokenService {
   };
 
   reset = async () => {
-    await AsyncStorage.clear();
-    // await AsyncStorage.removeItem('access_token');
-    // await AsyncStorage.removeItem('refresh_token');
+    await AsyncStorage.removeItem('access_token');
+    await AsyncStorage.removeItem('refresh_token');
   };
 }
 

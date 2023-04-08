@@ -132,7 +132,8 @@ const Login: React.FC<{}> = () => {
           <View style={[GlobalStyles.flexEnd]}>
             <TouchableOpacity
               style={[styles.btnPass]}
-              onPress={() => navigation.navigate('ChangePassword')}>
+              // onPress={() => navigation.navigate('ChangePassword')}
+            >
               <Text style={GlobalStyles.rememberText}>Quên mật khẩu?</Text>
             </TouchableOpacity>
           </View>
