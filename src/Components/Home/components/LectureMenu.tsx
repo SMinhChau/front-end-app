@@ -38,10 +38,10 @@ const LectureMenu = () => {
         .getLecturerByMajor(Number(majorState?.id))
         .then(result => {
           setLoading(false);
-          console.log('result?.data', result?.data);
           setLecturer(result?.data);
           setList(result?.data?.length);
-        });
+        })
+        .catch(er => console.log(er));
     }
   };
 
@@ -209,6 +209,12 @@ const styles = StyleSheet.create({
     fontSize: responsiveFont(18),
     color: Colors.grayLight,
   },
+  number: {
+    textAlign: 'center',
+    fontSize: responsiveFont(20),
+    color: '#003049',
+    fontWeight: '600',
+  },
   title: {
     fontSize: responsiveFont(18),
     color: '#c9184a',
@@ -255,7 +261,7 @@ const styles = StyleSheet.create({
   },
   numberList: {
     fontSize: responsiveFont(14),
-    color: Colors.primaryButton,
+    color: '#003049',
     backgroundColor: '#f8ad9d',
     borderRadius: 3,
     borderWidth: 1,

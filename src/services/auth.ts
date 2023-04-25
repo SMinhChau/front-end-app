@@ -1,9 +1,4 @@
-import {log} from 'react-native-reanimated';
-import axios from 'axios';
-import Config from 'react-native-config';
 import {axiosAuth, axiosFormData, axiosNotAuth} from '../utilities/axiosConfig';
-import tokenService from './token';
-
 class AuthService {
   login(data: {username: string; password: string}) {
     console.log('data - AuthService', data);
@@ -31,6 +26,13 @@ class AuthService {
   getStudent(termId: number, groupExists: boolean) {
     return axiosAuth({
       url: `api/student/students?termId=${termId}&groupExists=${groupExists}`,
+      method: 'get',
+    });
+  }
+
+  getTranscripts(termId: number) {
+    return axiosAuth({
+      url: `api/student/transcripts?termId=${termId}`,
       method: 'get',
     });
   }

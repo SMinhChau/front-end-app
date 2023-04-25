@@ -1,10 +1,7 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 import authAPI from '../apis/auth';
 import User from '../../utilities/contants';
-import tokenService from '../../services/token';
-import {isNull, isNumber} from 'lodash';
-import {number} from 'yup';
-
+import Transcript from '../../utilities/Contant/Transcript';
 interface StateType {
   user: User;
   error: boolean;
@@ -12,6 +9,7 @@ interface StateType {
   is_login: boolean;
   updated: boolean;
   updateError: boolean;
+  transcript: Transcript;
 }
 
 const initialState = {
@@ -35,6 +33,31 @@ const initialState = {
   is_login: false,
   updated: false,
   updateError: false,
+  transcript: {
+    student: {},
+    gradeSummary: NaN,
+    missings: {},
+    achievements: [
+      {
+        id: NaN,
+        name: '',
+        bonusGrade: NaN,
+        student: {},
+      },
+    ],
+    ADVISOR: {
+      avgGrader: NaN,
+      details: {},
+    },
+    REVIEWER: {
+      avgGrader: NaN,
+      details: {},
+    },
+    SESSION_HOST: {
+      avgGrader: NaN,
+      details: {},
+    },
+  },
 } as StateType;
 
 export const userSlice = createSlice({
@@ -68,6 +91,11 @@ export const userSlice = createSlice({
     builder.addCase(authAPI.updateUserInfo().rejected, state => {
       state.updated = false;
       state.updateError = true;
+    });
+
+    builder.addCase(authAPI.getTranscripts().fulfilled, (state, action) => {
+      console.log('======transcript  action', action);
+      state.transcript = action.payload;
     });
   },
 });

@@ -1,4 +1,3 @@
-import {log} from 'react-native-reanimated';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
 import authService from '../../services/auth';
@@ -11,13 +10,12 @@ class AuthAPI {
       if (result.status === 200) return result.data;
     });
   }
+
   login() {
     return createAsyncThunk(
       'user/login',
       async (data: {username: string; password: string}, thunkAPI) => {
         const result = await authService.login(data);
-        console.log('result', result);
-
         if (result.status === 200) {
           await tokenService.setAccessToken(result.data.accessToken);
 
@@ -36,10 +34,25 @@ class AuthAPI {
       async (data: FormData, thunkAPI) => {
         try {
           const result = await authService.updateUserInfo(data);
-          console.log('updateUserInfo ======result', result);
           if (result.status === 200) return result.data;
         } catch (error) {
           return thunkAPI.rejectWithValue('update fail');
+        }
+      },
+    );
+  }
+  getTranscripts() {
+    return createAsyncThunk(
+      'user/get-transcripts',
+      async (termId: number, thunkAPI) => {
+        try {
+          const result = await authService.getTranscripts(termId);
+          console.log('transcripts ======result', result);
+          if (result.status === 200) return result.data;
+        } catch (error) {
+          console.log('error ==== transcripts', error);
+
+          return thunkAPI.rejectWithValue('transcripts fail');
         }
       },
     );

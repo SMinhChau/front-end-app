@@ -11,7 +11,7 @@ export default {
 
   HomeTab: languages['vi'].home,
   GroupTab: languages['vi'].group,
-  EvaluationTab: languages['vi'].evaluation,
+  EvaluationTab: languages['vi'].total,
   AccountTab: languages['vi'].account,
 
   TermMenu: 'TermMenu',

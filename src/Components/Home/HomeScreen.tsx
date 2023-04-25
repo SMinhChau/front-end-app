@@ -178,8 +178,9 @@ const styles = StyleSheet.create({
   nameTitle: {
     textAlign: 'center',
     fontSize: responsiveFont(20),
-    color: '#f5cac3',
+    color: '#941b0c',
     fontWeight: '600',
+    textTransform: 'uppercase',
   },
   nameContent: {
     flexDirection: 'column',

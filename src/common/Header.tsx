@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   textView: {
     textAlign: 'center',
     fontSize: responsiveFont(20),
-    color: '#f7ede2',
+    color: '#003049',
     fontWeight: '600',
   },
   contentIcon: {

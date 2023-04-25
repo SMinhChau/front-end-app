@@ -35,5 +35,6 @@ export default {
     description: 'Mô tả',
     target: 'Mục tiêu',
     evaluation: 'Đánh giá',
+    total: 'Tổng kết',
   },
 };

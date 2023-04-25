@@ -11,6 +11,10 @@ export default interface Term {
   dateReport: string;
   createdAt: string;
   updatedAt: string;
+  startDateDiscussion: string;
+  endDateDiscussion: string;
+  startDateReport: string;
+  endDateReport: string;
   majors: {
     id: number;
   };

@@ -11,6 +11,7 @@ import {
 import {useAppSelector} from '../../../redux/hooks';
 import languages from '../../../languages';
 import moment from 'moment';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const TermMenu = () => {
   const termState = useAppSelector(state => state.term.term);
@@ -45,8 +46,24 @@ const TermMenu = () => {
       value: termState?.endDateSubmitTopic,
     },
     {
+      title: 'Khoản thời gian bắt đầu phản biện',
+      value: termState?.startDateDiscussion,
+    },
+    {
+      title: 'Khoản thời gian kết thúc phản biện',
+      value: termState?.endDateDiscussion,
+    },
+    {
       title: 'Ngày phản biện',
       value: termState?.dateDiscussion,
+    },
+    {
+      title: 'Khoản thời gian bắt đầu báo cáo',
+      value: termState?.startDateReport,
+    },
+    {
+      title: 'Khoản thời gian kết thúc báo cáo',
+      value: termState?.endDateReport,
     },
     {
       title: 'Ngày báo cáo hội đồng',
@@ -73,32 +90,34 @@ const TermMenu = () => {
           back={true}
           iconRight={true}></Header>
         <View style={styles.containner}>
-          {INFO_TERM.map(item => {
-            if (item?.title === 'Tên học kỳ') {
+          <ScrollView>
+            {INFO_TERM.map(item => {
+              if (item?.title === 'Tên học kỳ') {
+                return (
+                  <View style={[styles.contentTitle, GlobalStyles.centerView]}>
+                    <Text numberOfLines={1} style={[styles.titleGroup]}>
+                      {item?.title}
+                    </Text>
+                    <Text
+                      numberOfLines={1}
+                      style={[styles.titleGroup, styles.title]}>
+                      {item?.value}
+                    </Text>
+                  </View>
+                );
+              }
               return (
-                <View style={[styles.contentTitle, GlobalStyles.centerView]}>
+                <View style={styles.content}>
                   <Text numberOfLines={1} style={[styles.titleGroup]}>
                     {item?.title}
                   </Text>
-                  <Text
-                    numberOfLines={1}
-                    style={[styles.titleGroup, styles.title]}>
-                    {item?.value}
+                  <Text numberOfLines={1} style={[styles.textValue]}>
+                    {formatDate(item?.value)}
                   </Text>
                 </View>
               );
-            }
-            return (
-              <View style={styles.content}>
-                <Text numberOfLines={1} style={[styles.titleGroup]}>
-                  {item?.title}
-                </Text>
-                <Text numberOfLines={1} style={[styles.textValue]}>
-                  {formatDate(item?.value)}
-                </Text>
-              </View>
-            );
-          })}
+            })}
+          </ScrollView>
         </View>
       </View>
     </>

@@ -22,6 +22,10 @@ const initialState = {
     dateReport: '',
     createdAt: '',
     updatedAt: '',
+    startDateDiscussion: '',
+    endDateDiscussion: '',
+    startDateReport: '',
+    endDateReport: '',
     majors: {
       id: NaN,
     },
