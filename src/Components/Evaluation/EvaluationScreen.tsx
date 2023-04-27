@@ -100,9 +100,9 @@ const EvaluationScreen: React.FC<data> = ({}) => {
                 Điểm
               </DataTable.Title>
             </DataTable.Header>
-            {_data.map(item => {
+            {_data.map((item, key) => {
               return (
-                <DataTable.Row>
+                <DataTable.Row key={key}>
                   <DataTable.Cell textStyle={styles._total_Ar} numeric>
                     {item.name}
                   </DataTable.Cell>

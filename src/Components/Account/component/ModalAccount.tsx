@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,6 @@ import {
   Alert,
   Image,
 } from 'react-native';
-
 import CloseButton from '../../../common/CloseButton';
 import Colors from '../../../Themes/Colors';
 import {
@@ -16,32 +15,20 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from '../../../utilities/sizeScreen';
-
 import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import DocumentPicker from 'react-native-document-picker';
-import {
-  HelperText,
-  Modal,
-  Portal,
-  Provider,
-  RadioButton,
-  TextInput,
-} from 'react-native-paper';
+import {Modal, Portal} from 'react-native-paper';
 import languages from '../../../languages';
-import CustomButton from '../../../common/CustomButton';
+
 import GlobalStyles from '../../../common/styles/GlobalStyles';
 import TextInputView from '../../../common/TextInputView';
 import IconView from '../../../common/IconView';
-import {isEmpty, validateEmail} from '../../../utilities/utils';
+import {validateEmail} from '../../../utilities/utils';
 import GenderButton from '../../../common/GenderButton';
-
 import {Images} from '../../../assets/images/Images';
-
 import authAPI from '../../../redux/apis/auth';
-
 import ButtonHandle from '../../../common/ButtonHandle';
 import LoadingScreen from '../../../common/LoadingScreen';
-import {log} from 'react-native-reanimated';
 
 interface Props {
   title: string;
@@ -182,39 +169,20 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
   };
 
   const handleGetAvatar = () => {
-    console.log('basicInfo?.avatar', basicInfo?.avatar);
-
     if (selectedAvatar?.[0]?.uri) {
       return {uri: selectedAvatar?.[0]?.uri};
     }
-
     return basicInfo?.avatar ? {uri: basicInfo?.avatar} : Images.avatar;
   };
 
   const openPicker = async () => {
-    // try {
-    //   const response = await MultipleImagePicker.openPicker({
-    //     mediaType: 'image',
-    //   });
-    //   console.log
-    //   console.log('response', response[0]);
-    //   setSelectedAvatar(response);
-    // } catch (e: any) {
-    //   console.log(e.code, e.message);
-    // }
     try {
       const res = await DocumentPicker.pick({
         // Provide which type of file you want user to pick
         type: [DocumentPicker.types.images],
         allowMultiSelection: true,
-        // There can me more options as well
-        // DocumentPicker.types.allFiles
-        // DocumentPicker.types.images
-        // DocumentPicker.types.plainText
-        // DocumentPicker.types.audio
-        // DocumentPicker.types.pdf
       });
-      // Printing the log realted to the file
+
       console.log('res : ' + JSON.stringify(res));
       setSelectedAvatar(res);
     } catch (e: any) {

@@ -17,8 +17,6 @@ import JoinGroupToOrther from './Group/components/JoinGroupToOrther';
 import ItemTopicMenu from './Group/components/ItemTopicMenu';
 import LectureMenu from './Home/components/LectureMenu';
 
-import ChangePassword from './Login/ChangePassword';
-
 const Stack = createNativeStackNavigator();
 
 const NavigationRouter = () => {
@@ -38,7 +36,7 @@ const NavigationRouter = () => {
           component={Login}
           //   options={{title: 'Login'}}
         />
-        <Stack.Screen name="ChangePassword" component={ChangePassword} />
+
         <Stack.Screen name={'TabNavigation'} component={TabNavigation} />
         <Stack.Screen name={'TermMenu'} component={TermMenu} />
         <Stack.Screen name={'TopicMenu'} component={TopicMenu} />

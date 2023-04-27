@@ -47,29 +47,19 @@ const TopicMenu = () => {
   useEffect(() => {
     // getMyTopic();
     getToppicList();
-  }, []);
+  }, [termState]);
 
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
 
-  // const getMyTopic = useCallback(() => {
-  //   topicService
-  //     .getTopicId(groupState?.topic?.id ? groupState?.topic?.id : 1)
-  //     .then(result => {
-  //       console.log('getMyTopic=============', result?.data);
-
-  //       setMyTopic(result?.data);
-  //     })
-  //     .catch(error => console.log('getTopic error', error));
-  // }, [groupState]);
-
-  const getToppicList = useCallback(() => {
-    topicService
-      .getTopicList(termState?.id ? termState?.id : 0)
-      .then(result => {
+  const getToppicList = () => {
+    if (termState?.id) {
+      topicService.getTopicList(termState?.id).then(result => {
+        console.log('result?.data', result?.data);
         setTopics(result?.data);
       });
-  }, [groupState, isLoading]);
+    }
+  };
 
   const isStartDateChooseTopic = () =>
     moment().isAfter(termState?.startDateChooseTopic);
@@ -164,39 +154,43 @@ const TopicMenu = () => {
   const renderTopicList = useMemo(() => {
     return (
       <>
-        <View style={[styles.contentTopic]}>
-          {/* <View style={styles.viewIcon}>
-            <IconView name="ios-apps-sharp" color={Colors.iconbr} size={26} />
-          </View> */}
-          <Lottie
-            source={require('../../../assets/jsonAmination/loading_cricle.json')}
-            autoPlay
-            loop
-            style={{width: 60}}
-          />
-          <View style={styles.viewTitle}>
-            <Text style={styles.topTitle}>Danh sách Đề tài</Text>
-            <Text style={styles.topTitle}>Số lượng: {topics?.length}</Text>
-          </View>
-          <Lottie
-            source={require('../../../assets/jsonAmination/right-arrow-seemore.json')}
-            autoPlay
-            loop
-            style={styles.logoList}
-          />
-        </View>
-        <FlatList
-          horizontal={true}
-          data={topics}
-          initialNumToRender={20}
-          renderItem={(item: any) => (
-            <ItemTopic
-              key={item?.item}
-              topicInfo={item?.item}
-              handleChosseTopic={() => handleChosseTopic(item?.item?.id)}
+        {topics?.length > 0 ? (
+          <>
+            {' '}
+            <View style={[styles.contentTopic]}>
+              <Lottie
+                source={require('../../../assets/jsonAmination/loading_cricle.json')}
+                autoPlay
+                loop
+                style={{width: 60}}
+              />
+              <View style={styles.viewTitle}>
+                <Text style={styles.topTitle}>Danh sách Đề tài</Text>
+                <Text style={styles.topTitle}>Số lượng: {topics?.length}</Text>
+              </View>
+              <Lottie
+                source={require('../../../assets/jsonAmination/right-arrow-seemore.json')}
+                autoPlay
+                loop
+                style={styles.logoList}
+              />
+            </View>
+            <FlatList
+              horizontal={true}
+              data={topics}
+              initialNumToRender={20}
+              renderItem={(item: any) => (
+                <ItemTopic
+                  key={item?.item}
+                  topicInfo={item?.item}
+                  handleChosseTopic={() => handleChosseTopic(item?.item?.id)}
+                />
+              )}
             />
-          )}
-        />
+          </>
+        ) : (
+          <NoneData icon title="Học kỳ chưa có ĐỀ TÀI nào"></NoneData>
+        )}
       </>
     );
   }, [topics, groupState]);

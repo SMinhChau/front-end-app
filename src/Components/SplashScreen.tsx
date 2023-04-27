@@ -8,8 +8,6 @@ import {
   StatusBar,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import Logo from '../common/logo';
-import GlobalStyles from '../common/styles/GlobalStyles';
 import Colors from '../Themes/Colors';
 import Lottie from 'lottie-react-native';
 
@@ -48,12 +46,6 @@ const SplashScreen = () => {
       <StatusBar backgroundColor={'#3355f0'} />
       <View style={styles.content}>
         <Image source={Images.background_flast} style={styles.bg} />
-        {/* <Logo
-          source={Images.logo}
-          height={300}
-          width={300}
-          tintColor={Colors.black}
-        /> */}
         <Lottie
           source={require('../../src/assets/jsonAmination/start_screen.json')}
           autoPlay

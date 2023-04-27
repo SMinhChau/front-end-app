@@ -21,6 +21,7 @@ import {
 } from '../../utilities/sizeScreen';
 
 import {checkGenger, checkTypeTraining} from '../../utilities/contants';
+import {AlertNotificationRoot} from 'react-native-alert-notification';
 
 const Account: React.FC<{}> = ({}) => {
   const navigation = useNavigation();
@@ -29,8 +30,9 @@ const Account: React.FC<{}> = ({}) => {
   const userState = useAppSelector(state => state.user.user);
 
   const handleLogout = async () => {
-    await tokenService.reset();
-    navigation.navigate(RouteNames.loginNavigation);
+    tokenService
+      .reset()
+      .then(() => navigation.navigate(RouteNames.loginNavigation));
   };
 
   const [showModal, setShowModal] = useState(false);
@@ -97,44 +99,52 @@ const Account: React.FC<{}> = ({}) => {
 
   return (
     <>
-      <Header title="Thông tin" iconRight={true}></Header>
+      <AlertNotificationRoot>
+        <Header title="Thông tin" iconRight={true}></Header>
 
-      <View style={[GlobalStyles.container, styles.content]}>
-        <View style={[styles.update]}>
+        <View style={[GlobalStyles.container, styles.content]}>
+          <View style={[styles.update]}>
+            <TouchableOpacity
+              style={styles.btnView}
+              onPress={() => {
+                setShowModal(true);
+              }}>
+              <Lottie
+                source={require('../../../src/assets/jsonAmination/update.json')}
+                autoPlay
+                loop
+                style={styles.logo}
+              />
+
+              <Text style={GlobalStyles.textPrimary}>
+                {languages['vi'].update}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={[styles.topAccount]}>{renderTop()}</View>
+          <Line lager={true}></Line>
+
+          {renderMain()}
+
           <TouchableOpacity
-            style={styles.btnView}
-            onPress={() => {
-              setShowModal(true);
-            }}>
-            <Lottie
-              source={require('../../../src/assets/jsonAmination/update.json')}
-              autoPlay
-              loop
-              style={styles.logo}
-            />
+            style={[GlobalStyles.flexDirectionRow, styles.btnAction]}
+            // onPress={() => navigation.navigate('ChangePassword')}
+          >
+            <Text style={styles.itemAction}>Đổi mật khẩu</Text>
+          </TouchableOpacity>
 
-            <Text style={GlobalStyles.textPrimary}>
-              {languages['vi'].update}
-            </Text>
+          <TouchableOpacity
+            style={[GlobalStyles.flexDirectionRow, styles.btnAction]}
+            onPress={handleLogout}>
+            <Text style={styles.logout}>{languages['vi'].logout}</Text>
+            <IconView
+              name={'ios-log-out-outline'}
+              size={24}
+              color={Colors.red}
+            />
           </TouchableOpacity>
         </View>
-        <View style={[styles.topAccount]}>{renderTop()}</View>
-        <Line lager={true}></Line>
-
-        {renderMain()}
-        <TouchableOpacity
-          style={[GlobalStyles.flexDirectionRow, styles.btnAction]}
-          onPress={() => navigation.navigate('ChangePassword')}>
-          <Text style={styles.itemAction}>Đổi mật khẩu</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[GlobalStyles.flexDirectionRow, styles.btnAction]}
-          onPress={handleLogout}>
-          <Text style={styles.logout}>{languages['vi'].logout}</Text>
-          <IconView name={'ios-log-out-outline'} size={24} color={Colors.red} />
-        </TouchableOpacity>
-      </View>
+      </AlertNotificationRoot>
 
       <ModalAccount
         visible={showModal}

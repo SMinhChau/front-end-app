@@ -9,14 +9,15 @@ import {
   responsiveWidth,
 } from '../../../utilities/sizeScreen';
 import {useAppSelector} from '../../../redux/hooks';
-import languages from '../../../languages';
+
 import moment from 'moment';
 import {ScrollView} from 'react-native-gesture-handler';
+import {DataTable} from 'react-native-paper';
 
 const TermMenu = () => {
   const termState = useAppSelector(state => state.term.term);
 
-  const INFO_TERM = [
+  const START_END = [
     {
       title: 'Tên học kỳ',
       value: termState?.name,
@@ -29,6 +30,8 @@ const TermMenu = () => {
       title: 'Ngày kết thúc',
       value: termState?.endDate,
     },
+  ];
+  const INFO_TERM = [
     {
       title: 'Ngày bắt đầu chọn đề tài',
       value: termState?.startDateChooseTopic,
@@ -89,32 +92,64 @@ const TermMenu = () => {
           style={styles.header}
           back={true}
           iconRight={true}></Header>
-        <View style={styles.containner}>
-          <ScrollView>
-            {INFO_TERM.map(item => {
-              if (item?.title === 'Tên học kỳ') {
-                return (
-                  <View style={[styles.contentTitle, GlobalStyles.centerView]}>
-                    <Text numberOfLines={1} style={[styles.titleGroup]}>
-                      {item?.title}
-                    </Text>
-                    <Text
-                      numberOfLines={1}
-                      style={[styles.titleGroup, styles.title]}>
-                      {item?.value}
-                    </Text>
-                  </View>
-                );
-              }
+
+        <View style={styles.containner_Top}>
+          {START_END.map((item, key) => {
+            if (item?.title === 'Tên học kỳ') {
               return (
-                <View style={styles.content}>
+                <View
+                  key={key}
+                  style={[styles.contentTitle, GlobalStyles.centerView]}>
                   <Text numberOfLines={1} style={[styles.titleGroup]}>
                     {item?.title}
                   </Text>
-                  <Text numberOfLines={1} style={[styles.textValue]}>
-                    {formatDate(item?.value)}
+                  <Text
+                    numberOfLines={1}
+                    style={[styles.titleGroup, styles.title]}>
+                    {item?.value}
                   </Text>
                 </View>
+              );
+            }
+            return (
+              <DataTable>
+                <DataTable.Header>
+                  <DataTable.Title
+                    textStyle={[
+                      styles.title_Group,
+                      {color: 'red', fontWeight: '700'},
+                    ]}>
+                    {item?.title}
+                  </DataTable.Title>
+                </DataTable.Header>
+
+                <DataTable.Row>
+                  <DataTable.Cell textStyle={styles.textValue}>
+                    {formatDate(item?.value)}
+                  </DataTable.Cell>
+                </DataTable.Row>
+              </DataTable>
+            );
+          })}
+        </View>
+
+        <View style={styles.containner}>
+          <ScrollView>
+            {INFO_TERM.map(item => {
+              return (
+                <DataTable>
+                  <DataTable.Header>
+                    <DataTable.Title textStyle={styles.title_Group}>
+                      {item?.title}
+                    </DataTable.Title>
+                  </DataTable.Header>
+
+                  <DataTable.Row>
+                    <DataTable.Cell textStyle={styles.textValue}>
+                      {formatDate(item?.value)}
+                    </DataTable.Cell>
+                  </DataTable.Row>
+                </DataTable>
               );
             })}
           </ScrollView>
@@ -127,11 +162,22 @@ const TermMenu = () => {
 export default TermMenu;
 
 const styles = StyleSheet.create({
+  containner_Top: {
+    width: '100%',
+    paddingHorizontal: responsiveWidth(5),
+    backgroundColor: Colors.white,
+    borderBottomRightRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderLeftWidth: 2,
+    borderRightWidth: 2,
+    borderBottomWidth: 2,
+    borderColor: '#aed9e0',
+  },
   containner: {
     flex: 1,
     justifyContent: 'flex-start',
     alignContent: 'center',
-    backgroundColor: '#d8e2dc',
+    backgroundColor: Colors.white,
     borderColor: '#aed9e0',
     borderWidth: 1,
     paddingHorizontal: responsiveWidth(16),
@@ -141,16 +187,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: responsiveWidth(10),
   },
   titleGroup: {
-    fontSize: responsiveFont(17),
+    fontSize: responsiveFont(16),
     color: Colors.textPrimary,
     fontWeight: '500',
-    paddingHorizontal: responsiveWidth(10),
+    textTransform: 'uppercase',
+  },
+  title_Group: {
+    fontSize: responsiveFont(16),
+    color: '#003049',
+    fontWeight: '500',
     textTransform: 'uppercase',
   },
   textValue: {
-    fontSize: responsiveFont(17),
+    fontSize: responsiveFont(16),
     color: '#277da1',
     fontWeight: '500',
+    textTransform: 'uppercase',
     paddingHorizontal: responsiveWidth(10),
     marginHorizontal: responsiveWidth(10),
   },
@@ -159,11 +211,17 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     paddingVertical: responsiveHeight(10),
   },
+
   title: {
     marginHorizontal: responsiveWidth(10),
   },
   contentTitle: {
+    marginTop: 5,
     backgroundColor: '#aed9e0',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+
+    borderColor: '#003049',
     paddingVertical: responsiveHeight(10),
   },
 });

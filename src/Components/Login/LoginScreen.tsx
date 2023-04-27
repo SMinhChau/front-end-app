@@ -24,10 +24,28 @@ import GlobalStyles from '../../common/styles/GlobalStyles';
 import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 import authAPI from '../../redux/apis/auth';
 
-import {responsiveHeight, responsiveWidth} from '../../utilities/sizeScreen';
+import {
+  responsiveFont,
+  responsiveHeight,
+  responsiveWidth,
+} from '../../utilities/sizeScreen';
 
 import LoadingScreen from '../../common/LoadingScreen';
 import RouteNames from '../RouteNames';
+import authService from '../../services/auth';
+import {Button, Dialog, Portal} from 'react-native-paper';
+import ButtonHandle from '../../common/ButtonHandle';
+import PopupNotification from '../../common/PopupNotification';
+import {
+  ALERT_TYPE,
+  AlertNotificationRoot,
+  Toast,
+} from 'react-native-alert-notification';
+import {
+  showMessageEror,
+  showMessageSuccess,
+  showMessageWarning,
+} from '../../utilities/utils';
 
 const Login: React.FC<{}> = () => {
   const userState = useAppSelector(state => state.user);
@@ -41,6 +59,15 @@ const Login: React.FC<{}> = () => {
   const [inputUsername, setUserName] = useState('');
   const [inputPassword, setPass] = useState('');
   const [errorPass, setErrorPass] = useState('');
+  const [isResetPass, setResetPass] = useState(false);
+
+  const [modalRestPass, setModalRestPass] = useState(false);
+  const [inputUserName, setInputUserName] = useState('');
+
+  const hideDialog = () => setModalRestPass(false);
+  const onChangeText = (text: string) => {
+    setInputUserName(text);
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -56,7 +83,7 @@ const Login: React.FC<{}> = () => {
     }
     if (userState.error) {
       setLoading(false);
-      Alert.alert('Thông báo!', 'Thông tin đăng nhập không đúng');
+      showMessageEror('Thông tin đăng nhập không đúng'!);
     }
   }, [userState]);
 
@@ -65,17 +92,45 @@ const Login: React.FC<{}> = () => {
   };
 
   const handleSubmit = async () => {
-    if (inputPassword.length < 6) {
-      setErrorPass('Mật khẩu phải lớn hơn 5 ký tự!');
+    if (inputUsername !== '') {
+      if (inputPassword.length < 6) {
+        showMessageWarning('Mật khẩu phải lớn hơn 5 ký tự!');
+      } else {
+        setErrorPass('');
+        setLoading(true);
+        await dispatch(
+          authAPI.login()({
+            username: inputUsername,
+            password: inputPassword,
+          }),
+        );
+      }
     } else {
-      setErrorPass('');
-      setLoading(true);
-      await dispatch(
-        authAPI.login()({
-          username: inputUsername,
-          password: inputPassword,
-        }),
-      );
+      showMessageWarning('Vui lòng nhập tên!');
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (inputUserName !== '') {
+      setResetPass(true);
+      await authService
+        .resetPassword({username: inputUserName})
+        .then(result => {
+          setModalRestPass(false);
+          setResetPass(false);
+          setInputUserName('');
+          showMessageSuccess(
+            `Đã gửi yêu cầu khôi phục mật khẩu đến email: ${result.data.email}`,
+          );
+        })
+        .catch(er => {
+          setModalRestPass(false);
+          setResetPass(false);
+          setInputUserName('');
+          showMessageEror('Tên đăng nhập không tồn tại!');
+        });
+    } else {
+      showMessageWarning('Vui lòng nhập tên!');
     }
   };
 
@@ -132,8 +187,14 @@ const Login: React.FC<{}> = () => {
           <View style={[GlobalStyles.flexEnd]}>
             <TouchableOpacity
               style={[styles.btnPass]}
-              // onPress={() => navigation.navigate('ChangePassword')}
-            >
+              onPress={() => {
+                Toast.show({
+                  type: ALERT_TYPE.SUCCESS,
+                  title: 'Success',
+                  textBody: 'Congrats! this is toast notification success',
+                });
+                // setModalRestPass(true);
+              }}>
               <Text style={GlobalStyles.rememberText}>Quên mật khẩu?</Text>
             </TouchableOpacity>
           </View>
@@ -164,28 +225,58 @@ const Login: React.FC<{}> = () => {
         barStyle={'dark-content'}
         backgroundColor={Colors.primaryButton}
       />
-      <Header title="Đăng nhập"></Header>
+      <AlertNotificationRoot>
+        <Header title="Đăng nhập"></Header>
 
-      <ScrollView>
-        <KeyboardAvoidingView
-          style={{flex: 1}}
-          keyboardVerticalOffset={responsiveHeight(110)}
-          behavior={'position'}>
-          <View style={styles.formView}>
-            <View style={GlobalStyles.centerView}>
-              <Lottie
-                source={require('../../assets/jsonAmination/login.json')}
-                autoPlay
-                loop
-                style={styles.logo}
-              />
+        <ScrollView>
+          <KeyboardAvoidingView
+            style={{flex: 1}}
+            keyboardVerticalOffset={responsiveHeight(110)}
+            behavior={'position'}>
+            <View style={styles.formView}>
+              <View style={GlobalStyles.centerView}>
+                <Lottie
+                  source={require('../../assets/jsonAmination/login.json')}
+                  autoPlay
+                  loop
+                  style={styles.logo}
+                />
+              </View>
+
+              {formLogin}
             </View>
-
-            {formLogin}
-          </View>
-        </KeyboardAvoidingView>
-      </ScrollView>
+          </KeyboardAvoidingView>
+        </ScrollView>
+      </AlertNotificationRoot>
       {isLoading === true && <LoadingScreen />}
+      {isResetPass === true && <LoadingScreen />}
+
+      <Portal>
+        <Dialog
+          visible={modalRestPass}
+          onDismiss={hideDialog}
+          style={{backgroundColor: Colors.white}}>
+          <Dialog.Title style={styles.titleModal}>
+            Lấy lại mật khẩu
+          </Dialog.Title>
+          <Dialog.Content>
+            <TextInput
+              style={styles.inputModal}
+              placeholder={'Tên đăng nhập'}
+              onChangeText={text => onChangeText(text)}
+            />
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setModalRestPass(false)}>Hủy</Button>
+            <ButtonHandle
+              onPress={() => handleResetPassword()}
+              icon
+              iconName="paper-plane-outline"
+              title="Gửi"
+            />
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </View>
   );
 };
@@ -204,6 +295,15 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#fae1dd',
     paddingHorizontal: responsiveWidth(30),
+    fontSize: 16,
+    backgroundColor: Colors.white,
+  },
+  inputModal: {
+    width: '100%',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#73c3ed',
+    paddingHorizontal: responsiveWidth(10),
     fontSize: 16,
     backgroundColor: Colors.white,
   },
@@ -266,5 +366,9 @@ const styles = StyleSheet.create({
   },
   btn: {
     borderColor: Colors.blueBoder,
+  },
+  titleModal: {
+    fontSize: responsiveFont(15),
+    color: '#003049',
   },
 });

@@ -1,9 +1,7 @@
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
-
 import Colors from '../Themes/Colors';
 import IconView from './IconView';
 import {useNavigation} from '@react-navigation/native';
-import GlobalStyles from './styles/GlobalStyles';
 import RouteNames from '../Components/RouteNames';
 import {responsiveFont, responsiveHeight} from '../utilities/sizeScreen';
 
@@ -85,8 +83,6 @@ const styles = StyleSheet.create({
     width: '90%',
     justifyContent: 'center',
     alignItems: 'center',
-    // marginLeft: 90,
-    // marginRight: 90,
   },
   textView: {
     textAlign: 'center',
