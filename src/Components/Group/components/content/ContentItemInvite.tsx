@@ -1,11 +1,10 @@
-import {useMemo, useState} from 'react';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {useMemo} from 'react';
+import {View, StyleSheet, Text} from 'react-native';
 import ButtonHandle from '../../../../common/ButtonHandle';
-import CloseButton from '../../../../common/CloseButton';
+
 import IconView from '../../../../common/IconView';
 import GlobalStyles from '../../../../common/styles/GlobalStyles';
 import Colors from '../../../../Themes/Colors';
-import Group from '../../../../utilities/Contant/Group';
 import {
   responsiveFont,
   responsiveHeight,

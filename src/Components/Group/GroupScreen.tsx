@@ -23,6 +23,7 @@ import topicService from '../../services/topic';
 import Topic from '../../utilities/Contant/Topic';
 import ModelCreateGroup from './components/ModelCreateGroup';
 import {MENU} from './content';
+import {AlertNotificationRoot} from 'react-native-alert-notification';
 
 const Group: React.FC<{}> = () => {
   const groupState = useAppSelector(state => state.group);
@@ -133,34 +134,36 @@ const Group: React.FC<{}> = () => {
 
   return (
     <>
-      <Header title="Nhóm" iconRight={true}></Header>
-      <View style={[GlobalStyles.container, styles.container]}>
-        {checkStartDate ? (
-          <View style={styles.menu}>
-            <FlatList
-              numColumns={3}
-              data={MENU}
-              renderItem={({item, index}) => renderMenuItem(item, index)}
-            />
-          </View>
-        ) : (
-          <NoneData icon title="Chưa đến thời gian chọn nhóm"></NoneData>
-        )}
+      <AlertNotificationRoot>
+        <Header title="Nhóm" iconRight={true}></Header>
+        <View style={[GlobalStyles.container, styles.container]}>
+          {checkStartDate ? (
+            <View style={styles.menu}>
+              <FlatList
+                numColumns={3}
+                data={MENU}
+                renderItem={({item, index}) => renderMenuItem(item, index)}
+              />
+            </View>
+          ) : (
+            <NoneData icon title="Chưa đến thời gian chọn nhóm"></NoneData>
+          )}
 
-        <ModalInfoGroup
-          visible={showModal}
-          infoGroup={groupState?.group}
-          title={'Thông tin nhóm'}
-          topicInfo={topic as Topic}
-          termInfoGroup={termState?.term}
-          modalClose={setShowModal}></ModalInfoGroup>
+          <ModalInfoGroup
+            visible={showModal}
+            infoGroup={groupState?.group}
+            title={'Thông tin nhóm'}
+            topicInfo={topic as Topic}
+            termInfoGroup={termState?.term}
+            modalClose={setShowModal}></ModalInfoGroup>
 
-        <ModelCreateGroup
-          visible={showModalCreateGroup}
-          title={'Tạo nhóm'}
-          termCreateGroup={termState?.term}
-          modalClose={setShowModalCreateGroup}></ModelCreateGroup>
-      </View>
+          <ModelCreateGroup
+            visible={showModalCreateGroup}
+            title={'Tạo nhóm'}
+            termCreateGroup={termState?.term}
+            modalClose={setShowModalCreateGroup}></ModelCreateGroup>
+        </View>
+      </AlertNotificationRoot>
     </>
   );
 };

@@ -58,51 +58,49 @@ const Account: React.FC<{}> = ({}) => {
     );
   };
 
-  const renderMain = () => {
-    return useMemo(
-      () => (
-        <View style={styles.main}>
-          <TextItemAccount
-            textLeft={languages['vi'].gender}
-            textRight={checkGenger(userState?.gender)}
-            line={true}></TextItemAccount>
+  const renderMain = useMemo(
+    () => (
+      <View style={styles.main}>
+        <TextItemAccount
+          textLeft={languages['vi'].gender}
+          textRight={checkGenger(userState?.gender)}
+          line={true}></TextItemAccount>
 
-          <TextItemAccount
-            textLeft={languages['vi'].schoolYear}
-            textRight={userState?.schoolYear}
-            line={true}></TextItemAccount>
+        <TextItemAccount
+          textLeft={languages['vi'].schoolYear}
+          textRight={userState?.schoolYear}
+          line={true}></TextItemAccount>
 
-          <TextItemAccount
-            textLeft={languages['vi'].special}
-            textRight={majorState?.name}
-            line={true}></TextItemAccount>
+        <TextItemAccount
+          textLeft={languages['vi'].special}
+          textRight={majorState?.name}
+          line={true}></TextItemAccount>
 
-          <TextItemAccount
-            textLeft={languages['vi'].typeTraining}
-            textRight={checkTypeTraining(userState?.typeTraining)}
-            line={true}></TextItemAccount>
+        <TextItemAccount
+          textLeft={languages['vi'].typeTraining}
+          textRight={checkTypeTraining(userState?.typeTraining)}
+          line={true}></TextItemAccount>
 
-          <TextItemAccount
-            textLeft={languages['vi'].numberPhone}
-            textRight={userState?.phoneNumber}
-            line={true}></TextItemAccount>
+        <TextItemAccount
+          textLeft={languages['vi'].numberPhone}
+          textRight={userState?.phoneNumber}
+          line={true}></TextItemAccount>
 
-          <TextItemAccount
-            textLeft={languages['vi'].email}
-            textRight={userState?.email}
-            line={true}></TextItemAccount>
-        </View>
-      ),
-      [userState, majorState],
-    );
-  };
+        <TextItemAccount
+          textLeft={languages['vi'].email}
+          textRight={userState?.email}
+          line={true}></TextItemAccount>
+      </View>
+    ),
+    [userState, majorState],
+  );
 
   return (
     <>
       <AlertNotificationRoot>
         <Header title="Thông tin" iconRight={true}></Header>
 
-        <View style={[GlobalStyles.container, styles.content]}>
+        <View style={styles.content}>
           <View style={[styles.update]}>
             <TouchableOpacity
               style={styles.btnView}
@@ -124,17 +122,19 @@ const Account: React.FC<{}> = ({}) => {
           <View style={[styles.topAccount]}>{renderTop()}</View>
           <Line lager={true}></Line>
 
-          {renderMain()}
-
+          {renderMain}
           <TouchableOpacity
             style={[GlobalStyles.flexDirectionRow, styles.btnAction]}
-            // onPress={() => navigation.navigate('ChangePassword')}
-          >
+            onPress={() => navigation.navigate('ChangePassword')}>
             <Text style={styles.itemAction}>Đổi mật khẩu</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[GlobalStyles.flexDirectionRow, styles.btnAction]}
+            style={[
+              GlobalStyles.flexDirectionRow,
+              styles.btnAction,
+              {zIndex: 100000},
+            ]}
             onPress={handleLogout}>
             <Text style={styles.logout}>{languages['vi'].logout}</Text>
             <IconView
@@ -149,7 +149,8 @@ const Account: React.FC<{}> = ({}) => {
       <ModalAccount
         visible={showModal}
         title={languages['vi'].updateInfo}
-        onPressClose={setShowModal}></ModalAccount>
+        onPressClose={setShowModal}
+      />
     </>
   );
 };
@@ -157,8 +158,7 @@ export default Account;
 
 const styles = StyleSheet.create({
   content: {
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    backgroundColor: '#fff',
   },
   topAccount: {
     flexDirection: 'row',
@@ -183,7 +183,8 @@ const styles = StyleSheet.create({
   main: {
     marginTop: 20,
     marginHorizontal: 20,
-    flexDirection: 'column',
+    // flexDirection: 'column',
+    // backgroundColor: '#ccc',
   },
   logout: {
     color: Colors.red,
@@ -222,6 +223,7 @@ const styles = StyleSheet.create({
     color: Colors.drakCyonBoder,
   },
   btnAction: {
+    // backgroundColor: '#ccf',
     paddingVertical: responsiveHeight(10),
   },
 });

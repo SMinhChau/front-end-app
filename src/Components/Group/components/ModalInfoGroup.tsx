@@ -6,7 +6,6 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 
 import {Button, Dialog, Modal, Portal, TextInput} from 'react-native-paper';
@@ -38,6 +37,11 @@ import groupAPI from '../../../redux/apis/group';
 import Term from '../../../utilities/Contant/Term';
 
 import LoadingScreen from '../../../common/LoadingScreen';
+import {
+  showMessageEror,
+  showMessageSuccess,
+  showMessageWarning,
+} from '../../../utilities/utils';
 
 interface Props {
   title?: string;
@@ -84,7 +88,6 @@ const ModalInfoGroup: React.FC<Props> = ({
 
   const [topic, setTopic] = useState<Topic>();
   const groupState = useAppSelector(state => state.group);
-  const topicState = useAppSelector(state => state.topic);
   const [loading, setLoading] = useState(false);
   const [isRequest, setRequest] = useState(false);
 
@@ -109,8 +112,8 @@ const ModalInfoGroup: React.FC<Props> = ({
     setLoading(true);
     dispatch(groupAPI.outMyGroup()(id)).then(result => {
       setLoading(false);
-      Alert.alert('Thông báo', 'Đã xóa nhóm thành công');
       modalClose(false);
+      showMessageSuccess('Đã xóa nhóm thành công');
     });
   };
 
@@ -119,21 +122,27 @@ const ModalInfoGroup: React.FC<Props> = ({
   };
 
   const sendRequestToGroup = async () => {
-    setRequest(true);
-    await groupService
-      .sendRequestGroup(infoGroup?.id as number, content)
-      .then(result => {
-        setRequest(false);
-        Alert.alert('Thông báo', 'Đã gửi yêu cầu tham gia nhóm');
-        seModalRequestToJoinGroup(false);
-        modalClose(false);
-      })
-      .catch(error => {
-        setRequest(false);
-        Alert.alert('Thông báo', 'Gửi yêu cầu thất bại');
-        seModalRequestToJoinGroup(false);
-        modalClose(false);
-      });
+    console.log('vontent', content);
+
+    if (content !== '') {
+      setRequest(true);
+      await groupService
+        .sendRequestGroup(infoGroup?.id as number, content)
+        .then(result => {
+          setRequest(false);
+          seModalRequestToJoinGroup(false);
+          modalClose(false);
+          showMessageSuccess('Đã gửi yêu cầu tham gia nhóm');
+        })
+        .catch(error => {
+          setRequest(false);
+          seModalRequestToJoinGroup(false);
+          modalClose(false);
+          showMessageEror('Gửi yêu cầu thất bại!');
+        });
+    } else {
+      showMessageWarning('Vui lòng nhập nội dung!');
+    }
   };
 
   const renderListMember = useMemo(
@@ -255,14 +264,6 @@ const ModalInfoGroup: React.FC<Props> = ({
         ) : (
           <NoneData icon title="Nhóm không có sinh viên"></NoneData>
         )}
-
-        {/* {topic?.id ? 
-          {renderInfoTopic}
-         : (
-          <>
-            <NoneData icon title="Nhóm chưa có Đề tài"></NoneData>
-          </>
-        )} */}
       </View>
     );
   }, [listMember]);

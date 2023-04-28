@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Image, StatusBar, StyleSheet, Text, View} from 'react-native';
 import Header from '../../../common/Header';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
@@ -12,13 +12,12 @@ import {useAppSelector} from '../../../redux/hooks';
 import majorService from '../../../services/major';
 import Lecturer from '../../../utilities/Contant/Lecturer';
 import {List} from 'react-native-paper';
-import IconView from '../../../common/IconView';
+
 import {FlatList} from 'react-native-gesture-handler';
 import {Images} from '../../../assets/images/Images';
 import {checkDegree, checkGenger, checkRole} from '../../../utilities/contants';
 import {isEmpty} from '../../../utilities/utils';
 import LoadingScreen from '../../../common/LoadingScreen';
-import {log} from 'react-native-reanimated';
 
 const LectureMenu = () => {
   const majorState = useAppSelector(state => state.major.major);
@@ -33,7 +32,6 @@ const LectureMenu = () => {
   const getLecturersOfmajor = async () => {
     setLoading(true);
     if (!isEmpty(majorState?.id)) {
-      console.log('majorState?.id', majorState?.id);
       await majorService
         .getLecturerByMajor(Number(majorState?.id))
         .then(result => {

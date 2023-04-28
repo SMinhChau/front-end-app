@@ -1,15 +1,6 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {
-  TouchableOpacity,
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  ScrollView,
-  useWindowDimensions,
-  Alert,
-} from 'react-native';
-import Lottie from 'lottie-react-native';
+import React, {useEffect, useMemo, useState} from 'react';
+import {View, StyleSheet, FlatList, useWindowDimensions} from 'react-native';
+
 import {TabView, SceneMap} from 'react-native-tab-view';
 import Header from '../../../common/Header';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
@@ -23,12 +14,11 @@ import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import groupService from '../../../services/group';
 import {TypeRequestGroup} from '../../../utilities/contants';
 
-import {isEmpty} from '../../../utilities/utils';
+import {isEmpty, showMessageSuccess} from '../../../utilities/utils';
 import ContentItemInvite from '../components/content/ContentItemInvite';
 import LoadingScreen from '../../../common/LoadingScreen';
-import {log} from 'react-native-reanimated';
 import groupAPI from '../../../redux/apis/group';
-import NoneData from '../../Section/NoneData';
+import {AlertNotificationRoot} from 'react-native-alert-notification';
 
 const InviteJoinGroup = () => {
   const layout = useWindowDimensions();
@@ -99,7 +89,7 @@ const InviteJoinGroup = () => {
       .deleteRequest(id)
       .then(() => {
         setLoading(false);
-        Alert.alert('Thông báo', 'Đã hủy yêu cầu');
+        showMessageSuccess('Đã hủy yêu cầu');
       })
       .catch(() => {});
   };
@@ -110,7 +100,7 @@ const InviteJoinGroup = () => {
       .acceptRequest(id)
       .then(() => {
         setLoading(false);
-        Alert.alert('Thông báo', 'Đã duyệt tham gia nhóm');
+        showMessageSuccess('Đã duyệt tham gia nhóm');
       })
       .catch(() => {});
     dispatch(groupAPI.getMyGroup()(termState?.term?.id));
@@ -141,8 +131,6 @@ const InviteJoinGroup = () => {
   };
 
   const renderInvitedStudentJionGroup = useMemo(() => {
-    console.log('listInvitedToStudent', listInvitedToStudent);
-
     return (
       <>
         <>
@@ -185,25 +173,27 @@ const InviteJoinGroup = () => {
   }, [listInviteReceidFromStudent]);
   return (
     <>
-      <View style={GlobalStyles.container}>
-        <View style={styles.containner}>
-          <Header
-            title="Lời mời tham gia nhóm"
-            iconLeft={true}
-            home={false}
-            style={styles.header}
-            back={true}
-            iconRight={false}></Header>
-          <TabView
-            navigationState={{index, routes}}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            style={styles.contentTab}
-            initialLayout={{width: layout.width}}
-          />
+      <AlertNotificationRoot>
+        <View style={GlobalStyles.container}>
+          <View style={styles.containner}>
+            <Header
+              title="Lời mời tham gia nhóm"
+              iconLeft={true}
+              home={false}
+              style={styles.header}
+              back={true}
+              iconRight={false}></Header>
+            <TabView
+              navigationState={{index, routes}}
+              renderScene={renderScene}
+              onIndexChange={setIndex}
+              style={styles.contentTab}
+              initialLayout={{width: layout.width}}
+            />
+          </View>
+          {isLoading && <LoadingScreen />}
         </View>
-        {isLoading && <LoadingScreen />}
-      </View>
+      </AlertNotificationRoot>
     </>
   );
 };

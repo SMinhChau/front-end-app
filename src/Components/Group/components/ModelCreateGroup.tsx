@@ -13,9 +13,13 @@ import languages from '../../../languages';
 import ButtonHandle from '../../../common/ButtonHandle';
 import groupAPI from '../../../redux/apis/group';
 
-import {result} from 'lodash';
 import Term from '../../../utilities/Contant/Term';
-import {isEmpty} from '../../../utilities/utils';
+import {
+  isEmpty,
+  showMessageEror,
+  showMessageSuccess,
+  showMessageWarning,
+} from '../../../utilities/utils';
 import LoadingScreen from '../../../common/LoadingScreen';
 
 interface Props {
@@ -28,7 +32,6 @@ interface Props {
 
 const ModelCreateGroup: React.FC<Props> = ({
   title,
-  onPressClose,
   termCreateGroup,
   visible,
   modalClose,
@@ -47,24 +50,30 @@ const ModelCreateGroup: React.FC<Props> = ({
   };
 
   const handleCreatgroup = () => {
-    if (!isEmpty(term?.id)) {
-      setLoading(true);
-      dispatch(
-        groupAPI.createGroup()({
-          termId: term?.id as number,
-          name: nameGroupInput,
-        }),
-      )
-        .then(result => {
-          setLoading(false);
-          Alert.alert('Thông báo', 'Tạo nhóm thành công');
-          modalClose(false);
-        })
-        .catch(error => {
-          setLoading(false);
-          Alert.alert('Thông báo', 'Tạo nhóm không thành công');
-        });
-      setNameGroupInput('');
+    if (nameGroupInput !== '') {
+      if (!isEmpty(term?.id)) {
+        setLoading(true);
+        dispatch(
+          groupAPI.createGroup()({
+            termId: term?.id as number,
+            name: nameGroupInput,
+          }),
+        )
+          .then(result => {
+            setLoading(false);
+            modalClose(false);
+            showMessageSuccess('Tạo nhóm thành công!');
+          })
+          .catch(error => {
+            setLoading(false);
+            modalClose(false);
+            showMessageEror('Tạo nhóm không thành công!');
+          });
+        setNameGroupInput('');
+      }
+    } else {
+      modalClose(false);
+      showMessageWarning('Vui lòng nhập tên nhóm!');
     }
   };
 
@@ -110,6 +119,7 @@ const ModelCreateGroup: React.FC<Props> = ({
           </ScrollView>
         </Modal>
       </Portal>
+
       {loading && <LoadingScreen />}
     </>
   );

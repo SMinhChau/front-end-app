@@ -17,6 +17,7 @@ import tokenService from '../services/token';
 import {useAppDispatch, useAppSelector} from '../redux/hooks';
 
 import authAPI from '../redux/apis/auth';
+import authService from '../services/auth';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
@@ -31,8 +32,16 @@ const SplashScreen = () => {
     );
 
     const token = await tokenService.getRefreshToken();
-    if (token && userState?.id !== null) {
-      await dispatch(authAPI.getInfo()());
+    console.log('token -> ', token);
+    console.log('userState -> ', userState);
+
+    if (token !== null && userState?.id === null) {
+      await authService
+        .getInfo()
+        .then(result => {
+          console.log('getInfo', result);
+        })
+        .catch(er => console.log(er));
       navigation.navigate(RouteNames.TabNavigation);
     } else navigation.navigate(RouteNames.loginNavigation);
   };

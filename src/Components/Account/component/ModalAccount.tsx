@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Alert,
   Image,
 } from 'react-native';
 import CloseButton from '../../../common/CloseButton';
@@ -23,12 +22,18 @@ import languages from '../../../languages';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
 import TextInputView from '../../../common/TextInputView';
 import IconView from '../../../common/IconView';
-import {validateEmail} from '../../../utilities/utils';
+import {
+  showMessageEror,
+  showMessageSuccess,
+  validateEmail,
+} from '../../../utilities/utils';
 import GenderButton from '../../../common/GenderButton';
 import {Images} from '../../../assets/images/Images';
-import authAPI from '../../../redux/apis/auth';
 import ButtonHandle from '../../../common/ButtonHandle';
 import LoadingScreen from '../../../common/LoadingScreen';
+import {AlertNotificationRoot} from 'react-native-alert-notification';
+import authService from '../../../services/auth';
+import {updateUser} from '../../../redux/slices/UserSlices';
 
 interface Props {
   title: string;
@@ -114,17 +119,21 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
       formData.append('avatar', basicInfo?.avatar);
     }
 
-    await dispatch(authAPI.updateUserInfo()(formData));
-    if (userState?.updated === true) {
-      setLoading(false);
-      onPressClose(false);
-      Alert.alert('Thông báo!', 'Cập nhật thành công!');
-    }
-    if (userState?.updateError === true) {
-      setLoading(false);
-      onPressClose(false);
-      Alert.alert('Thông báo!', 'Cập nhật không thành công!');
-    }
+    await authService
+      .updateUserInfo(formData)
+      .then(result => {
+        console.log('updateUserInfo  ==== result', result);
+        showMessageSuccess('Cập nhật thành công!');
+        setLoading(false);
+        dispatch(updateUser(result.data));
+        onPressClose(false);
+      })
+      .catch(er => {
+        console.log('er', er);
+        setLoading(false);
+        showMessageEror('Cập nhật không thành công!');
+        onPressClose(false);
+      });
   };
 
   const isError = basicInfo.email ? !validateEmail(basicInfo.email) : false;
@@ -261,6 +270,7 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
           </ScrollView>
         </Modal>
       </Portal>
+
       {isLoading && <LoadingScreen />}
     </>
   );
@@ -278,13 +288,14 @@ const styles = StyleSheet.create({
   },
   top: {
     flex: 1,
-
+    backgroundColor: Colors.white,
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: responsiveHeight(10),
   },
   topLeft: {
     flex: 1,
+
     flexDirection: 'row',
     paddingHorizontal: responsiveWidth(15),
     alignItems: 'center',
@@ -297,6 +308,7 @@ const styles = StyleSheet.create({
     margin: responsiveHeight(20),
   },
   main: {
+    backgroundColor: Colors.white,
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -1,12 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {
-  TouchableOpacity,
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  ScrollView,
-} from 'react-native';
+import {View, Text, StyleSheet, FlatList} from 'react-native';
 import Lottie from 'lottie-react-native';
 import Header from '../../../common/Header';
 import IconView from '../../../common/IconView';
@@ -20,6 +13,7 @@ import {
 import {useAppSelector} from '../../../redux/hooks';
 import groupService from '../../../services/group';
 import GroupItem from './GroupItem';
+import {AlertNotificationRoot} from 'react-native-alert-notification';
 
 const ItemListGroup = () => {
   const groupState = useAppSelector(state => state.group);
@@ -83,16 +77,18 @@ const ItemListGroup = () => {
   return (
     <>
       <View style={GlobalStyles.container}>
-        <View style={styles.containner}>
-          <Header
-            title="Danh sách nhóm"
-            iconLeft={true}
-            home={false}
-            style={styles.header}
-            back={true}
-            iconRight={false}></Header>
-          {ListGroup}
-        </View>
+        <AlertNotificationRoot>
+          <View style={styles.containner}>
+            <Header
+              title="Danh sách nhóm"
+              iconLeft={true}
+              home={false}
+              style={styles.header}
+              back={true}
+              iconRight={false}></Header>
+            {ListGroup}
+          </View>
+        </AlertNotificationRoot>
       </View>
     </>
   );

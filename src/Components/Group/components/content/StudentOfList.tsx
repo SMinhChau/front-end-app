@@ -1,45 +1,22 @@
-import {useCallback, useEffect, useMemo, useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  Image,
-  Alert,
-} from 'react-native';
-import {
-  Button,
-  Card,
-  Dialog,
-  Modal,
-  Portal,
-  TextInput,
-} from 'react-native-paper';
-import Lottie from 'lottie-react-native';
+import {useMemo, useState} from 'react';
+import {View, StyleSheet, Text, Image, Alert} from 'react-native';
+import {Button, Dialog, Portal, TextInput} from 'react-native-paper';
 import {Images} from '../../../../assets/images/Images';
 import ButtonHandle from '../../../../common/ButtonHandle';
-import CloseButton from '../../../../common/CloseButton';
-import IconView from '../../../../common/IconView';
-import GlobalStyles from '../../../../common/styles/GlobalStyles';
 import languages from '../../../../languages';
 import {useAppSelector} from '../../../../redux/hooks';
 import groupService from '../../../../services/group';
-import topicService from '../../../../services/topic';
 import Colors from '../../../../Themes/Colors';
-import Group from '../../../../utilities/Contant/Group';
 import Term from '../../../../utilities/Contant/Term';
-
-import User, {TypeRequestGroup} from '../../../../utilities/contants';
+import User from '../../../../utilities/contants';
 import {
   responsiveFont,
   responsiveHeight,
   responsiveWidth,
 } from '../../../../utilities/sizeScreen';
-import {isEmpty} from '../../../../utilities/utils';
-import TextItemAccount from '../../../Account/component/TextItemAccount';
-import ModalInfoGroup from '../ModalInfoGroup';
-import {color, log} from 'react-native-reanimated';
+
 import LoadingScreen from '../../../../common/LoadingScreen';
+import {showMessageSuccess} from '../../../../utilities/utils';
 
 interface Props {
   title?: string;
@@ -58,15 +35,12 @@ const StudentOfList: React.FC<Props> = ({
   notGroup,
   isStudentInvited,
 }) => {
-  const [visible, setVisible] = useState(false);
   const groupState = useAppSelector(state => state.group);
   const termState = useAppSelector(state => state.term);
   const [content, SetContent] = useState('');
   const [isInvite, setInvite] = useState(false);
   const [modalInviteStudentJionGtoup, setModalInviteStudentJionGtoup] =
     useState(false);
-
-  console.log('isStudentInvited 2', isStudentInvited);
 
   const onChangeText = (text: string) => {
     SetContent(text);
@@ -104,16 +78,14 @@ const StudentOfList: React.FC<Props> = ({
         content,
       )
       .then(result => {
-        console.log('sendInviteToStudent result ====', result);
         setInvite(false);
-        Alert.alert('Thông báo', 'Đã gửi lời mời tham gia nhóm');
         setModalInviteStudentJionGtoup(false);
+        showMessageSuccess('Đã gửi lời mời tham gia nhóm');
       })
       .catch(error => {
-        console.log('sendInviteToStudent error', error);
         setInvite(false);
-        Alert.alert('Thông báo', 'Lời mời tham gia nhóm chưa được gửi');
         setModalInviteStudentJionGtoup(false);
+        showMessageSuccess('Lời mời tham gia nhóm chưa được gửi');
       });
     SetContent('');
   };

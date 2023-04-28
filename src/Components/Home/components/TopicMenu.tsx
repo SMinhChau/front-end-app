@@ -1,17 +1,9 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import Lottie from 'lottie-react-native';
 import moment from 'moment';
 import 'moment/locale/vi';
-import {
-  StatusBar,
-  StyleSheet,
-  View,
-  Text,
-  Alert,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {StatusBar, StyleSheet, View, Text, FlatList} from 'react-native';
+
 import Header from '../../../common/Header';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
 import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
@@ -24,17 +16,16 @@ import {
 } from '../../../utilities/sizeScreen';
 
 import NoneData from '../../Section/NoneData';
-import {isEmpty, truncate} from 'lodash';
-import {Avatar, Banner, Card, IconButton} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import {Card} from 'react-native-paper';
 import IconView from '../../../common/IconView';
 import topicService from '../../../services/topic';
 import Topic from '../../../utilities/Contant/Topic';
 import ItemTopic from './ItemTopic';
 
-import {log} from 'react-native-reanimated';
 import LoadingScreen from '../../../common/LoadingScreen';
 import groupAPI from '../../../redux/apis/group';
+import {AlertNotificationRoot} from 'react-native-alert-notification';
+import {showMessageSuccess} from '../../../utilities/utils';
 
 const TopicMenu = () => {
   const termState = useAppSelector(state => state.term.term);
@@ -45,12 +36,10 @@ const TopicMenu = () => {
   const [topics, setTopics] = useState<Topic[]>();
 
   useEffect(() => {
-    // getMyTopic();
     getToppicList();
   }, [termState]);
 
   const dispatch = useAppDispatch();
-  const navigation = useNavigation();
 
   const getToppicList = () => {
     if (termState?.id) {
@@ -144,10 +133,9 @@ const TopicMenu = () => {
   const handleChosseTopic = async (id: any) => {
     setLoading(true);
     await topicService.chooseTopic(termState?.id, id).then(async result => {
-      console.log(' topicService.chooseTopic', result);
       setLoading(false);
       await dispatch(groupAPI.getMyGroup()(termState?.id));
-      Alert.alert('Thông báo', 'Đã chọn đề tài ');
+      showMessageSuccess('Đã chọn đề tài');
     });
   };
 
@@ -156,7 +144,6 @@ const TopicMenu = () => {
       <>
         {topics?.length > 0 ? (
           <>
-            {' '}
             <View style={[styles.contentTopic]}>
               <Lottie
                 source={require('../../../assets/jsonAmination/loading_cricle.json')}
@@ -196,55 +183,57 @@ const TopicMenu = () => {
   }, [topics, groupState]);
   return (
     <>
-      <View style={GlobalStyles.container}>
-        <StatusBar
-          barStyle={'dark-content'}
-          backgroundColor={Colors.primaryButton}
-        />
-        <View style={styles.containner}>
-          <Header
-            title="Đề tài"
-            iconLeft={true}
-            home={false}
-            style={styles.header}
-            back={true}
-            iconRight={true}></Header>
+      <AlertNotificationRoot>
+        <View style={GlobalStyles.container}>
+          <StatusBar
+            barStyle={'dark-content'}
+            backgroundColor={Colors.primaryButton}
+          />
+          <View style={styles.containner}>
+            <Header
+              title="Đề tài"
+              iconLeft={true}
+              home={false}
+              style={styles.header}
+              back={true}
+              iconRight={true}></Header>
 
-          {isStartDateChooseTopic() === false ? (
-            <>
-              <View style={styles.nonChooseTopic}>
-                <View style={styles.contentNoData}>
-                  <NoneData
-                    icon
-                    title="Chưa đến thời gian chọn đề tài!"></NoneData>
-                </View>
+            {isStartDateChooseTopic() === false ? (
+              <>
+                <View style={styles.nonChooseTopic}>
+                  <View style={styles.contentNoData}>
+                    <NoneData
+                      icon
+                      title="Chưa đến thời gian chọn đề tài!"></NoneData>
+                  </View>
 
-                <View style={styles.bottomView}>
-                  <Text style={styles.dateNoChooseTopic}>
-                    Thời gian chọn đề tài là:
-                  </Text>
-                  <Lottie
-                    source={require('../../../assets/jsonAmination/start.json')}
-                    autoPlay
-                    loop
-                    style={styles.logo}
-                  />
-                  <Text style={[styles.dateNoChooseTopic, styles.leftTitle]}>
-                    {startDateChooseTopicFormat}
-                  </Text>
+                  <View style={styles.bottomView}>
+                    <Text style={styles.dateNoChooseTopic}>
+                      Thời gian chọn đề tài là:
+                    </Text>
+                    <Lottie
+                      source={require('../../../assets/jsonAmination/start.json')}
+                      autoPlay
+                      loop
+                      style={styles.logo}
+                    />
+                    <Text style={[styles.dateNoChooseTopic, styles.leftTitle]}>
+                      {startDateChooseTopicFormat}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            </>
-          ) : (
-            <>
-              <View style={GlobalStyles.container}>
-                {renderContentTopic}
-                {renderTopicList}
-              </View>
-            </>
-          )}
+              </>
+            ) : (
+              <>
+                <View style={GlobalStyles.container}>
+                  {renderContentTopic}
+                  {renderTopicList}
+                </View>
+              </>
+            )}
+          </View>
         </View>
-      </View>
+      </AlertNotificationRoot>
       {isLoading && <LoadingScreen />}
     </>
   );

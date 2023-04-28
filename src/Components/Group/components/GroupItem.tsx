@@ -30,16 +30,7 @@ interface Props {
   termInfoGroup?: Term;
   menberInfo?: string;
 }
-const GroupItem: React.FC<Props> = ({
-  title,
-  icon,
-  onPress,
-  join,
-  handleJoin,
-  groupInfo,
-  termInfoGroup,
-  menberInfo,
-}) => {
+const GroupItem: React.FC<Props> = ({groupInfo}) => {
   const [infoGroupItem, setInfoGroupItem] = useState<Group>();
   const [member, setMember] = useState('');
   const [topic, setTopic] = useState<Topic | null>();

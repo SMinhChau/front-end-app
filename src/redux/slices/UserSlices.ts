@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import authAPI from '../apis/auth';
 import User from '../../utilities/contants';
 import Transcript from '../../utilities/Contant/Transcript';
@@ -63,7 +63,11 @@ const initialState = {
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    updateUser: (state, action: PayloadAction<User>) => {
+      state.user = action.payload;
+    },
+  },
   extraReducers: builder => {
     builder.addCase(authAPI.login().fulfilled, (state, action) => {
       state.user = action.payload.user;
@@ -79,19 +83,19 @@ export const userSlice = createSlice({
       state.user = action.payload;
     });
 
-    builder.addCase(authAPI.updateUserInfo().pending, state => {
-      state.updated = false;
-      state.error = false;
-    });
-    builder.addCase(authAPI.updateUserInfo().fulfilled, (state, action) => {
-      state.user = action.payload;
-      state.updated = true;
-      state.updateError = false;
-    });
-    builder.addCase(authAPI.updateUserInfo().rejected, state => {
-      state.updated = false;
-      state.updateError = true;
-    });
+    // builder.addCase(authAPI.updateUserInfo().pending, state => {
+    //   state.updated = false;
+    //   state.error = false;
+    // });
+    // builder.addCase(authAPI.updateUserInfo().fulfilled, (state, action) => {
+    //   state.user = action.payload;
+    //   state.updated = true;
+    //   state.updateError = false;
+    // });
+    // builder.addCase(authAPI.updateUserInfo().rejected, state => {
+    //   state.updated = false;
+    //   state.updateError = true;
+    // });
 
     builder.addCase(authAPI.getTranscripts().fulfilled, (state, action) => {
       console.log('======transcript  action', action);
@@ -99,3 +103,5 @@ export const userSlice = createSlice({
     });
   },
 });
+
+export const {updateUser} = userSlice.actions;

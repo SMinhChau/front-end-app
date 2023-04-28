@@ -10,7 +10,7 @@ import {
   responsiveWidth,
 } from '../../../utilities/sizeScreen';
 import NoneData from '../../Section/NoneData';
-import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
+import {useAppSelector} from '../../../redux/hooks';
 
 import ItemTopic from '../../Home/components/ItemTopic';
 import {useNavigation} from '@react-navigation/native';
@@ -23,7 +23,6 @@ const ItemTopicMenu = () => {
 
   const [topic, setTopic] = useState<Topic>();
 
-  const dispatch = useAppDispatch();
   const navigation = useNavigation();
 
   useEffect(() => {

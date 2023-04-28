@@ -1,14 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {
-  TouchableOpacity,
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  ScrollView,
-  useWindowDimensions,
-} from 'react-native';
-import Lottie from 'lottie-react-native';
+import {View, StyleSheet, FlatList, useWindowDimensions} from 'react-native';
+
 import {TabView, SceneMap} from 'react-native-tab-view';
 import Header from '../../../common/Header';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
@@ -19,14 +11,13 @@ import {
   responsiveWidth,
 } from '../../../utilities/sizeScreen';
 import {useAppSelector} from '../../../redux/hooks';
-import IconView from '../../../common/IconView';
-import GroupItem from './GroupItem';
 import authService from '../../../services/auth';
 
 import groupService from '../../../services/group';
 import {TypeRequestGroup} from '../../../utilities/contants';
 import StudentOfList from './content/StudentOfList';
-import {log} from 'react-native-reanimated';
+
+import {AlertNotificationRoot} from 'react-native-alert-notification';
 interface ListInvited {
   id: number;
   message: string;
@@ -43,11 +34,10 @@ const ItemStudents = () => {
   const [students, setStudents] = useState([]);
   const [studentsHaveGroup, setStudentsHaveGroup] = useState();
 
+  const layout = useWindowDimensions();
   const [flag, setFlag] = useState(false);
   const [listStudentInvitedJoinGroup, setStudentInvitedJoinGroup] =
     useState<ListInvited[]>();
-
-  const layout = useWindowDimensions();
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
@@ -61,8 +51,6 @@ const ItemStudents = () => {
         await authService
           .getStudent(termState?.term?.id, false)
           .then(result => {
-            console.log('listStudentInvited', listStudentInvited);
-
             const checkInvited = (item: {id: number}) =>
               listStudentInvited?.find(
                 (studentGroup: {student: {id: number}}) =>
@@ -118,8 +106,6 @@ const ItemStudents = () => {
   };
 
   const renderListStudents = (item: any) => {
-    console.log('item', item);
-
     return (
       <StudentOfList
         notGroup
@@ -184,25 +170,27 @@ const ItemStudents = () => {
   }, [studentsHaveGroup]);
   return (
     <>
-      <View style={GlobalStyles.container}>
-        <View style={styles.containner}>
-          <Header
-            title="Danh sách sinh viên"
-            iconLeft={true}
-            home={false}
-            style={styles.header}
-            back={true}
-            iconRight={false}></Header>
+      <AlertNotificationRoot>
+        <View style={GlobalStyles.container}>
+          <View style={styles.containner}>
+            <Header
+              title="Danh sách sinh viên"
+              iconLeft={true}
+              home={false}
+              style={styles.header}
+              back={true}
+              iconRight={false}></Header>
 
-          {/* {ListStudents} */}
-          <TabView
-            navigationState={{index, routes}}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            initialLayout={{width: layout.width}}
-          />
+            {/* {ListStudents} */}
+            <TabView
+              navigationState={{index, routes}}
+              renderScene={renderScene}
+              onIndexChange={setIndex}
+              initialLayout={{width: layout.width}}
+            />
+          </View>
         </View>
-      </View>
+      </AlertNotificationRoot>
     </>
   );
 };

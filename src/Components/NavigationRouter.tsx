@@ -16,6 +16,7 @@ import JoinGroupToOrther from './Group/components/JoinGroupToOrther';
 
 import ItemTopicMenu from './Group/components/ItemTopicMenu';
 import LectureMenu from './Home/components/LectureMenu';
+import Notification from './Home/Notification';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +52,7 @@ const NavigationRouter = () => {
         />
         <Stack.Screen name={'InviteJoinGroup'} component={InviteJoinGroup} />
         <Stack.Screen name={'ItemTopicMenu'} component={ItemTopicMenu} />
+        <Stack.Screen name={'Notification'} component={Notification} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -24,4 +24,6 @@ export default {
   JoinGroupToOrther: 'JoinGroupToOrther',
   InviteJoinGroup: 'InviteJoinGroup',
   ItemTopicMenu: 'ItemTopicMenu',
+
+  Notification: 'Notification',
 };

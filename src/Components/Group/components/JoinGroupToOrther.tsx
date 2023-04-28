@@ -24,6 +24,8 @@ import NoneData from '../../Section/NoneData';
 import {isEmpty} from 'lodash';
 import groupAPI from '../../../redux/apis/group';
 import ContentItemInvite from '../components/content/ContentItemInvite';
+import {showMessageSuccess} from '../../../utilities/utils';
+import {AlertNotificationRoot} from 'react-native-alert-notification';
 
 const JoinGroupToOrther = () => {
   const layout = useWindowDimensions();
@@ -82,7 +84,7 @@ const JoinGroupToOrther = () => {
       .deleteRequest(id)
       .then(() => {
         setLoading(false);
-        Alert.alert('Thông báo', 'Đã xóa lời mời');
+        showMessageSuccess('Đã xóa lời mời');
       })
       .catch(() => {});
   };
@@ -90,7 +92,7 @@ const JoinGroupToOrther = () => {
   const handleAccpect = async (id: number) => {
     setLoading(true);
     dispatch(groupAPI.accpectJoinGroup()(id)).then(() => {
-      Alert.alert('Thông báo', 'Đã tham gia nhóm');
+      showMessageSuccess('Đã tham gia nhóm');
       setLoading(false);
       dispatch(groupAPI.getMyGroup()(termState?.term?.id));
     });
@@ -187,23 +189,25 @@ const JoinGroupToOrther = () => {
   }, [listRecied]);
   return (
     <>
-      <View style={GlobalStyles.container}>
-        <View style={styles.containner}>
-          <Header
-            title="Yêu cầu tham gia nhóm"
-            iconLeft={true}
-            home={false}
-            style={styles.header}
-            back={true}
-            iconRight={false}></Header>
-          <TabView
-            navigationState={{index, routes}}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            initialLayout={{width: layout.width}}
-          />
+      <AlertNotificationRoot>
+        <View style={GlobalStyles.container}>
+          <View style={styles.containner}>
+            <Header
+              title="Yêu cầu tham gia nhóm"
+              iconLeft={true}
+              home={false}
+              style={styles.header}
+              back={true}
+              iconRight={false}></Header>
+            <TabView
+              navigationState={{index, routes}}
+              renderScene={renderScene}
+              onIndexChange={setIndex}
+              initialLayout={{width: layout.width}}
+            />
+          </View>
         </View>
-      </View>
+      </AlertNotificationRoot>
 
       {isLoading && <LoadingScreen />}
     </>

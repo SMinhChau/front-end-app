@@ -50,7 +50,9 @@ const Header: React.FC<Props> = ({
 
       <View style={styles.contentIconRight}>
         {iconRight && (
-          <TouchableOpacity style={[styles.contentIcon]}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate(RouteNames.Notification)}
+            style={[styles.contentIcon]}>
             <IconView
               name="notifications-outline"
               color={Colors.textPrimary}
