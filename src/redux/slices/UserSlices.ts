@@ -67,6 +67,9 @@ export const userSlice = createSlice({
     updateUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
     },
+    setUser: (state, action: PayloadAction<User>) => {
+      state.user = action.payload;
+    },
   },
   extraReducers: builder => {
     builder.addCase(authAPI.login().fulfilled, (state, action) => {
@@ -104,4 +107,4 @@ export const userSlice = createSlice({
   },
 });
 
-export const {updateUser} = userSlice.actions;
+export const {updateUser, setUser} = userSlice.actions;

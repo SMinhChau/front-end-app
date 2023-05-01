@@ -12,7 +12,7 @@ import {
 } from '../../../utilities/sizeScreen';
 import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import groupService from '../../../services/group';
-import {TypeRequestGroup} from '../../../utilities/contants';
+import User, {TypeRequestGroup} from '../../../utilities/contants';
 
 import {isEmpty, showMessageSuccess} from '../../../utilities/utils';
 import ContentItemInvite from '../components/content/ContentItemInvite';
@@ -22,7 +22,8 @@ import {AlertNotificationRoot} from 'react-native-alert-notification';
 
 const InviteJoinGroup = () => {
   const layout = useWindowDimensions();
-  const [listInvitedToStudent, setListInvitedToStudent] = useState();
+  const [listInvitedToStudent, setListInvitedToStudent] =
+    useState<Array<User>>();
   const [listInviteReceidFromStudent, setInviteReceidFromStudent] = useState();
 
   const termState = useAppSelector(state => state.term);
@@ -51,6 +52,8 @@ const InviteJoinGroup = () => {
           TypeRequestGroup.REQUEST_INVITE,
         )
         .then(result => {
+          console.log('setListInvitedToStudent', result?.data);
+
           setListInvitedToStudent(result?.data);
         })
         .catch(error => console.log('error', error));

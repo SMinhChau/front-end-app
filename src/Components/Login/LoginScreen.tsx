@@ -46,6 +46,7 @@ import {
   showMessageSuccess,
   showMessageWarning,
 } from '../../utilities/utils';
+import {setUser} from '../../redux/slices/UserSlices';
 
 const Login: React.FC<{}> = () => {
   const userState = useAppSelector(state => state.user);
@@ -79,6 +80,7 @@ const Login: React.FC<{}> = () => {
   useEffect(() => {
     if (userState.is_login) {
       setLoading(false);
+      dispatch(setUser(userState.user));
       navigation.navigate(RouteNames.TabNavigation);
     }
     if (userState.error) {
@@ -111,11 +113,12 @@ const Login: React.FC<{}> = () => {
   };
 
   const handleResetPassword = async () => {
-    if (inputUserName !== '') {
+    if (inputUserName !== '' && inputUserName.length > 5) {
       setResetPass(true);
       await authService
         .resetPassword({username: inputUserName})
         .then(result => {
+          console.log('result', result);
           setModalRestPass(false);
           setResetPass(false);
           setInputUserName('');
@@ -124,13 +127,14 @@ const Login: React.FC<{}> = () => {
           );
         })
         .catch(er => {
+          console.log('er', er);
           setModalRestPass(false);
           setResetPass(false);
           setInputUserName('');
           showMessageEror('Tên đăng nhập không tồn tại!');
         });
     } else {
-      showMessageWarning('Vui lòng nhập tên!');
+      showMessageWarning('Vui lòng nhập tên lớn hơn 6 ký tự');
     }
   };
 
@@ -188,12 +192,7 @@ const Login: React.FC<{}> = () => {
             <TouchableOpacity
               style={[styles.btnPass]}
               onPress={() => {
-                Toast.show({
-                  type: ALERT_TYPE.SUCCESS,
-                  title: 'Success',
-                  textBody: 'Congrats! this is toast notification success',
-                });
-                // setModalRestPass(true);
+                setModalRestPass(true);
               }}>
               <Text style={GlobalStyles.rememberText}>Quên mật khẩu?</Text>
             </TouchableOpacity>

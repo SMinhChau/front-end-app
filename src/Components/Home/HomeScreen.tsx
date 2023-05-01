@@ -20,6 +20,7 @@ import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 import majorAPI from '../../redux/apis/major';
 import termrAPI from '../../redux/apis/term';
 import groupAPI from '../../redux/apis/group';
+import authAPI from '../../redux/apis/auth';
 
 const menu = [
   {
@@ -77,6 +78,12 @@ const HomeScreen: React.FC<{}> = () => {
       dispatch(groupAPI.getMyGroup()(termState?.id));
     }
   }, [termState]);
+
+  useEffect(() => {
+    if (termState.id) {
+      dispatch(authAPI.getTranscripts()(termState.id));
+    }
+  }, []);
 
   return (
     <>

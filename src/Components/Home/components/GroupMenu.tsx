@@ -13,6 +13,7 @@ import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import authAPI from '../../../redux/apis/auth';
 import {DataTable, Text} from 'react-native-paper';
 import NoneData from '../../Section/NoneData';
+import {isEmpty} from 'lodash';
 
 const EvaluationMenu = () => {
   const layout = useWindowDimensions();
@@ -20,12 +21,11 @@ const EvaluationMenu = () => {
 
   const userState = useAppSelector(state => state.user);
   const termState = useAppSelector(state => state.term.term);
-
+  const transcript = useAppSelector(state => state.user.transcript);
   useEffect(() => {
-    console.log('termState.id', termState.id);
-    if (termState.id) {
-      dispatch(authAPI.getTranscripts()(termState.id));
-    }
+    console.log('transcript', transcript);
+
+    dispatch(authAPI.getTranscripts()(termState.id));
   }, []);
 
   const [index, setIndex] = useState(0);
@@ -52,7 +52,7 @@ const EvaluationMenu = () => {
   });
 
   const advisorRender = useMemo(() => {
-    const _data = userState.transcript.ADVISOR;
+    const _data = transcript.ADVISOR;
     return (
       <>
         <>
@@ -80,10 +80,10 @@ const EvaluationMenu = () => {
         </>
       </>
     );
-  }, []);
+  }, [transcript]);
 
   const reviewRender = useMemo(() => {
-    const _data = userState.transcript.REVIEWER;
+    const _data = transcript.REVIEWER;
     return (
       <>
         <>
@@ -111,9 +111,9 @@ const EvaluationMenu = () => {
         </>
       </>
     );
-  }, []);
+  }, [transcript]);
   const hostRender = useMemo(() => {
-    const _data = userState.transcript.SESSION_HOST;
+    const _data = transcript.SESSION_HOST;
     return (
       <>
         <>
@@ -141,7 +141,7 @@ const EvaluationMenu = () => {
         </>
       </>
     );
-  }, []);
+  }, [transcript]);
 
   return (
     <>

@@ -44,7 +44,6 @@ const TopicMenu = () => {
   const getToppicList = () => {
     if (termState?.id) {
       topicService.getTopicList(termState?.id).then(result => {
-        console.log('result?.data', result?.data);
         setTopics(result?.data);
       });
     }
@@ -112,13 +111,13 @@ const TopicMenu = () => {
     return (
       <>
         <View style={styles.content}>
-          <FlatList
+          {/* <FlatList
             horizontal={true}
             data={DATETOPIC}
             initialNumToRender={20}
             renderItem={(item: any) => renderBannerDate(item?.item)}
             keyExtractor={item => item.icon}
-          />
+          /> */}
         </View>
       </>
     );
@@ -323,9 +322,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     height: '10%',
-
-    backgroundColor: '#f4978e',
-    borderWidth: 3,
+    marginTop: responsiveHeight(10),
+    backgroundColor: '#bfd7ff',
+    borderWidth: 2,
     borderColor: '#f08080',
     borderRadius: 5,
     paddingHorizontal: responsiveWidth(16),

@@ -1,4 +1,3 @@
-import {log} from 'react-native-reanimated';
 import {axiosAuth} from '../utilities/axiosConfig';
 
 class TopicService {

@@ -1,5 +1,12 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {Image, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import Header from '../../../common/Header';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
 import Colors from '../../../Themes/Colors';
@@ -37,6 +44,7 @@ const LectureMenu = () => {
         .then(result => {
           setLoading(false);
           setLecturer(result?.data);
+
           setList(result?.data?.length);
         })
         .catch(er => console.log(er));
@@ -86,22 +94,24 @@ const LectureMenu = () => {
             }
             return (
               <>
-                <List.Item
-                  key={index}
-                  title={
-                    <>
-                      <Text numberOfLines={1} style={[styles.titleMain]}>
-                        {i?.key}
+                <ScrollView>
+                  <List.Item
+                    key={index}
+                    title={
+                      <>
+                        <Text numberOfLines={1} style={[styles.titleMain]}>
+                          {i?.key}
+                        </Text>
+                      </>
+                    }
+                    description={
+                      <Text numberOfLines={1} style={[styles.titleGroup]}>
+                        {i?.name}
                       </Text>
-                    </>
-                  }
-                  description={
-                    <Text numberOfLines={1} style={[styles.titleGroup]}>
-                      {i?.name}
-                    </Text>
-                  }
-                  left={props => <View style={styles.iconContentView}></View>}
-                />
+                    }
+                    left={props => <View style={styles.iconContentView}></View>}
+                  />
+                </ScrollView>
               </>
             );
           })}
@@ -160,7 +170,7 @@ export default LectureMenu;
 const styles = StyleSheet.create({
   containner: {
     flex: 1,
-    backgroundColor: '#fde2e4',
+    backgroundColor: '#e2fdff',
     justifyContent: 'space-between',
     alignContent: 'space-between',
   },
@@ -234,7 +244,7 @@ const styles = StyleSheet.create({
     fontSize: responsiveFont(17),
     color: Colors.textPrimary,
     fontWeight: '500',
-    paddingHorizontal: responsiveWidth(15),
+    // paddingHorizontal: responsiveWidth(15),
     textTransform: 'uppercase',
   },
   imgaAvatar: {

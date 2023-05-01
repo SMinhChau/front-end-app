@@ -168,9 +168,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
+
     borderLeftWidth: 2,
     borderRightWidth: 2,
     borderBottomWidth: 2,
+
     borderColor: '#aed9e0',
   },
   containner: {
@@ -178,8 +180,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignContent: 'center',
     backgroundColor: Colors.white,
-    borderColor: '#aed9e0',
-    borderWidth: 1,
+    // borderColor: '#aed9e0',
+    // borderWidth: 1,
     paddingHorizontal: responsiveWidth(16),
     paddingVertical: responsiveHeight(16),
   },
@@ -218,8 +220,8 @@ const styles = StyleSheet.create({
   contentTitle: {
     marginTop: 5,
     backgroundColor: '#aed9e0',
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
 
     borderColor: '#003049',
     paddingVertical: responsiveHeight(10),

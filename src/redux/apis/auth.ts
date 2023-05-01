@@ -47,11 +47,8 @@ class AuthAPI {
       async (termId: number, thunkAPI) => {
         try {
           const result = await authService.getTranscripts(termId);
-          console.log('transcripts ======result', result);
           if (result.status === 200) return result.data;
         } catch (error) {
-          console.log('error ==== transcripts', error);
-
           return thunkAPI.rejectWithValue('transcripts fail');
         }
       },

@@ -125,7 +125,7 @@ const StudentOfList: React.FC<Props> = ({
         <View style={[styles.contentTitle]}>
           <Image
             source={{
-              uri: studentInfo?.avatar ? studentInfo?.avatar : Images.avatar,
+              uri: studentInfo?.avatar,
             }}
             style={styles.imgaAvatar}
           />
