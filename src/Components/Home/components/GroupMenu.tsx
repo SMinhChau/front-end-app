@@ -55,29 +55,25 @@ const EvaluationMenu = () => {
     const _data = transcript.ADVISOR;
     return (
       <>
-        <>
-          {_data.avgGrader !== null ? (
-            <>
-              <View style={[styles.bottomContent]}>
-                <Text style={styles.title} variant="titleLarge">
-                  Kết Quả GĐ Hướng Dẫn
-                </Text>
-                <DataTable>
-                  <DataTable.Header>
-                    <DataTable.Title textStyle={styles._titleCol}>
-                      Điểm Trung Bình
-                    </DataTable.Title>
-                    <DataTable.Title textStyle={styles._titleCol} numeric>
-                      {_data.avgGrader}
-                    </DataTable.Title>
-                  </DataTable.Header>
-                </DataTable>
-              </View>
-            </>
-          ) : (
-            <NoneData icon title="Chưa có điểm Trung bình"></NoneData>
-          )}
-        </>
+        <View style={[styles.bottomContent]}>
+          <Text style={styles.title} variant="titleLarge">
+            Kết Quả GĐ Hướng Dẫn
+          </Text>
+          <DataTable>
+            <DataTable.Header>
+              <DataTable.Title textStyle={styles._titleCol}>
+                Điểm Trung Bình
+              </DataTable.Title>
+              <DataTable.Title textStyle={styles._titleCol} numeric>
+                {!isEmpty(_data.avgGrader) ? (
+                  <>{_data.avgGrader}</>
+                ) : (
+                  <Text style={styles.title_Point}>Chưa có điểm</Text>
+                )}
+              </DataTable.Title>
+            </DataTable.Header>
+          </DataTable>
+        </View>
       </>
     );
   }, [transcript]);
@@ -86,29 +82,25 @@ const EvaluationMenu = () => {
     const _data = transcript.REVIEWER;
     return (
       <>
-        <>
-          {_data.avgGrader !== null ? (
-            <>
-              <View style={[styles.bottomContent]}>
-                <Text style={styles.title} variant="titleLarge">
-                  Kết Quả GĐ Phản biện
-                </Text>
-                <DataTable>
-                  <DataTable.Header>
-                    <DataTable.Title textStyle={styles._titleCol}>
-                      Điểm Trung Bình
-                    </DataTable.Title>
-                    <DataTable.Title textStyle={styles._titleCol} numeric>
-                      {_data.avgGrader}
-                    </DataTable.Title>
-                  </DataTable.Header>
-                </DataTable>
-              </View>
-            </>
-          ) : (
-            <NoneData icon title="Chưa có điểm Trung bình"></NoneData>
-          )}
-        </>
+        <View style={[styles.bottomContent]}>
+          <Text style={styles.title} variant="titleLarge">
+            Kết Quả GĐ Phản biện
+          </Text>
+          <DataTable>
+            <DataTable.Header>
+              <DataTable.Title textStyle={styles._titleCol}>
+                Điểm Trung Bình
+              </DataTable.Title>
+              <DataTable.Title textStyle={styles._titleCol} numeric>
+                {!isEmpty(_data.avgGrader) ? (
+                  <>{_data.avgGrader}</>
+                ) : (
+                  <Text style={styles.title_Point}>Chưa có điểm</Text>
+                )}
+              </DataTable.Title>
+            </DataTable.Header>
+          </DataTable>
+        </View>
       </>
     );
   }, [transcript]);
@@ -116,29 +108,25 @@ const EvaluationMenu = () => {
     const _data = transcript.SESSION_HOST;
     return (
       <>
-        <>
-          {_data.avgGrader !== null ? (
-            <>
-              <View style={[styles.bottomContent]}>
-                <Text style={styles.title} variant="titleLarge">
-                  Kết Quả GĐ Hội đồng
-                </Text>
-                <DataTable>
-                  <DataTable.Header>
-                    <DataTable.Title textStyle={styles._titleCol}>
-                      Điểm Trung Bình
-                    </DataTable.Title>
-                    <DataTable.Title textStyle={styles._titleCol} numeric>
-                      {_data.avgGrader}
-                    </DataTable.Title>
-                  </DataTable.Header>
-                </DataTable>
-              </View>
-            </>
-          ) : (
-            <NoneData icon title="Chưa có điểm Trung bình"></NoneData>
-          )}
-        </>
+        <View style={[styles.bottomContent]}>
+          <Text style={styles.title} variant="titleLarge">
+            Kết Quả GĐ Hội đồng
+          </Text>
+          <DataTable>
+            <DataTable.Header>
+              <DataTable.Title textStyle={styles._titleCol}>
+                Điểm Trung Bình
+              </DataTable.Title>
+              <DataTable.Title textStyle={styles._titleCol} numeric>
+                {!isEmpty(_data.avgGrader) ? (
+                  <>{_data.avgGrader}</>
+                ) : (
+                  <Text style={styles.title_Point}>Chưa có điểm</Text>
+                )}
+              </DataTable.Title>
+            </DataTable.Header>
+          </DataTable>
+        </View>
       </>
     );
   }, [transcript]);
@@ -218,5 +206,14 @@ const styles = StyleSheet.create({
     fontSize: responsiveFont(16),
     fontWeight: '700',
     textTransform: 'uppercase',
+  },
+  title_Point: {
+    textAlign: 'center',
+    fontSize: responsiveFont(16),
+    paddingVertical: responsiveHeight(10),
+    color: '#f28482',
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    marginTop: 10,
   },
 });

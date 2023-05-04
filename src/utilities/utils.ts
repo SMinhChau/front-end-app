@@ -7,7 +7,12 @@ export function validateEmail(email: string) {
 }
 
 export const isEmpty = (val: any) => {
-  return val === undefined || val == null || val.length <= 0 ? true : false;
+  return val === undefined ||
+    val == null ||
+    Number.isNaN(val) ||
+    val.length <= 0
+    ? true
+    : false;
 };
 
 export const showMessageWarning = (message: string) => {

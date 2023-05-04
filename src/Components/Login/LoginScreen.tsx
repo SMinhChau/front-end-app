@@ -8,6 +8,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   ScrollView,
+  Image,
 } from 'react-native';
 
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -47,6 +48,7 @@ import {
   showMessageWarning,
 } from '../../utilities/utils';
 import {setUser} from '../../redux/slices/UserSlices';
+import {Images} from '../../assets/images/Images';
 
 const Login: React.FC<{}> = () => {
   const userState = useAppSelector(state => state.user);
@@ -142,6 +144,10 @@ const Login: React.FC<{}> = () => {
     return (
       <>
         <View style={styles.contentForm}>
+          <Image
+            source={Images.logo_iuh}
+            style={{width: 100, height: 40, resizeMode: 'contain'}}
+          />
           <View style={[styles.contentInputTop]}>
             <View style={styles.viewInputTop}>
               <Ionicons name={'md-person'} color={Colors.iconbr} size={16} />
@@ -230,7 +236,7 @@ const Login: React.FC<{}> = () => {
         <ScrollView>
           <KeyboardAvoidingView
             style={{flex: 1}}
-            keyboardVerticalOffset={responsiveHeight(110)}
+            keyboardVerticalOffset={responsiveHeight(130)}
             behavior={'position'}>
             <View style={styles.formView}>
               <View style={GlobalStyles.centerView}>
@@ -303,6 +309,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#73c3ed',
     paddingHorizontal: responsiveWidth(10),
+    paddingTop: responsiveHeight(20),
     fontSize: 16,
     backgroundColor: Colors.white,
   },
@@ -338,7 +345,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: responsiveHeight(15),
     paddingVertical: responsiveHeight(5),
     // paddingBottom: responsiveHeight(20),
-    backgroundColor: Colors.blueBoder,
+    backgroundColor: Colors.white,
     borderColor: '#fec89a',
     borderWidth: 1,
     shadowOpacity: 3,

@@ -248,7 +248,7 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
                         fontSize: responsiveFont(14),
                         color: Colors.black,
                       }}
-                      key={index.toString()}
+                      key={index}
                       placeholder={item.placeholder}
                       onChangeText={text =>
                         setBasicInfo({...basicInfo, [item.key]: text})
