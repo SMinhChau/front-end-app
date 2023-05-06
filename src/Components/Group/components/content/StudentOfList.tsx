@@ -119,16 +119,18 @@ const StudentOfList: React.FC<Props> = ({
     );
   }, [isStudentInvited]);
 
+  const handleGetAvatar = () => {
+    return studentInfo?.avatar
+      ? {uri: studentInfo?.avatar}
+      : Images.avatarDefault;
+  };
+
   const topContent = useMemo(() => {
     return (
       <>
+        {/* uri: studentInfo?.avatar, */}
         <View style={[styles.contentTitle]}>
-          <Image
-            source={{
-              uri: studentInfo?.avatar,
-            }}
-            style={styles.imgaAvatar}
-          />
+          <Image source={handleGetAvatar()} style={styles.imgaAvatar} />
 
           <View
             style={{

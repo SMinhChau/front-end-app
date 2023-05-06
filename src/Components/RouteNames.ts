@@ -26,4 +26,6 @@ export default {
   ItemTopicMenu: 'ItemTopicMenu',
 
   Notification: 'Notification',
+  DisAcceptedUser: 'DisAcceptedUser',
+  ForgotPassword: 'ForgotPassword',
 };

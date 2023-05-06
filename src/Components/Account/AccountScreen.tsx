@@ -22,6 +22,7 @@ import {
 
 import {checkGenger, checkTypeTraining} from '../../utilities/contants';
 import {AlertNotificationRoot} from 'react-native-alert-notification';
+import {DataTable} from 'react-native-paper';
 
 const Account: React.FC<{}> = ({}) => {
   const navigation = useNavigation();
@@ -123,11 +124,14 @@ const Account: React.FC<{}> = ({}) => {
           <Line lager={true}></Line>
 
           {renderMain}
-          <TouchableOpacity
-            style={[GlobalStyles.flexDirectionRow, styles.btnAction]}
-            onPress={() => navigation.navigate('ChangePassword')}>
-            <Text style={styles.itemAction}>Đổi mật khẩu</Text>
-          </TouchableOpacity>
+          <DataTable>
+            <TouchableOpacity
+              style={[GlobalStyles.flexDirectionRow, styles.btnAction]}
+              onPress={() => navigation.navigate(RouteNames.ForgotPassword)}>
+              <Text style={styles.itemAction}>Đổi mật khẩu</Text>
+              <IconView name="key-outline" color={Colors.blueBoder} />
+            </TouchableOpacity>
+          </DataTable>
 
           <TouchableOpacity
             style={[
@@ -158,7 +162,7 @@ export default Account;
 
 const styles = StyleSheet.create({
   content: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.bg,
   },
   topAccount: {
     flexDirection: 'row',
@@ -193,9 +197,10 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   itemAction: {
-    color: Colors.textPrimary,
+    color: Colors.blueBoder,
     fontSize: responsiveFont(15),
     paddingRight: 20,
+    fontWeight: '500',
     marginLeft: 20,
   },
   update: {

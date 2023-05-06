@@ -1,9 +1,9 @@
 import {axiosAuth} from '../utilities/axiosConfig';
 
 class TermService {
-  getLastTerm(majorsId: number) {
+  getTermNow(majorsId: number) {
     return axiosAuth({
-      url: `api/student/terms/last-term?majorsId=${majorsId}`,
+      url: `/api/student/terms/now?majorsId=${majorsId}`,
       method: 'get',
     });
   }

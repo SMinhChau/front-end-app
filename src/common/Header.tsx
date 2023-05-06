@@ -1,9 +1,10 @@
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
 import Colors from '../Themes/Colors';
 import IconView from './IconView';
 import {useNavigation} from '@react-navigation/native';
 import RouteNames from '../Components/RouteNames';
 import {responsiveFont, responsiveHeight} from '../utilities/sizeScreen';
+import {Images} from '../assets/images/Images';
 
 interface Props {
   title: string;
@@ -12,6 +13,7 @@ interface Props {
   home?: boolean;
   back?: boolean;
   style?: any;
+  logo?: boolean;
 }
 const Header: React.FC<Props> = ({
   title,
@@ -20,6 +22,7 @@ const Header: React.FC<Props> = ({
   iconLeft,
   home,
   iconRight,
+  logo,
 }) => {
   const navigation = useNavigation();
   return (
@@ -31,7 +34,18 @@ const Header: React.FC<Props> = ({
           <IconView name="home-outline" color={Colors.textPrimary} size={24} />
         </TouchableOpacity>
       )}
-
+      {logo && (
+        <Image
+          source={Images.logo_iuh}
+          style={{
+            width: 100,
+            height: 40,
+            position: 'relative',
+            left: 60,
+            top: -5,
+          }}
+        />
+      )}
       {iconLeft && back && (
         <TouchableOpacity
           style={[styles.contentIcon, styles.contentIconLeft]}
@@ -45,7 +59,9 @@ const Header: React.FC<Props> = ({
       )}
 
       <View style={styles.contentText}>
-        <Text style={[styles.textView]}>{title}</Text>
+        <Text style={[logo ? styles.content_Logo : styles.textView]}>
+          {title}
+        </Text>
       </View>
 
       <View style={styles.contentIconRight}>
@@ -70,13 +86,14 @@ const styles = StyleSheet.create({
   sectionContainer: {
     width: '100%',
     // paddingHorizontal: responsiveHeight(10),
-    backgroundColor: Colors.primaryButton,
+    // backgroundColor: Colors.primaryButton,
+    backgroundColor: Colors.white,
     paddingVertical: responsiveHeight(15),
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: Colors.primaryButton,
-    borderEndWidth: 1,
+    borderBottomColor: Colors.primaryButton,
+    borderBottomWidth: 1,
     elevation: 5,
     shadowOpacity: 0.02,
     shadowOffset: {width: 2, height: 3},
@@ -92,6 +109,15 @@ const styles = StyleSheet.create({
     color: '#003049',
     fontWeight: '600',
   },
+  content_Logo: {
+    textAlign: 'center',
+    position: 'relative',
+    left: -20,
+    fontSize: responsiveFont(20),
+    color: '#003049',
+    fontWeight: '600',
+  },
+
   contentIcon: {
     backgroundColor: Colors.white,
 

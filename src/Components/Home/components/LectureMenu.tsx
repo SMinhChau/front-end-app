@@ -137,10 +137,7 @@ const LectureMenu = () => {
   return (
     <>
       <View style={GlobalStyles.container}>
-        <StatusBar
-          barStyle={'dark-content'}
-          backgroundColor={Colors.primaryButton}
-        />
+        <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
 
         <View style={styles.containner}>
           <Header

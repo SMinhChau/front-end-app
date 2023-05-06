@@ -32,6 +32,7 @@ const TopicMenu = () => {
   const groupState = useAppSelector(state => state.group.group);
 
   const [isLoading, setLoading] = useState(false);
+  const [isLoadingTopic, setLoadingTopic] = useState(false);
 
   const [topics, setTopics] = useState<Topic[]>();
 
@@ -42,8 +43,10 @@ const TopicMenu = () => {
   const dispatch = useAppDispatch();
 
   const getToppicList = () => {
+    setLoadingTopic(true);
     if (termState?.id) {
       topicService.getTopicList(termState?.id).then(result => {
+        setLoadingTopic(false);
         setTopics(result?.data);
       });
     }
@@ -167,7 +170,7 @@ const TopicMenu = () => {
               initialNumToRender={20}
               renderItem={(item: any) => (
                 <ItemTopic
-                  key={item?.item}
+                  key={item}
                   topicInfo={item?.item}
                   handleChosseTopic={() => handleChosseTopic(item?.item?.id)}
                 />
@@ -184,56 +187,51 @@ const TopicMenu = () => {
     <>
       <AlertNotificationRoot>
         <View style={GlobalStyles.container}>
-          <StatusBar
-            barStyle={'dark-content'}
-            backgroundColor={Colors.primaryButton}
-          />
-          <View style={styles.containner}>
-            <Header
-              title="Đề tài"
-              iconLeft={true}
-              home={false}
-              style={styles.header}
-              back={true}
-              iconRight={true}></Header>
+          <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
 
-            {isStartDateChooseTopic() === false ? (
-              <>
-                <View style={styles.nonChooseTopic}>
-                  <View style={styles.contentNoData}>
-                    <NoneData
-                      icon
-                      title="Chưa đến thời gian chọn đề tài!"></NoneData>
-                  </View>
+          <Header
+            title="Đề tài"
+            iconLeft={true}
+            home={false}
+            style={styles.header}
+            back={true}
+            iconRight={true}></Header>
 
-                  <View style={styles.bottomView}>
-                    <Text style={styles.dateNoChooseTopic}>
-                      Thời gian chọn đề tài là:
-                    </Text>
-                    <Lottie
-                      source={require('../../../assets/jsonAmination/start.json')}
-                      autoPlay
-                      loop
-                      style={styles.logo}
-                    />
-                    <Text style={[styles.dateNoChooseTopic, styles.leftTitle]}>
-                      {startDateChooseTopicFormat}
-                    </Text>
-                  </View>
+          {isStartDateChooseTopic() === false ? (
+            <>
+              <View style={styles.nonChooseTopic}>
+                <View style={styles.contentNoData}>
+                  <NoneData
+                    icon
+                    title="Chưa đến thời gian chọn đề tài!"></NoneData>
                 </View>
-              </>
-            ) : (
-              <>
-                <View style={GlobalStyles.container}>
-                  {renderContentTopic}
-                  {renderTopicList}
+
+                <View style={styles.bottomView}>
+                  <Text style={styles.dateNoChooseTopic}>
+                    Thời gian chọn đề tài là:
+                  </Text>
+                  <Lottie
+                    source={require('../../../assets/jsonAmination/start.json')}
+                    autoPlay
+                    loop
+                    style={styles.logo}
+                  />
+                  <Text style={[styles.dateNoChooseTopic, styles.leftTitle]}>
+                    {startDateChooseTopicFormat}
+                  </Text>
                 </View>
-              </>
-            )}
-          </View>
+              </View>
+            </>
+          ) : (
+            <>
+              {renderContentTopic}
+              {renderTopicList}
+            </>
+          )}
         </View>
       </AlertNotificationRoot>
       {isLoading && <LoadingScreen />}
+      {isLoadingTopic && <LoadingScreen />}
     </>
   );
 };
@@ -323,7 +321,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     height: '10%',
     marginTop: responsiveHeight(10),
-    backgroundColor: '#bfd7ff',
+    // backgroundColor: '#bfd7ff',
     borderWidth: 2,
     borderColor: '#f08080',
     borderRadius: 5,

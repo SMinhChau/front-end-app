@@ -36,12 +36,8 @@ import RouteNames from '../RouteNames';
 import authService from '../../services/auth';
 import {Button, Dialog, Portal} from 'react-native-paper';
 import ButtonHandle from '../../common/ButtonHandle';
-import PopupNotification from '../../common/PopupNotification';
-import {
-  ALERT_TYPE,
-  AlertNotificationRoot,
-  Toast,
-} from 'react-native-alert-notification';
+
+import {AlertNotificationRoot} from 'react-native-alert-notification';
 import {
   showMessageEror,
   showMessageSuccess,
@@ -226,10 +222,7 @@ const Login: React.FC<{}> = () => {
 
   return (
     <View style={[GlobalStyles.container, {backgroundColor: Colors.white}]}>
-      <StatusBar
-        barStyle={'dark-content'}
-        backgroundColor={Colors.primaryButton}
-      />
+      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
       <AlertNotificationRoot>
         <Header title="Đăng nhập"></Header>
 

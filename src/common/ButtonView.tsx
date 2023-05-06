@@ -10,9 +10,16 @@ interface Props {
   disabled?: boolean;
   textStyle?: any;
   wrapper?: string;
+  warning?: boolean;
 }
 
-const ButtonView: React.FC<Props> = ({title, style, onPress, disabled}) => {
+const ButtonView: React.FC<Props> = ({
+  title,
+  style,
+  onPress,
+  disabled,
+  warning,
+}) => {
   return (
     <TouchableOpacity
       style={[
@@ -22,7 +29,11 @@ const ButtonView: React.FC<Props> = ({title, style, onPress, disabled}) => {
       ]}
       disabled={disabled}
       onPress={onPress}>
-      {title && <Text style={[styles.textStyle]}>{title}</Text>}
+      {title && (
+        <Text style={[warning ? styles.warning : styles.textStyle]}>
+          {title}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };
@@ -46,6 +57,12 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: '#ade8f4',
+    fontSize: 18,
+    flex: 1,
+    textAlign: 'center',
+  },
+  warning: {
+    color: '#eae2b7',
     fontSize: 18,
     flex: 1,
     textAlign: 'center',

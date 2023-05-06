@@ -10,6 +10,7 @@ interface StateType {
   updated: boolean;
   updateError: boolean;
   transcript: Transcript;
+  allow: boolean;
 }
 
 const initialState = {
@@ -58,6 +59,7 @@ const initialState = {
       details: {},
     },
   },
+  allow: true,
 } as StateType;
 
 export const userSlice = createSlice({
@@ -69,6 +71,10 @@ export const userSlice = createSlice({
     },
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
+    },
+    setAllow: (state, action) => {
+      console.log('-======> setAllow', action);
+      state.allow = action.payload;
     },
   },
   extraReducers: builder => {
@@ -85,21 +91,6 @@ export const userSlice = createSlice({
     builder.addCase(authAPI.getInfo().fulfilled, (state, action) => {
       state.user = action.payload;
     });
-
-    // builder.addCase(authAPI.updateUserInfo().pending, state => {
-    //   state.updated = false;
-    //   state.error = false;
-    // });
-    // builder.addCase(authAPI.updateUserInfo().fulfilled, (state, action) => {
-    //   state.user = action.payload;
-    //   state.updated = true;
-    //   state.updateError = false;
-    // });
-    // builder.addCase(authAPI.updateUserInfo().rejected, state => {
-    //   state.updated = false;
-    //   state.updateError = true;
-    // });
-
     builder.addCase(authAPI.getTranscripts().fulfilled, (state, action) => {
       console.log('======transcript  action', action);
       state.transcript = action.payload;
@@ -107,4 +98,4 @@ export const userSlice = createSlice({
   },
 });
 
-export const {updateUser, setUser} = userSlice.actions;
+export const {updateUser, setUser, setAllow} = userSlice.actions;

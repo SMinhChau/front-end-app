@@ -7,7 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {List} from 'react-native-paper';
+import {DataTable, List} from 'react-native-paper';
 import Lottie from 'lottie-react-native';
 import IconView from '../../../common/IconView';
 import Colors from '../../../Themes/Colors';
@@ -22,13 +22,13 @@ import ButtonHandle from '../../../common/ButtonHandle';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
 import {useAppSelector} from '../../../redux/hooks';
 
-
 interface Props {
   topicInfo?: Topic;
   handleChosseTopic(): void;
+  count?: number;
 }
 
-const ItemTopic = ({topicInfo, handleChosseTopic}: Props) => {
+const ItemTopic = ({topicInfo, handleChosseTopic, count}: Props) => {
   const groupState = useAppSelector(state => state.group.group);
   const [expanded, setExpanded] = useState(true);
 
@@ -55,7 +55,6 @@ const ItemTopic = ({topicInfo, handleChosseTopic}: Props) => {
   ];
 
   const renderButton = useMemo(() => {
-  
     return (
       <>
         {groupState?.id ? (
@@ -79,9 +78,24 @@ const ItemTopic = ({topicInfo, handleChosseTopic}: Props) => {
   return (
     <>
       <View style={styles.mainTopic}>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={styles.contentName}>Tên đề tài: </Text>
-          <Text style={styles.contentName}>{topicInfo?.name}</Text>
+        <View style={styles.content_Top}>
+          <DataTable>
+            <DataTable.Header>
+              <DataTable.Title
+                textStyle={[
+                  styles.textValue,
+                  {color: 'red', fontWeight: '700'},
+                ]}>
+                Tên đề tài
+              </DataTable.Title>
+            </DataTable.Header>
+
+            <DataTable.Row>
+              <DataTable.Cell textStyle={styles.textValue}>
+                {topicInfo?.name}
+              </DataTable.Cell>
+            </DataTable.Row>
+          </DataTable>
         </View>
         {renderButton}
         <List.Section style={styles.content}>
@@ -209,6 +223,7 @@ export default ItemTopic;
 
 const styles = StyleSheet.create({
   mainTopic: {
+    flex: 1,
     backgroundColor: '#fff0f3',
     borderColor: '#f08080',
     borderWidth: 1,
@@ -218,6 +233,11 @@ const styles = StyleSheet.create({
   },
   content: {
     width: '100%',
+    backgroundColor: Colors.white,
+  },
+  content_Top: {
+    width: '100%',
+
     backgroundColor: Colors.white,
   },
   iconMenu: {
@@ -252,5 +272,12 @@ const styles = StyleSheet.create({
   },
   btn: {
     width: '40%',
+  },
+  textValue: {
+    fontSize: responsiveFont(16),
+    color: '#277da1',
+    fontWeight: '500',
+    textTransform: 'uppercase',
+    // paddingHorizontal: responsiveWidth(10),
   },
 });

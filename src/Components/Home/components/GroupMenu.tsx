@@ -23,9 +23,10 @@ const EvaluationMenu = () => {
   const termState = useAppSelector(state => state.term.term);
   const transcript = useAppSelector(state => state.user.transcript);
   useEffect(() => {
-    console.log('transcript', transcript);
-
-    dispatch(authAPI.getTranscripts()(termState.id));
+    if (isEmpty(transcript.ADVISOR)) {
+      console.log('transcript', transcript);
+      dispatch(authAPI.getTranscripts()(termState.id));
+    }
   }, []);
 
   const [index, setIndex] = useState(0);
@@ -134,10 +135,7 @@ const EvaluationMenu = () => {
   return (
     <>
       <View style={GlobalStyles.container}>
-        <StatusBar
-          barStyle={'dark-content'}
-          backgroundColor={Colors.primaryButton}
-        />
+        <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
         <Header
           title="Đánh giá"
           iconLeft={true}

@@ -37,21 +37,17 @@ const initialState = {
 export const TermSlices = createSlice({
   name: 'term',
   initialState,
-  reducers: {
-    //
-  },
+  reducers: {},
   extraReducers: builder => {
-    builder.addCase(termrAPI.getLastTerm().pending, state => {
+    builder.addCase(termrAPI.getTermNow().pending, state => {
       state.is_loading = true;
     });
-    builder.addCase(termrAPI.getLastTerm().fulfilled, (state, action) => {
-      console.log('TermSlices action.payload', action.payload);
-
+    builder.addCase(termrAPI.getTermNow().fulfilled, (state, action) => {
       state.term = action.payload;
       state.is_loading = false;
       state.error = false;
     });
-    builder.addCase(termrAPI.getLastTerm().rejected, state => {
+    builder.addCase(termrAPI.getTermNow().rejected, state => {
       state.error = true;
       state.is_loading = false;
     });

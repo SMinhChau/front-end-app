@@ -81,10 +81,7 @@ const TermMenu = () => {
   return (
     <>
       <View style={GlobalStyles.container}>
-        <StatusBar
-          barStyle={'dark-content'}
-          backgroundColor={Colors.primaryButton}
-        />
+        <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
         <Header
           title="Học kỳ"
           iconLeft={true}

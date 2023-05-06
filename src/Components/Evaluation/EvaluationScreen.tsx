@@ -129,10 +129,7 @@ const EvaluationScreen: React.FC<data> = ({}) => {
 
   return (
     <View style={GlobalStyles.container}>
-      <StatusBar
-        barStyle={'dark-content'}
-        backgroundColor={Colors.primaryButton}
-      />
+      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
       <Header
         title="Tổng kết"
         iconLeft={true}

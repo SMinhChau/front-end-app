@@ -69,9 +69,15 @@ const HomeScreen: React.FC<{}> = () => {
   useEffect(() => {
     if (userState?.user?.majors?.id) {
       dispatch(majorAPI.getMajorById()(userState?.user?.majors?.id));
-      dispatch(termrAPI.getLastTerm()(userState?.user?.majors?.id));
+      dispatch(termrAPI.getTermNow()(userState?.user?.majors?.id));
     }
   }, [userState]);
+
+  useEffect(() => {
+    if (userState.allow === false) {
+      navigation.navigate(RouteNames.DisAcceptedUser);
+    }
+  }, [userState, termState]);
 
   useEffect(() => {
     if (termState?.id) {
@@ -87,7 +93,7 @@ const HomeScreen: React.FC<{}> = () => {
 
   return (
     <>
-      <Header title="Trang chủ" iconRight={true}></Header>
+      <Header logo title="Trang chủ" iconRight={true} iconLeft></Header>
       <View style={styles.contentTop}>
         <Lottie
           source={require('../../assets/jsonAmination/hello.json')}
@@ -148,6 +154,7 @@ const styles = StyleSheet.create({
   content: {
     justifyContent: 'flex-start',
     paddingTop: responsiveHeight(20),
+    backgroundColor: Colors.bg,
   },
   top: {
     justifyContent: 'center',
@@ -173,13 +180,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: Colors.primaryButton,
-    borderBottomRightRadius: 200,
-    borderColor: 'none',
-    borderBottomLeftRadius: 5,
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 0,
-    overflow: 'hidden',
+    backgroundColor: Colors.bg,
+    // borderBottomRightRadius: 200,
+    // borderColor: 'none',
+    // borderBottomLeftRadius: 5,
+    // borderTopLeftRadius: 5,
+    // borderTopRightRadius: 0,
+    // overflow: 'hidden',
   },
 
   nameTitle: {
