@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
   },
   formView: {
     marginTop: '35%',
-    marginHorizontal: responsiveWidth(5),
+    marginHorizontal: responsiveWidth(10),
     backgroundColor: Colors.white,
     borderRadius: 10,
   },

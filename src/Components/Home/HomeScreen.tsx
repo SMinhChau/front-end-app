@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 
 import Lottie from 'lottie-react-native';
 import Header from '../../common/Header';
@@ -93,57 +93,60 @@ const HomeScreen: React.FC<{}> = () => {
 
   return (
     <>
-      <Header logo title="Trang chủ" iconRight={true} iconLeft></Header>
+      <Header logo home title="Trang chủ" iconRight={true}></Header>
       <View style={styles.contentTop}>
-        <Lottie
-          source={require('../../assets/jsonAmination/hello.json')}
-          autoPlay
-          loop
-          style={styles.iconUser}
-        />
+        <View style={styles.iconUser}>
+          <Lottie
+            source={require('../../assets/jsonAmination/hello.json')}
+            autoPlay
+            style={{width: 80}}
+          />
+        </View>
 
         <View style={styles.nameContent}>
           <Text style={styles.nameTitle}>{userState?.user?.name}</Text>
         </View>
       </View>
       <View style={[GlobalStyles.container, styles.content]}>
-        <View style={styles.top}>
-          <View style={styles.topTop}>
-            {menu.map((item, index) => (
-              <View key={index} style={styles.iconRight}>
-                <Ionicons
-                  name={item.icon}
-                  color={item?.color}
-                  size={40}
-                  style={styles.icon}
-                />
-                <TouchViewMenu
-                  backgroundColor={item?.backgroundColor}
-                  borderColor={item?.color}
-                  onPress={() => navigation.navigate(item?.navigation)}
-                  title={item.name}></TouchViewMenu>
-              </View>
-            ))}
-          </View>
+        <ScrollView>
+          <View style={styles.top}>
+            <View style={styles.topTop}>
+              {menu.map((item, index) => (
+                <View key={index} style={styles.iconRight}>
+                  <Ionicons
+                    name={item.icon}
+                    color={item?.color}
+                    size={40}
+                    style={styles.icon}
+                  />
+                  <TouchViewMenu
+                    backgroundColor={item?.backgroundColor}
+                    borderColor={item?.color}
+                    onPress={() => navigation.navigate(item?.navigation)}
+                    title={item.name}></TouchViewMenu>
+                </View>
+              ))}
+            </View>
 
-          <View style={styles.topTop}>
-            {menuBottom.map((item, index) => (
-              <View key={index} style={styles.iconRight}>
-                <Ionicons
-                  name={item.icon}
-                  color={item?.color}
-                  size={40}
-                  style={styles.icon}
-                />
-                <TouchViewMenu
-                  backgroundColor={item?.backgroundColor}
-                  borderColor={item?.color}
-                  onPress={() => navigation.navigate(item?.navigation)}
-                  title={item.name}></TouchViewMenu>
-              </View>
-            ))}
+            <View style={styles.topTop}>
+              {menuBottom.map((item, index) => (
+                <View key={index} style={styles.iconRight}>
+                  <Ionicons
+                    name={item.icon}
+                    color={item?.color}
+                    size={40}
+                    style={styles.icon}
+                  />
+                  <TouchViewMenu
+                    backgroundColor={item?.backgroundColor}
+                    borderColor={item?.color}
+                    onPress={() => navigation.navigate(item?.navigation)}
+                    title={item.name}></TouchViewMenu>
+                </View>
+              ))}
+            </View>
           </View>
-        </View>
+        </ScrollView>
       </View>
     </>
   );
@@ -152,9 +155,8 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   content: {
-    justifyContent: 'flex-start',
-    paddingTop: responsiveHeight(20),
-    backgroundColor: Colors.bg,
+    justifyContent: 'space-between',
+    backgroundColor: Colors.white,
   },
   top: {
     justifyContent: 'center',
@@ -174,26 +176,33 @@ const styles = StyleSheet.create({
   },
 
   iconUser: {
-    width: 80,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: responsiveWidth(10),
+    borderRadius: 20,
+    borderColor: '#ffb3c6',
+    // backgroundColor: '#ffe5ec',
+    borderWidth: 2,
   },
   contentTop: {
+    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    backgroundColor: Colors.white,
     alignItems: 'center',
-    backgroundColor: Colors.bg,
-    // borderBottomRightRadius: 200,
-    // borderColor: 'none',
-    // borderBottomLeftRadius: 5,
-    // borderTopLeftRadius: 5,
-    // borderTopRightRadius: 0,
-    // overflow: 'hidden',
+    borderColor: Colors.bg,
+    borderWidth: 1,
+    shadowOpacity: 1,
+    paddingVertical: responsiveHeight(2),
+    shadowOffset: {width: 2, height: 3},
   },
 
   nameTitle: {
     textAlign: 'center',
     fontSize: responsiveFont(20),
     color: '#941b0c',
-    fontWeight: '600',
+    fontWeight: '500',
     textTransform: 'uppercase',
   },
   nameContent: {
@@ -201,5 +210,16 @@ const styles = StyleSheet.create({
     width: '50%',
     paddingHorizontal: responsiveWidth(10),
     paddingVertical: responsiveHeight(5),
+    backgroundColor: Colors.white,
+  },
+  titleModal: {
+    fontSize: responsiveFont(15),
+    color: '#003049',
+  },
+  btn: {
+    width: '100%',
+  },
+  view_Portal: {
+    backgroundColor: '#e9d8a6',
   },
 });

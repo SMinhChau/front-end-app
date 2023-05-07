@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  KeyboardAvoidingView,
 } from 'react-native';
 import CloseButton from '../../../common/CloseButton';
 import Colors from '../../../Themes/Colors';
@@ -102,6 +103,7 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
     setBasicInfo({
       ...basicInfo,
     });
+    console.log('updateUserInfo basicInfo', {...basicInfo});
 
     const formData = new FormData();
     formData.append('username', basicInfo.username);
@@ -225,48 +227,52 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
             />
           </View>
           <ScrollView>
-            <View style={styles.contentForm}>
-              {renderImage}
-              <View style={styles.content}>
-                {BASIC_INFO.map((item, index) => {
-                  if (item?.key === 'gender') {
-                    return genderBlock(index);
-                  }
+            <KeyboardAvoidingView
+              keyboardVerticalOffset={responsiveHeight(40)}
+              behavior={'position'}>
+              <View style={styles.contentForm}>
+                {renderImage}
+                <View style={styles.content}>
+                  {BASIC_INFO.map((item, index) => {
+                    if (item?.key === 'gender') {
+                      return genderBlock(index);
+                    }
 
-                  const isUserName = () => item?.key === 'username';
-                  return (
-                    <TextInputView
-                      inputStyle={{
-                        borderColor: Colors.blueBoder,
-                        borderRadius: 6,
-                      }}
-                      isRequire={!isUserName()}
-                      editable={!isUserName()}
-                      title={item.title}
-                      titleStyle={[styles.lable]}
-                      textInputStyle={{
-                        fontSize: responsiveFont(14),
-                        color: Colors.black,
-                      }}
-                      key={index}
-                      placeholder={item.placeholder}
-                      onChangeText={text =>
-                        setBasicInfo({...basicInfo, [item.key]: text})
-                      }
-                      style={{marginBottom: responsiveHeight(20)}}
-                      messageError={item.key === 'email' && isError}
-                    />
-                  );
-                })}
+                    const isUserName = () => item?.key === 'username';
+                    return (
+                      <TextInputView
+                        inputStyle={{
+                          borderColor: Colors.blueBoder,
+                          borderRadius: 6,
+                        }}
+                        isRequire={!isUserName()}
+                        editable={!isUserName()}
+                        title={item.title}
+                        titleStyle={[styles.lable]}
+                        textInputStyle={{
+                          fontSize: responsiveFont(14),
+                          color: Colors.black,
+                        }}
+                        key={index}
+                        placeholder={item.placeholder}
+                        onChangeText={text =>
+                          setBasicInfo({...basicInfo, [item.key]: text})
+                        }
+                        style={{marginBottom: responsiveHeight(20)}}
+                        messageError={item.key === 'email' && isError}
+                      />
+                    );
+                  })}
+                </View>
+                <View style={styles.viewBtn}>
+                  <ButtonHandle
+                    onPress={() => handleSubmitForm()}
+                    style={styles.btn}
+                    icon
+                    title={languages['vi'].update}></ButtonHandle>
+                </View>
               </View>
-              <View style={styles.viewBtn}>
-                <ButtonHandle
-                  onPress={() => handleSubmitForm()}
-                  style={styles.btn}
-                  icon
-                  title={languages['vi'].update}></ButtonHandle>
-              </View>
-            </View>
+            </KeyboardAvoidingView>
           </ScrollView>
         </Modal>
       </Portal>

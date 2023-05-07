@@ -2,9 +2,6 @@ import {Dimensions, Platform} from 'react-native';
 
 const {width, height} = Dimensions.get('window');
 
-const DESIGN_WIDTH = 375;
-const DESIGN_HEIGHT = 812;
-
 export function deviceWidth() {
   return width;
 }
@@ -14,15 +11,15 @@ export function deviceHeight() {
 }
 
 export function responsiveWidth(value = 0) {
-  return (width * value) / DESIGN_WIDTH;
+  return (width * value) / width;
 }
 
 export function responsiveHeight(value = 0) {
-  return (height * value) / DESIGN_HEIGHT;
+  return (height * value) / height;
 }
 
 export function responsiveFont(value = 0) {
-  return (width * value) / DESIGN_WIDTH;
+  return (width * value) / width;
 }
 
 export function isIOS() {

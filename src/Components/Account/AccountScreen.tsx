@@ -23,6 +23,7 @@ import {
 import {checkGenger, checkTypeTraining} from '../../utilities/contants';
 import {AlertNotificationRoot} from 'react-native-alert-notification';
 import {DataTable} from 'react-native-paper';
+import {isEmpty, showMessageWarning} from '../../utilities/utils';
 
 const Account: React.FC<{}> = ({}) => {
   const navigation = useNavigation();
@@ -30,13 +31,21 @@ const Account: React.FC<{}> = ({}) => {
   const majorState = useAppSelector(state => state.major.major);
   const userState = useAppSelector(state => state.user.user);
 
+  const [showModal, setShowModal] = useState(false);
+
   const handleLogout = async () => {
     tokenService
       .reset()
       .then(() => navigation.navigate(RouteNames.loginNavigation));
   };
 
-  const [showModal, setShowModal] = useState(false);
+  const handleChangePass = () => {
+    if (isEmpty(userState.email)) {
+      showMessageWarning('Vui lòng cập nhật email');
+    } else {
+      navigation.navigate(RouteNames.ForgotPassword);
+    }
+  };
 
   const renderTop = () => {
     return (
@@ -127,7 +136,7 @@ const Account: React.FC<{}> = ({}) => {
           <DataTable>
             <TouchableOpacity
               style={[GlobalStyles.flexDirectionRow, styles.btnAction]}
-              onPress={() => navigation.navigate(RouteNames.ForgotPassword)}>
+              onPress={handleChangePass}>
               <Text style={styles.itemAction}>Đổi mật khẩu</Text>
               <IconView name="key-outline" color={Colors.blueBoder} />
             </TouchableOpacity>
@@ -230,5 +239,15 @@ const styles = StyleSheet.create({
   btnAction: {
     // backgroundColor: '#ccf',
     paddingVertical: responsiveHeight(10),
+  },
+  titleModal: {
+    fontSize: responsiveFont(15),
+    color: '#003049',
+  },
+  btn: {
+    width: '100%',
+  },
+  view_Portal: {
+    backgroundColor: '#e9d8a6',
   },
 });

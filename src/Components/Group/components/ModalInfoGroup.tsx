@@ -6,6 +6,7 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 
 import {Button, Dialog, Modal, Portal, TextInput} from 'react-native-paper';
@@ -42,6 +43,8 @@ import {
   showMessageSuccess,
   showMessageWarning,
 } from '../../../utilities/utils';
+import {Images} from '../../../assets/images/Images';
+import GlobalStyles from '../../../common/styles/GlobalStyles';
 
 interface Props {
   title?: string;
@@ -147,14 +150,18 @@ const ModalInfoGroup: React.FC<Props> = ({
 
   const renderListMember = useMemo(
     () => (item: any) => {
+      const handleGetAvatar = () => {
+        return item?.avatar ? {uri: item?.avatar} : Images.avatarDefault;
+      };
       return (
         <View style={styles.contenMember}>
-          <View style={styles.leftContent}>
-            <Lottie
+          <View style={[styles.leftContent, GlobalStyles.centerView]}>
+            <Image source={handleGetAvatar()} style={styles.imgaAvatar} />
+            {/* <Lottie
               source={require('../../../assets/jsonAmination/88012-student-animated-icon.json')}
               autoPlay
               loop
-            />
+            /> */}
           </View>
           <View style={styles.rightContent}>
             <TextItemAccount
@@ -244,6 +251,7 @@ const ModalInfoGroup: React.FC<Props> = ({
     return (
       <View style={styles.contentTitle}>
         <View style={styles.nameGroup}>
+          <Text style={[styles.titleGroup]}>Tên nhóm: </Text>
           <IconView name="ios-caret-forward" color={Colors.iconbr} size={26} />
           <Text numberOfLines={1} style={styles.titleGroup}>
             {infoGroup?.name}
@@ -348,6 +356,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   nameGroup: {
+    justifyContent: 'center',
+    alignItems: 'center',
     borderColor: '#ff9f1c',
     borderWidth: 1,
     shadowOpacity: 3,
@@ -355,7 +365,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     paddingVertical: responsiveHeight(10),
     flexDirection: 'row',
-    backgroundColor: '#80b918',
   },
   viewIcon: {
     backgroundColor: '#dda15e',
@@ -378,19 +387,20 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderWidth: 1,
     shadowOpacity: 3,
-    backgroundColor: '#cbdfbd',
-    borderRadius: 10,
+
+    borderRadius: 5,
     borderColor: '#76c893',
-    width: responsiveWidth(330),
+    width: responsiveWidth(340),
     marginTop: responsiveHeight(10),
+    marginBottom: responsiveHeight(10),
     marginRight: 5,
   },
   contenTopic: {
     // width: '100%',
     borderWidth: 1,
     shadowOpacity: 3,
-    backgroundColor: '#98c1d9',
-    borderRadius: 10,
+    backgroundColor: Colors.white,
+    borderRadius: 5,
     borderColor: '#669bbc',
     paddingHorizontal: responsiveWidth(10),
     marginHorizontal: responsiveWidth(5),
@@ -429,5 +439,15 @@ const styles = StyleSheet.create({
   },
   btn: {
     width: 50,
+  },
+  imgaAvatar: {
+    width: 65,
+    height: 65,
+    resizeMode: 'contain',
+    borderRadius: 50,
+    borderColor: Colors.blueBoder,
+    borderWidth: 1,
+    shadowOpacity: 0.02,
+    shadowOffset: {width: 2, height: 3},
   },
 });

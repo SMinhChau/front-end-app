@@ -3,7 +3,11 @@ import Colors from '../Themes/Colors';
 import IconView from './IconView';
 import {useNavigation} from '@react-navigation/native';
 import RouteNames from '../Components/RouteNames';
-import {responsiveFont, responsiveHeight} from '../utilities/sizeScreen';
+import {
+  responsiveFont,
+  responsiveHeight,
+  responsiveWidth,
+} from '../utilities/sizeScreen';
 import {Images} from '../assets/images/Images';
 
 interface Props {
@@ -34,18 +38,7 @@ const Header: React.FC<Props> = ({
           <IconView name="home-outline" color={Colors.textPrimary} size={24} />
         </TouchableOpacity>
       )}
-      {logo && (
-        <Image
-          source={Images.logo_iuh}
-          style={{
-            width: 100,
-            height: 40,
-            position: 'relative',
-            left: 60,
-            top: -5,
-          }}
-        />
-      )}
+
       {iconLeft && back && (
         <TouchableOpacity
           style={[styles.contentIcon, styles.contentIconLeft]}
@@ -58,10 +51,20 @@ const Header: React.FC<Props> = ({
         </TouchableOpacity>
       )}
 
-      <View style={styles.contentText}>
-        <Text style={[logo ? styles.content_Logo : styles.textView]}>
-          {title}
-        </Text>
+      {iconRight && logo && (
+        <Image
+          source={Images.logo_iuh}
+          style={{
+            width: 100,
+            height: 35,
+            // position: 'relative',
+            left: 0,
+            top: -5,
+          }}
+        />
+      )}
+      <View style={[logo ? styles._contentText : styles.contentText]}>
+        <Text style={[styles.textView]}>{title}</Text>
       </View>
 
       <View style={styles.contentIconRight}>
@@ -100,6 +103,13 @@ const styles = StyleSheet.create({
   },
   contentText: {
     width: '90%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  _contentText: {
+    width: '60%',
+    position: 'relative',
+    left: responsiveWidth(-10),
     justifyContent: 'center',
     alignItems: 'center',
   },

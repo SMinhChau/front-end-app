@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
-  Alert,
   KeyboardAvoidingView,
   ScrollView,
   Image,
@@ -95,9 +94,9 @@ const Login: React.FC<{}> = () => {
     if (inputUsername !== '') {
       if (inputPassword.length < 6) {
         showMessageWarning('Mật khẩu phải lớn hơn 5 ký tự!');
+        setResetPass(false);
       } else {
         setErrorPass('');
-        setLoading(true);
         await dispatch(
           authAPI.login()({
             username: inputUsername,
@@ -110,28 +109,31 @@ const Login: React.FC<{}> = () => {
     }
   };
 
-  const handleResetPassword = async () => {
+  const handleResetPassword = () => {
     if (inputUserName !== '' && inputUserName.length > 5) {
       setResetPass(true);
-      await authService
-        .resetPassword({username: inputUserName})
-        .then(result => {
-          console.log('result', result);
-          setModalRestPass(false);
-          setResetPass(false);
-          setInputUserName('');
-          showMessageSuccess(
-            `Đã gửi yêu cầu khôi phục mật khẩu đến email: ${result.data.email}`,
-          );
-        })
-        .catch(er => {
-          console.log('er', er);
-          setModalRestPass(false);
-          setResetPass(false);
-          setInputUserName('');
-          showMessageEror('Tên đăng nhập không tồn tại!');
-        });
+      setTimeout(async () => {
+        await authService
+          .resetPassword({username: inputUserName})
+          .then(result => {
+            console.log('result', result);
+            setModalRestPass(false);
+            setResetPass(false);
+            setInputUserName('');
+            showMessageSuccess(
+              `Đã gửi yêu cầu khôi phục mật khẩu đến email: ${result.data.email}`,
+            );
+          })
+          .catch(er => {
+            console.log('er', er);
+            setModalRestPass(false);
+            setResetPass(false);
+            setInputUserName('');
+            showMessageEror('Tên đăng nhập không tồn tại!');
+          });
+      }, 5000);
     } else {
+      setModalRestPass(false);
       showMessageWarning('Vui lòng nhập tên lớn hơn 6 ký tự');
     }
   };
@@ -259,7 +261,7 @@ const Login: React.FC<{}> = () => {
           </Dialog.Title>
           <Dialog.Content>
             <TextInput
-              style={styles.inputModal}
+              style={styles.input}
               placeholder={'Tên đăng nhập'}
               onChangeText={text => onChangeText(text)}
             />
@@ -282,8 +284,8 @@ export default Login;
 
 const styles = StyleSheet.create({
   formView: {
-    marginTop: responsiveHeight(50),
-    marginHorizontal: responsiveWidth(5),
+    marginTop: responsiveHeight(40),
+    marginHorizontal: responsiveWidth(10),
     backgroundColor: Colors.white,
     borderRadius: 10,
   },
@@ -335,9 +337,8 @@ const styles = StyleSheet.create({
   },
   contentForm: {
     flexDirection: 'column',
-    paddingHorizontal: responsiveHeight(15),
+    paddingHorizontal: responsiveWidth(10),
     paddingVertical: responsiveHeight(5),
-    // paddingBottom: responsiveHeight(20),
     backgroundColor: Colors.white,
     borderColor: '#fec89a',
     borderWidth: 1,
@@ -354,8 +355,8 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(15),
   },
   logo: {
-    width: responsiveWidth(150),
-    height: responsiveHeight(150),
+    width: responsiveWidth(140),
+    height: responsiveHeight(140),
     marginBottom: responsiveHeight(10),
     alignContent: 'center',
   },

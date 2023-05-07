@@ -42,13 +42,13 @@ export default TouchViewMenu;
 
 const styles = StyleSheet.create({
   content: {
-    height: responsiveHeight(200),
+    height: responsiveHeight(180),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
 
     flexDirection: 'column',
-    width: responsiveWidth(160),
+    width: responsiveWidth(150),
     borderRadius: 30,
 
     borderWidth: 2,

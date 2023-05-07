@@ -128,7 +128,6 @@ const StudentOfList: React.FC<Props> = ({
   const topContent = useMemo(() => {
     return (
       <>
-        {/* uri: studentInfo?.avatar, */}
         <View style={[styles.contentTitle]}>
           <Image source={handleGetAvatar()} style={styles.imgaAvatar} />
 
@@ -285,8 +284,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   btn: {
-    width: '70%',
-    marginRight: responsiveWidth(5),
+    width: '80%',
+    marginRight: responsiveWidth(20),
   },
   btnDisabled: {
     opacity: 0.5,

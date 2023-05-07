@@ -215,11 +215,10 @@ const styles = StyleSheet.create({
     marginHorizontal: responsiveWidth(10),
   },
   contentTitle: {
-    marginTop: 5,
+    marginTop: responsiveHeight(10),
     backgroundColor: '#aed9e0',
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
-
     borderColor: '#003049',
     paddingVertical: responsiveHeight(10),
   },
