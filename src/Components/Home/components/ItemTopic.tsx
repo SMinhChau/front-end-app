@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -6,6 +6,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import {DataTable, List} from 'react-native-paper';
 import Lottie from 'lottie-react-native';
@@ -35,6 +36,23 @@ const ItemTopic = ({topicInfo, handleChosseTopic, count}: Props) => {
   const handlePress = () => setExpanded(!expanded);
   const [ismodal, showModal] = useState(false);
   const [valueModal, setValueModal] = useState<string>();
+  const termState = useAppSelector(state => state.term.term);
+  const [dayChooseTopic, setDayChooseTopic] = useState(false);
+
+  const checkDateChooseTopic = () => {
+    const start = new Date(termState?.endDateChooseTopic);
+    const nowDate = new Date();
+    console.log('start', start);
+    console.log('nowDate', nowDate);
+
+    if (start < nowDate) {
+      setDayChooseTopic(true);
+    }
+  };
+
+  useEffect(() => {
+    checkDateChooseTopic();
+  }, []);
 
   const TOPIC_DATA = [
     {name: topicInfo?.quantityGroupMax, key: 'Số lượng'},
@@ -55,22 +73,40 @@ const ItemTopic = ({topicInfo, handleChosseTopic, count}: Props) => {
   ];
 
   const renderButton = useMemo(() => {
+    console.log('dayChooseTopic', dayChooseTopic);
+
     return (
       <>
-        {groupState?.id ? (
+        {dayChooseTopic === true ? (
           <>
-            {groupState?.topic?.id ? null : (
-              <View style={GlobalStyles.centerView}>
-                <ButtonHandle
-                  style={styles.btn}
-                  iconName="md-arrow-redo-outline"
-                  title="Chọn đề tài"
-                  onPress={handleChosseTopic}
-                />
-              </View>
+            {groupState?.id ? (
+              <>
+                {groupState?.topic?.id ? null : (
+                  <View style={GlobalStyles.centerView}>
+                    <ButtonHandle
+                      style={styles.btn}
+                      iconName="md-arrow-redo-outline"
+                      title="Chọn đề tài"
+                      onPress={handleChosseTopic}
+                    />
+                  </View>
+                )}
+              </>
+            ) : (
+              <ButtonHandle
+                style={styles.btn_dis}
+                disabled
+                colorIcon={Colors.grayLight}
+                iconName="md-arrow-redo-outline"
+                title="Chọn đề tài"
+              />
             )}
           </>
-        ) : null}
+        ) : (
+          <>
+            <Text>Chưa đến thời gian chọn đề tài</Text>
+          </>
+        )}
       </>
     );
   }, [groupState?.topic?.id, groupState?.id]);
@@ -223,13 +259,16 @@ export default ItemTopic;
 
 const styles = StyleSheet.create({
   mainTopic: {
-    flex: 1,
+    // height: Dimensions.get('window').height - 100,
     backgroundColor: '#fff0f3',
     borderColor: '#f08080',
     borderWidth: 1,
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
     width: responsiveWidth(360),
-    marginHorizontal: responsiveWidth(6),
-    paddingHorizontal: responsiveWidth(16),
+    marginHorizontal: responsiveWidth(5),
+    paddingHorizontal: responsiveWidth(10),
   },
   content: {
     width: '100%',
@@ -272,6 +311,11 @@ const styles = StyleSheet.create({
   },
   btn: {
     width: '40%',
+  },
+  btn_dis: {
+    width: '40%',
+    backgroundColor: '#5e6e52',
+    color: '#000',
   },
   textValue: {
     fontSize: responsiveFont(16),

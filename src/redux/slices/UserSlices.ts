@@ -76,6 +76,9 @@ export const userSlice = createSlice({
       console.log('-======> setAllow', action);
       state.allow = action.payload;
     },
+    setTranscript: (state, action: PayloadAction<Transcript>) => {
+      state.transcript = action.payload;
+    },
   },
   extraReducers: builder => {
     builder.addCase(authAPI.login().fulfilled, (state, action) => {
@@ -98,4 +101,4 @@ export const userSlice = createSlice({
   },
 });
 
-export const {updateUser, setUser, setAllow} = userSlice.actions;
+export const {updateUser, setUser, setAllow, setTranscript} = userSlice.actions;

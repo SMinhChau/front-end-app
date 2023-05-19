@@ -1,5 +1,12 @@
-import {useMemo, useReducer, useState} from 'react';
-import {TouchableOpacity, View, Text, StyleSheet, Image} from 'react-native';
+import {useMemo, useState} from 'react';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Dimensions,
+} from 'react-native';
 import Lottie from 'lottie-react-native';
 import Header from '../../common/Header';
 import GlobalStyles from '../../common/styles/GlobalStyles';
@@ -171,7 +178,10 @@ export default Account;
 
 const styles = StyleSheet.create({
   content: {
-    backgroundColor: Colors.bg,
+    height: Dimensions.get('window').height,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    backgroundColor: Colors.white,
   },
   topAccount: {
     flexDirection: 'row',
@@ -216,10 +226,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     width: '100%',
     alignItems: 'flex-end',
-    paddingTop: 10,
     paddingRight: 15,
     position: 'relative',
-    top: 20,
+    top: 15,
     zIndex: 99999,
   },
   btnView: {

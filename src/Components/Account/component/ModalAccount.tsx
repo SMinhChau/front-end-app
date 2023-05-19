@@ -115,10 +115,12 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
     formData.append('email', basicInfo.email);
 
     if (selectedAvatar) {
-      console.log(selectedAvatar?.length);
       formData.append('avatar', selectedAvatar[0]);
+      formData.append('avatar', selectedAvatar[0]);
+      console.log('selectedAvatar', selectedAvatar[0]);
     } else {
       formData.append('avatar', basicInfo?.avatar);
+      console.log('avtar ', basicInfo?.avatar);
     }
 
     await authService

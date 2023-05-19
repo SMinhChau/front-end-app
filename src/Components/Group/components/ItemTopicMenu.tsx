@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import Lottie from 'lottie-react-native';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
 import Header from '../../../common/Header';
@@ -46,7 +52,7 @@ const ItemTopicMenu = () => {
         iconRight={false}></Header>
 
       {topic?.id ? (
-        <View style={styles.containner}>
+        <View style={[styles.containner, GlobalStyles.centerView]}>
           <ItemTopic
             key={groupState?.topic?.id}
             topicInfo={topic}
@@ -86,8 +92,8 @@ export default ItemTopicMenu;
 
 const styles = StyleSheet.create({
   containner: {
-    marginTop: responsiveHeight(20),
     flex: 1,
+    marginVertical: responsiveHeight(20),
   },
   center: {
     flex: 1,

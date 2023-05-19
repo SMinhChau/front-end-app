@@ -25,6 +25,8 @@ class GroupAPI {
         const result = await groupService.outGroup(termId);
 
         if (result.status === 200) {
+          console.log('result.data');
+
           return result.data;
         }
         return thunkAP.rejectWithValue('Xóa nhóm không thành công');

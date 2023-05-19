@@ -12,19 +12,16 @@ import {SceneMap, TabView} from 'react-native-tab-view';
 import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import authAPI from '../../../redux/apis/auth';
 import {DataTable, Text} from 'react-native-paper';
-import NoneData from '../../Section/NoneData';
-import {isEmpty} from 'lodash';
 
 const EvaluationMenu = () => {
   const layout = useWindowDimensions();
   const dispatch = useAppDispatch();
 
-  const userState = useAppSelector(state => state.user);
   const termState = useAppSelector(state => state.term.term);
   const transcript = useAppSelector(state => state.user.transcript);
+
   useEffect(() => {
-    if (isEmpty(transcript.ADVISOR)) {
-      console.log('transcript', transcript);
+    if (termState.id) {
       dispatch(authAPI.getTranscripts()(termState.id));
     }
   }, []);
@@ -66,7 +63,7 @@ const EvaluationMenu = () => {
                 Điểm Trung Bình
               </DataTable.Title>
               <DataTable.Title textStyle={styles._titleCol} numeric>
-                {!isEmpty(_data.avgGrader) ? (
+                {_data.avgGrader ? (
                   <>{_data.avgGrader}</>
                 ) : (
                   <Text style={styles.title_Point}>Chưa có điểm</Text>
@@ -93,7 +90,7 @@ const EvaluationMenu = () => {
                 Điểm Trung Bình
               </DataTable.Title>
               <DataTable.Title textStyle={styles._titleCol} numeric>
-                {!isEmpty(_data.avgGrader) ? (
+                {_data.avgGrader ? (
                   <>{_data.avgGrader}</>
                 ) : (
                   <Text style={styles.title_Point}>Chưa có điểm</Text>
@@ -119,7 +116,7 @@ const EvaluationMenu = () => {
                 Điểm Trung Bình
               </DataTable.Title>
               <DataTable.Title textStyle={styles._titleCol} numeric>
-                {!isEmpty(_data.avgGrader) ? (
+                {_data.avgGrader ? (
                   <>{_data.avgGrader}</>
                 ) : (
                   <Text style={styles.title_Point}>Chưa có điểm</Text>

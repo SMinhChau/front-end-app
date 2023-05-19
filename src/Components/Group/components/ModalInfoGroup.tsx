@@ -114,6 +114,8 @@ const ModalInfoGroup: React.FC<Props> = ({
   const handleOutGroup = (id: any) => {
     setLoading(true);
     dispatch(groupAPI.outMyGroup()(id)).then(result => {
+      console.log('result', result);
+
       setLoading(false);
       modalClose(false);
       showMessageSuccess('Đã xóa nhóm thành công');

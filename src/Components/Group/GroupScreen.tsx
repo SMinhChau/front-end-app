@@ -1,6 +1,13 @@
 import {is} from 'immer/dist/internal';
 import {useEffect, useMemo, useState} from 'react';
-import {TouchableOpacity, View, Text, StyleSheet, FlatList} from 'react-native';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Dimensions,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import Header from '../../common/Header';
@@ -48,7 +55,6 @@ const Group: React.FC<{}> = () => {
 
   useEffect(() => {
     checkTermStart();
-
     getInfoGroup();
   }, [checkStartDate, termState, groupState]);
 
@@ -171,19 +177,20 @@ export default Group;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: Colors.bg,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     paddingHorizontal: responsiveWidth(10),
   },
   content: {
+    width: Dimensions.get('window').width / 3,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    height: responsiveHeight(120),
-    width: responsiveWidth(110),
     paddingVertical: responsiveHeight(10),
     shadowOffset: {width: 2, height: 3},
     marginVertical: responsiveHeight(20),
-    marginRight: responsiveWidth(10),
   },
   bottomContent: {
     alignItems: 'flex-start',
@@ -193,7 +200,6 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(20),
     shadowOffset: {width: 2, height: 3},
   },
-
   topTitle: {
     fontSize: responsiveFont(17),
     color: Colors.textPrimary,
@@ -231,13 +237,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#a2d2ff',
   },
   flatList: {
-    width: '100%',
+    width: Dimensions.get('window').width - responsiveWidth(20),
     height: '75%',
   },
   amination: {
     right: responsiveWidth(-150),
   },
   menu: {
+    width: Dimensions.get('window').width,
+    marginHorizontal: responsiveWidth(10),
+
     flexDirection: 'row',
     alignItems: 'center',
   },

@@ -75,12 +75,11 @@ const Login: React.FC<{}> = () => {
   );
 
   useEffect(() => {
-    if (userState.is_login) {
+    if (userState.is_login === true) {
       setLoading(false);
-      dispatch(setUser(userState.user));
       navigation.navigate(RouteNames.TabNavigation);
     }
-    if (userState.error) {
+    if (userState.error === true) {
       setLoading(false);
       showMessageEror('Thông tin đăng nhập không đúng'!);
     }
@@ -97,12 +96,18 @@ const Login: React.FC<{}> = () => {
         setResetPass(false);
       } else {
         setErrorPass('');
-        await dispatch(
-          authAPI.login()({
-            username: inputUsername,
-            password: inputPassword,
-          }),
-        );
+        setLoading(true);
+        try {
+          await dispatch(
+            authAPI.login()({
+              username: inputUsername,
+              password: inputPassword,
+            }),
+          );
+        } catch (error) {
+          setLoading(false);
+          showMessageWarning('Có lỗi xảy ra. VUi lòng thử lại!');
+        }
       }
     } else {
       showMessageWarning('Vui lòng nhập tên!');

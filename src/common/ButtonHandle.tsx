@@ -38,7 +38,11 @@ const ButtonHandle: React.FC<Props> = ({
           size={24}
           color={colorIcon ? colorIcon : Colors.white}
         />
-        {title && <Text style={[styles.textStyle]}>{title}</Text>}
+        {title && (
+          <Text style={disabled ? styles.disabled : styles.textStyle}>
+            {title}
+          </Text>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -61,6 +65,12 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: Colors.white,
+    fontSize: 16,
+    paddingHorizontal: responsiveWidth(10),
+    textAlign: 'center',
+  },
+  disabled: {
+    color: Colors.grayLight,
     fontSize: 16,
     paddingHorizontal: responsiveWidth(10),
     textAlign: 'center',
