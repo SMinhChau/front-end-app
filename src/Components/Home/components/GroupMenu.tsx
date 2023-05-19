@@ -21,10 +21,8 @@ const EvaluationMenu = () => {
   const transcript = useAppSelector(state => state.user.transcript);
 
   useEffect(() => {
-    if (termState.id) {
-      dispatch(authAPI.getTranscripts()(termState.id));
-    }
-  }, []);
+    dispatch(authAPI.getTranscripts()(termState.id));
+  }, [transcript]);
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([

@@ -77,35 +77,24 @@ const ItemTopic = ({topicInfo, handleChosseTopic, count}: Props) => {
 
     return (
       <>
-        {dayChooseTopic === true ? (
-          <>
-            {groupState?.id ? (
-              <>
-                {groupState?.topic?.id ? null : (
-                  <View style={GlobalStyles.centerView}>
-                    <ButtonHandle
-                      style={styles.btn}
-                      iconName="md-arrow-redo-outline"
-                      title="Chọn đề tài"
-                      onPress={handleChosseTopic}
-                    />
-                  </View>
-                )}
-              </>
-            ) : (
-              <ButtonHandle
-                style={styles.btn_dis}
-                disabled
-                colorIcon={Colors.grayLight}
-                iconName="md-arrow-redo-outline"
-                title="Chọn đề tài"
-              />
-            )}
-          </>
+        {groupState?.id ? (
+          <View style={GlobalStyles.centerView}>
+            <ButtonHandle
+              style={styles.btn}
+              disabled={true}
+              colorIcon={Colors.grayLight}
+              iconName="md-arrow-redo-outline"
+              title="Chọn đề tài"
+              onPress={handleChosseTopic}
+            />
+          </View>
         ) : (
-          <>
-            <Text>Chưa đến thời gian chọn đề tài</Text>
-          </>
+          <ButtonHandle
+            style={styles.btn_dis}
+            colorIcon={Colors.grayLight}
+            iconName="md-arrow-redo-outline"
+            title="Chọn đề tài"
+          />
         )}
       </>
     );
