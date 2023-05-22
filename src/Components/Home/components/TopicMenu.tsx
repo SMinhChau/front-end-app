@@ -25,7 +25,7 @@ import ItemTopic from './ItemTopic';
 import LoadingScreen from '../../../common/LoadingScreen';
 import groupAPI from '../../../redux/apis/group';
 import {AlertNotificationRoot} from 'react-native-alert-notification';
-import {showMessageSuccess} from '../../../utilities/utils';
+import {showMessageEror, showMessageSuccess} from '../../../utilities/utils';
 
 const TopicMenu = () => {
   const termState = useAppSelector(state => state.term.term);
@@ -134,11 +134,18 @@ const TopicMenu = () => {
 
   const handleChosseTopic = async (id: any) => {
     setLoading(true);
-    await topicService.chooseTopic(termState?.id, id).then(async result => {
-      setLoading(false);
-      await dispatch(groupAPI.getMyGroup()(termState?.id));
-      showMessageSuccess('Đã chọn đề tài');
-    });
+    await topicService
+      .chooseTopic(termState?.id, id)
+      .then(async result => {
+        setLoading(false);
+        await dispatch(groupAPI.getMyGroup()(termState?.id));
+        showMessageSuccess('Đã chọn đề tài');
+      })
+      .catch(er => {
+        setLoading(false);
+        showMessageEror('Vui lòng thử lại');
+        console.log('ẻ', er);
+      });
   };
 
   const renderTopicList = useMemo(() => {

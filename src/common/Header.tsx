@@ -9,6 +9,7 @@ import {
   responsiveWidth,
 } from '../utilities/sizeScreen';
 import {Images} from '../assets/images/Images';
+import {Badge} from 'react-native-paper';
 
 interface Props {
   title: string;
@@ -69,15 +70,18 @@ const Header: React.FC<Props> = ({
 
       <View style={styles.contentIconRight}>
         {iconRight && (
-          <TouchableOpacity
-            onPress={() => navigation.navigate(RouteNames.Notification)}
-            style={[styles.contentIcon]}>
-            <IconView
-              name="notifications-outline"
-              color={Colors.textPrimary}
-              size={24}
-            />
-          </TouchableOpacity>
+          <>
+            <TouchableOpacity
+              onPress={() => navigation.navigate(RouteNames.Notification)}
+              style={[styles.contentIcon]}>
+              <IconView
+                name="notifications-outline"
+                color={Colors.textPrimary}
+                size={24}
+              />
+            </TouchableOpacity>
+            {/* <Text>3</Text> */}
+          </>
         )}
       </View>
     </View>
@@ -138,7 +142,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   contentIconRight: {
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
 });

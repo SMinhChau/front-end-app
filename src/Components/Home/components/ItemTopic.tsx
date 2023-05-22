@@ -81,15 +81,15 @@ const ItemTopic = ({topicInfo, handleChosseTopic, count}: Props) => {
           <View style={GlobalStyles.centerView}>
             <ButtonHandle
               style={styles.btn}
-              disabled={true}
+              onPress={handleChosseTopic}
               colorIcon={Colors.grayLight}
               iconName="md-arrow-redo-outline"
               title="Chọn đề tài"
-              onPress={handleChosseTopic}
             />
           </View>
         ) : (
           <ButtonHandle
+            disabled={true}
             style={styles.btn_dis}
             colorIcon={Colors.grayLight}
             iconName="md-arrow-redo-outline"
