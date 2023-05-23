@@ -14,6 +14,7 @@ import authAPI from '../../../redux/apis/auth';
 import {DataTable, Text} from 'react-native-paper';
 import authService from '../../../services/auth';
 import Transcript from '../../../utilities/Contant/Transcript';
+import NoneData from '../../Section/NoneData';
 
 const EvaluationMenu = () => {
   const layout = useWindowDimensions();
@@ -150,13 +151,16 @@ const EvaluationMenu = () => {
           home={false}
           style={styles.header}
           back={true}></Header>
-
-        <TabView
-          navigationState={{index, routes}}
-          renderScene={renderScene}
-          onIndexChange={setIndex}
-          initialLayout={{width: layout.width}}
-        />
+        {termState.isPublicResult === 1 ? (
+          <TabView
+            navigationState={{index, routes}}
+            renderScene={renderScene}
+            onIndexChange={setIndex}
+            initialLayout={{width: layout.width}}
+          />
+        ) : (
+          <NoneData icon title="Chưa được xem đi"></NoneData>
+        )}
       </View>
     </>
   );

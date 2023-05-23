@@ -22,6 +22,7 @@ import ModalDes from './ModalDes';
 import ButtonHandle from '../../../common/ButtonHandle';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
 import {useAppSelector} from '../../../redux/hooks';
+import {Images} from '../../../assets/images/Images';
 
 interface Props {
   topicInfo?: Topic;
@@ -37,6 +38,10 @@ const ItemTopic = ({topicInfo, handleChosseTopic, count}: Props) => {
   const [ismodal, showModal] = useState(false);
   const [valueModal, setValueModal] = useState<string>();
   const termState = useAppSelector(state => state.term.term);
+  const [isMax, setMax] = useState(false);
+
+  const memberOfGroup = topicInfo?.totalGroupChoose;
+  const membermaxOfGroup = topicInfo?.quantityGroupMax;
 
   const TOPIC_DATA = [
     {name: topicInfo?.quantityGroupMax, key: 'Số lượng'},
@@ -64,13 +69,18 @@ const ItemTopic = ({topicInfo, handleChosseTopic, count}: Props) => {
             {groupState?.topic?.id ? (
               <></>
             ) : (
-              <ButtonHandle
-                style={styles.btn}
-                onPress={handleChosseTopic}
-                colorIcon={Colors.white}
-                iconName="md-arrow-redo-outline"
-                title="Chọn đề tài"
-              />
+              <View style={styles.vewButton}>
+                <ButtonHandle
+                  style={styles.btn}
+                  onPress={handleChosseTopic}
+                  colorIcon={Colors.white}
+                  iconName="md-arrow-redo-outline"
+                  title="Chọn đề tài"
+                />
+                <Text style={styles.vewButton_text}>
+                  Nhóm đã chọn đề tài: {membermaxOfGroup}
+                </Text>
+              </View>
             )}
           </View>
         ) : (
@@ -192,7 +202,9 @@ const ItemTopic = ({topicInfo, handleChosseTopic, count}: Props) => {
                         right={props => (
                           <>
                             <Image
-                              source={{uri: item.name}}
+                              source={{
+                                uri: item.name ? item.name : Images.avatar,
+                              }}
                               style={styles.imgaAvatar}
                             />
                           </>
@@ -319,5 +331,17 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     textTransform: 'uppercase',
     // paddingHorizontal: responsiveWidth(10),
+  },
+  vewButton_text: {
+    fontSize: responsiveFont(16),
+    color: '#277da1',
+    fontWeight: '500',
+    textTransform: 'uppercase',
+    // paddingHorizontal: responsiveWidth(10),
+  },
+  vewButton: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });

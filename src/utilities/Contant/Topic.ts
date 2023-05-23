@@ -30,4 +30,5 @@ export default interface Topic {
   term: {
     id: number;
   };
+  totalGroupChoose: number;
 }

@@ -18,4 +18,5 @@ export default interface Term {
   majors: {
     id: number;
   };
+  isPublicResult: number;
 }

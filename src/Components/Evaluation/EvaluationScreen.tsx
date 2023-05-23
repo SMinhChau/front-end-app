@@ -24,6 +24,7 @@ const EvaluationScreen: React.FC<data> = ({}) => {
 
   const userState = useAppSelector(state => state.user);
   const termState = useAppSelector(state => state.term.term);
+  console.log('termState.isPublicResult', termState.isPublicResult);
 
   useEffect(() => {
     if (termState.id) {
@@ -136,38 +137,54 @@ const EvaluationScreen: React.FC<data> = ({}) => {
         home={false}
         iconRight={true}></Header>
 
-      <View style={styles.containner}>
-        <Text style={styles.title} variant="titleLarge">
-          Kết Quả Cuối Kỳ
-        </Text>
-        {infoUser}
+      {termState.isPublicResult === 1 ? (
+        <View style={styles.containner}>
+          <Text style={styles.title} variant="titleLarge">
+            Kết Quả Cuối Kỳ
+          </Text>
+          {infoUser}
 
-        <Text style={styles.title_Table}>Tổng hợp điểm</Text>
+          <Text style={styles.title_Table}>Tổng hợp điểm</Text>
 
-        <ScrollView>
-          <View>
-            <DataTable>
-              <DataTable.Header>
-                <DataTable.Title textStyle={styles._titleCol}>
-                  Điểm thuộc gđ
-                </DataTable.Title>
-                <DataTable.Title textStyle={styles._titleCol} numeric>
-                  Điểm TB
-                </DataTable.Title>
-              </DataTable.Header>
+          <ScrollView>
+            <View>
+              <DataTable>
+                <DataTable.Header>
+                  <DataTable.Title textStyle={styles._titleCol}>
+                    Điểm thuộc gđ
+                  </DataTable.Title>
+                  <DataTable.Title textStyle={styles._titleCol} numeric>
+                    Điểm TB
+                  </DataTable.Title>
+                </DataTable.Header>
 
-              {_data.map(item => {
-                if (item.key === 4) {
-                  return <>{renderForAchievement()}</>;
-                }
+                {_data.map(item => {
+                  if (item.key === 4) {
+                    return <>{renderForAchievement()}</>;
+                  }
 
-                if (item.key === 5) {
+                  if (item.key === 5) {
+                    return (
+                      <DataTable.Row>
+                        <DataTable.Cell textStyle={styles._total} numeric>
+                          {item.label}
+                        </DataTable.Cell>
+                        <DataTable.Cell textStyle={styles._total} numeric>
+                          {!isEmpty(item.grade) ? (
+                            <>{item.grade}</>
+                          ) : (
+                            <Text style={styles.title_Point}>Chưa có điểm</Text>
+                          )}
+                        </DataTable.Cell>
+                      </DataTable.Row>
+                    );
+                  }
                   return (
                     <DataTable.Row>
-                      <DataTable.Cell textStyle={styles._total} numeric>
+                      <DataTable.Cell textStyle={styles._grade} numeric>
                         {item.label}
                       </DataTable.Cell>
-                      <DataTable.Cell textStyle={styles._total} numeric>
+                      <DataTable.Cell textStyle={styles._grade} numeric>
                         {!isEmpty(item.grade) ? (
                           <>{item.grade}</>
                         ) : (
@@ -176,26 +193,14 @@ const EvaluationScreen: React.FC<data> = ({}) => {
                       </DataTable.Cell>
                     </DataTable.Row>
                   );
-                }
-                return (
-                  <DataTable.Row>
-                    <DataTable.Cell textStyle={styles._grade} numeric>
-                      {item.label}
-                    </DataTable.Cell>
-                    <DataTable.Cell textStyle={styles._grade} numeric>
-                      {!isEmpty(item.grade) ? (
-                        <>{item.grade}</>
-                      ) : (
-                        <Text style={styles.title_Point}>Chưa có điểm</Text>
-                      )}
-                    </DataTable.Cell>
-                  </DataTable.Row>
-                );
-              })}
-            </DataTable>
-          </View>
-        </ScrollView>
-      </View>
+                })}
+              </DataTable>
+            </View>
+          </ScrollView>
+        </View>
+      ) : (
+        <NoneData icon title="Chưa được xem đi"></NoneData>
+      )}
     </View>
   );
 };
