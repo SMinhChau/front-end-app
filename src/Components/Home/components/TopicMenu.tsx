@@ -91,8 +91,22 @@ const TopicMenu = () => {
       .chooseTopic(termState?.id, id)
       .then(async result => {
         setLoading(false);
-        await dispatch(groupAPI.getMyGroup()(termState?.id));
         showMessageSuccess('Đã chọn đề tài');
+        await dispatch(groupAPI.getMyGroup()(termState?.id));
+      })
+      .catch(er => {
+        showMessageEror('Vui lòng thử lại');
+        setLoading(false);
+      });
+  };
+  const handleCancelTopic = async (id: any) => {
+    setLoading(true);
+    await topicService
+      .cancelTopic(termState?.id)
+      .then(async result => {
+        setLoading(false);
+        showMessageSuccess('Hủy thành công');
+        await dispatch(groupAPI.getMyGroup()(termState?.id));
       })
       .catch(er => {
         setLoading(false);
@@ -107,12 +121,12 @@ const TopicMenu = () => {
         {topics?.length > 0 ? (
           <>
             <View style={[styles.contentTopic]}>
-              <Lottie
+              {/* <Lottie
                 source={require('../../../assets/jsonAmination/loading_cricle.json')}
                 autoPlay
                 loop
                 style={{width: 60}}
-              />
+              /> */}
               <View style={styles.viewTitle}>
                 <Text style={styles.topTitle}>Danh sách Đề tài</Text>
                 <Text style={styles.topTitle}>Số lượng: {topics?.length}</Text>
@@ -133,6 +147,7 @@ const TopicMenu = () => {
                   key={item}
                   topicInfo={item?.item}
                   handleChosseTopic={() => handleChosseTopic(item?.item?.id)}
+                  handleCancelTopic={() => handleCancelTopic(item?.item?.id)}
                 />
               )}
             />
@@ -145,10 +160,9 @@ const TopicMenu = () => {
   }, [topics, groupState]);
   return (
     <>
-      <AlertNotificationRoot>
-        <View style={GlobalStyles.container}>
-          <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
-
+      <View style={GlobalStyles.container}>
+        <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
+        <AlertNotificationRoot>
           <Header
             title="Đề tài"
             iconLeft={true}
@@ -188,8 +202,9 @@ const TopicMenu = () => {
               {renderTopicList}
             </>
           )}
-        </View>
-      </AlertNotificationRoot>
+        </AlertNotificationRoot>
+      </View>
+
       {isLoading && <LoadingScreen />}
       {isLoadingTopic && <LoadingScreen />}
     </>
