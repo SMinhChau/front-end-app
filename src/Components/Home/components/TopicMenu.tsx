@@ -47,7 +47,11 @@ const TopicMenu = () => {
     if (termState?.id) {
       topicService.getTopicList(termState?.id).then(result => {
         setLoadingTopic(false);
-        setTopics(result?.data);
+        const _data = result?.data?.filter(
+          (i: {status: string}) => i.status === 'ACCEPT',
+        );
+
+        setTopics(_data);
       });
     }
   };
@@ -58,57 +62,6 @@ const TopicMenu = () => {
   var startDateChooseTopicFormat = moment(termState?.startDateChooseTopic)
     .locale('vi')
     .format('dddd, DD/MM/YYYY, h:mm:ss A');
-
-  const DATETOPIC = [
-    {
-      id: 1,
-      title: 'Ngày bắt đầu chọn Đề tài',
-      icon: 'ios-megaphone',
-      date: moment(termState?.startDateChooseTopic)
-        .locale('vi')
-        .format('dddd, DD/MM/YYYY, h:mm:ss A'),
-    },
-    {
-      id: 2,
-      title: 'Ngày kết thúc chọn Đề tài',
-      icon: 'ios-megaphone-outline',
-      date: moment(termState?.endDateChooseTopic)
-        .locale('vi')
-        .format('dddd, DD/MM/YYYY, h:mm:ss A'),
-    },
-  ];
-
-  const renderBannerDate = (item: any) => {
-    return (
-      <>
-        <Card.Title
-          style={styles.contentDate}
-          title={item?.title}
-          titleStyle={styles.titleStyle}
-          subtitleStyle={styles.subtitleStyle}
-          subtitle={item?.date}
-          left={props => (
-            <>
-              <View
-                {...props}
-                style={[styles.viewIcon, GlobalStyles.centerView]}>
-                <IconView name={item?.icon} color={Colors.red} size={26} />
-              </View>
-            </>
-          )}
-          right={props => (
-            <Lottie
-              {...props}
-              source={require('../../../assets/jsonAmination/arrow-right.json')}
-              autoPlay
-              loop
-              style={styles.iconArrow}
-            />
-          )}
-        />
-      </>
-    );
-  };
 
   const renderContentTopic = useMemo(() => {
     return (

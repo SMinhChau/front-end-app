@@ -37,22 +37,6 @@ const ItemTopic = ({topicInfo, handleChosseTopic, count}: Props) => {
   const [ismodal, showModal] = useState(false);
   const [valueModal, setValueModal] = useState<string>();
   const termState = useAppSelector(state => state.term.term);
-  const [dayChooseTopic, setDayChooseTopic] = useState(false);
-
-  const checkDateChooseTopic = () => {
-    const start = new Date(termState?.endDateChooseTopic);
-    const nowDate = new Date();
-    console.log('start', start);
-    console.log('nowDate', nowDate);
-
-    if (start < nowDate) {
-      setDayChooseTopic(true);
-    }
-  };
-
-  useEffect(() => {
-    checkDateChooseTopic();
-  }, []);
 
   const TOPIC_DATA = [
     {name: topicInfo?.quantityGroupMax, key: 'Số lượng'},
@@ -73,8 +57,6 @@ const ItemTopic = ({topicInfo, handleChosseTopic, count}: Props) => {
   ];
 
   const renderButton = useMemo(() => {
-    console.log('dayChooseTopic', dayChooseTopic);
-
     return (
       <>
         {groupState?.id ? (
@@ -119,24 +101,22 @@ const ItemTopic = ({topicInfo, handleChosseTopic, count}: Props) => {
               </DataTable.Title>
             </DataTable.Header>
 
-            <DataTable.Row>
-              <DataTable.Cell textStyle={styles.textValue}>
-                <View>
-                  <Text style={styles.textValue}>{topicInfo?.name}</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      showModal(true);
-                      setValueModal(topicInfo?.name as string);
-                    }}>
-                    <IconView
-                      name="ios-ellipsis-vertical"
-                      color={Colors.grayLight}
-                      size={24}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </DataTable.Cell>
-            </DataTable.Row>
+            <View style={styles.contentTop}>
+              <Text style={styles.textValue} numberOfLines={1}>
+                {topicInfo?.name}
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  showModal(true);
+                  setValueModal(topicInfo?.name as string);
+                }}>
+                <IconView
+                  name="ios-ellipsis-vertical"
+                  color={Colors.grayLight}
+                  size={24}
+                />
+              </TouchableOpacity>
+            </View>
           </DataTable>
         </View>
         {renderButton}
@@ -275,6 +255,16 @@ const styles = StyleSheet.create({
     width: responsiveWidth(360),
     marginHorizontal: responsiveWidth(5),
     paddingHorizontal: responsiveWidth(10),
+  },
+  contentTop: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: responsiveHeight(10),
+    paddingLeft: responsiveWidth(5),
+    marginBottom: responsiveHeight(10),
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
   },
   content: {
     width: '100%',
