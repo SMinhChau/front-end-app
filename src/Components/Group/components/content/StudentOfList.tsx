@@ -93,28 +93,17 @@ const StudentOfList: React.FC<Props> = ({
   const renderButton = useMemo(() => {
     return (
       <>
-        {isStudentInvited === true ? (
-          <ButtonHandle
-            disabled
-            onPress={() => {
-              setModalInviteStudentJionGtoup(true);
-            }}
-            style={styles.btnDisabled}
-            icon
-            iconName="ios-person-add"
-            title="Đã mời"
-          />
-        ) : (
-          <ButtonHandle
-            onPress={() => {
-              setModalInviteStudentJionGtoup(true);
-            }}
-            style={styles.btn}
-            icon
-            iconName="ios-person-add"
-            title="Mời tham gia nhóm"
-          />
-        )}
+        <ButtonHandle
+          disabled={isStudentInvited === true ? true : false}
+          onPress={() => {
+            setModalInviteStudentJionGtoup(true);
+          }}
+          style={isStudentInvited === true ? styles.btnDisabled : styles.btn}
+          icon
+          colorIcon={isStudentInvited === true ? 'gray' : '#FFF'}
+          iconName={'ios-person-add'}
+          title={'Mời tham gia nhóm'}
+        />
       </>
     );
   }, [isStudentInvited]);
@@ -288,6 +277,8 @@ const styles = StyleSheet.create({
     marginRight: responsiveWidth(20),
   },
   btnDisabled: {
-    opacity: 0.5,
+    opacity: 1,
+    width: '80%',
+    marginRight: responsiveWidth(20),
   },
 });

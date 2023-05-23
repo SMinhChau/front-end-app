@@ -12,17 +12,30 @@ import {SceneMap, TabView} from 'react-native-tab-view';
 import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import authAPI from '../../../redux/apis/auth';
 import {DataTable, Text} from 'react-native-paper';
+import authService from '../../../services/auth';
+import Transcript from '../../../utilities/Contant/Transcript';
 
 const EvaluationMenu = () => {
   const layout = useWindowDimensions();
   const dispatch = useAppDispatch();
 
   const termState = useAppSelector(state => state.term.term);
-  const transcript = useAppSelector(state => state.user.transcript);
+
+  const [transcript, setTranscript] = useState<Transcript>();
+
+  console.log('transcript', transcript);
 
   useEffect(() => {
-    dispatch(authAPI.getTranscripts()(termState.id));
-  }, [transcript]);
+    getTranscript();
+  }, [termState]);
+
+  const getTranscript = () => {
+    if (termState?.id) {
+      authService.getTranscripts(termState?.id).then(result => {
+        setTranscript(result.data);
+      });
+    }
+  };
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
@@ -48,7 +61,7 @@ const EvaluationMenu = () => {
   });
 
   const advisorRender = useMemo(() => {
-    const _data = transcript.ADVISOR;
+    const _data = transcript?.ADVISOR;
     return (
       <>
         <View style={[styles.bottomContent]}>
@@ -61,7 +74,7 @@ const EvaluationMenu = () => {
                 Điểm Trung Bình
               </DataTable.Title>
               <DataTable.Title textStyle={styles._titleCol} numeric>
-                {_data.avgGrader ? (
+                {_data?.avgGrader ? (
                   <>{_data.avgGrader}</>
                 ) : (
                   <Text style={styles.title_Point}>Chưa có điểm</Text>
@@ -75,7 +88,7 @@ const EvaluationMenu = () => {
   }, [transcript]);
 
   const reviewRender = useMemo(() => {
-    const _data = transcript.REVIEWER;
+    const _data = transcript?.REVIEWER;
     return (
       <>
         <View style={[styles.bottomContent]}>
@@ -88,7 +101,7 @@ const EvaluationMenu = () => {
                 Điểm Trung Bình
               </DataTable.Title>
               <DataTable.Title textStyle={styles._titleCol} numeric>
-                {_data.avgGrader ? (
+                {_data?.avgGrader ? (
                   <>{_data.avgGrader}</>
                 ) : (
                   <Text style={styles.title_Point}>Chưa có điểm</Text>
@@ -101,7 +114,7 @@ const EvaluationMenu = () => {
     );
   }, [transcript]);
   const hostRender = useMemo(() => {
-    const _data = transcript.SESSION_HOST;
+    const _data = transcript?.SESSION_HOST;
     return (
       <>
         <View style={[styles.bottomContent]}>
@@ -114,7 +127,7 @@ const EvaluationMenu = () => {
                 Điểm Trung Bình
               </DataTable.Title>
               <DataTable.Title textStyle={styles._titleCol} numeric>
-                {_data.avgGrader ? (
+                {_data?.avgGrader ? (
                   <>{_data.avgGrader}</>
                 ) : (
                   <Text style={styles.title_Point}>Chưa có điểm</Text>

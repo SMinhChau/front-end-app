@@ -112,6 +112,7 @@ const Login: React.FC<{}> = () => {
     } else {
       showMessageWarning('Vui lòng nhập tên!');
     }
+    setLoading(false);
   };
 
   const handleResetPassword = () => {

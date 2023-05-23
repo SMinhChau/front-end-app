@@ -79,13 +79,17 @@ const ItemTopic = ({topicInfo, handleChosseTopic, count}: Props) => {
       <>
         {groupState?.id ? (
           <View style={GlobalStyles.centerView}>
-            <ButtonHandle
-              style={styles.btn}
-              onPress={handleChosseTopic}
-              colorIcon={Colors.grayLight}
-              iconName="md-arrow-redo-outline"
-              title="Chọn đề tài"
-            />
+            {groupState?.topic?.id ? (
+              <></>
+            ) : (
+              <ButtonHandle
+                style={styles.btn}
+                onPress={handleChosseTopic}
+                colorIcon={Colors.white}
+                iconName="md-arrow-redo-outline"
+                title="Chọn đề tài"
+              />
+            )}
           </View>
         ) : (
           <ButtonHandle
@@ -117,7 +121,20 @@ const ItemTopic = ({topicInfo, handleChosseTopic, count}: Props) => {
 
             <DataTable.Row>
               <DataTable.Cell textStyle={styles.textValue}>
-                {topicInfo?.name}
+                <View>
+                  <Text style={styles.textValue}>{topicInfo?.name}</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      showModal(true);
+                      setValueModal(topicInfo?.name as string);
+                    }}>
+                    <IconView
+                      name="ios-ellipsis-vertical"
+                      color={Colors.grayLight}
+                      size={24}
+                    />
+                  </TouchableOpacity>
+                </View>
               </DataTable.Cell>
             </DataTable.Row>
           </DataTable>
