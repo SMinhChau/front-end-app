@@ -112,7 +112,7 @@ const ItemTopic = ({
 
   return (
     <>
-      <AlertNotificationRoot>
+    
         <View style={styles.mainTopic}>
           <View style={styles.content_Top}>
             <DataTable>
@@ -260,7 +260,7 @@ const ItemTopic = ({
             </List.Accordion>
           </List.Section>
         </View>
-      </AlertNotificationRoot>
+  
       <ModalDes
         visible={ismodal}
         title={valueModal}
