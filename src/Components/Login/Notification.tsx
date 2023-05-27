@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {responsiveFont, responsiveHeight} from '../../utilities/sizeScreen';
 import ButtonView from '../../common/ButtonView';
@@ -17,6 +17,7 @@ const DisAcceptedUser = () => {
       .reset()
       .then(() => navigation.navigate(RouteNames.loginNavigation));
   };
+
   return (
     <View style={styles.containner}>
       <Text style={styles.title_Point}>

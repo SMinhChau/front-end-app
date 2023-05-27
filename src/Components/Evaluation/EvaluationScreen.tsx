@@ -10,53 +10,57 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from '../../utilities/sizeScreen';
-import {useEffect, useMemo} from 'react';
-import authAPI from '../../redux/apis/auth';
+import {useEffect, useMemo, useState} from 'react';
+
 import {checkGenger} from '../../utilities/contants';
 import NoneData from '../Section/NoneData';
 import {isEmpty} from '../../utilities/utils';
+import Transcript from '../../utilities/Contant/Transcript';
+import authService from '../../services/auth';
 
 interface data {
   data: data;
 }
 const EvaluationScreen: React.FC<data> = ({}) => {
-  const dispatch = useAppDispatch();
-
   const userState = useAppSelector(state => state.user);
   const termState = useAppSelector(state => state.term.term);
-  console.log('termState.isPublicResult', termState.isPublicResult);
+  const [transcript, setTranscript] = useState<Transcript>();
 
   useEffect(() => {
-    if (termState.id) {
-      dispatch(authAPI.getTranscripts()(termState.id));
-    }
-  }, []);
+    getTranscript();
+  }, [termState]);
+
+  const getTranscript = () => {
+    authService.getTranscripts(termState?.id).then(result => {
+      setTranscript(result.data);
+    });
+  };
 
   const _data = [
     {
       key: 1,
       label: 'Hướng dẫn',
-      grade: userState.transcript.ADVISOR.avgGrader,
+      grade: transcript?.ADVISOR.avgGrader,
     },
     {
       key: 2,
       label: 'Phản Biện',
-      grade: userState.transcript.REVIEWER.avgGrader,
+      grade: transcript?.REVIEWER.avgGrader,
     },
     {
       key: 3,
       label: 'Hội Đồng',
-      grade: userState.transcript.SESSION_HOST.avgGrader,
+      grade: transcript?.SESSION_HOST.avgGrader,
     },
     {
       key: 4,
       label: 'Điểm Cộng',
-      grade: userState.transcript.SESSION_HOST.avgGrader,
+      grade: transcript?.SESSION_HOST.avgGrader,
     },
     {
       key: 5,
       label: 'Điểm Trung Bình',
-      grade: userState.transcript.gradeSummary,
+      grade: transcript?.gradeSummary,
     },
   ];
 
@@ -86,13 +90,14 @@ const EvaluationScreen: React.FC<data> = ({}) => {
         </View>
       </>
     );
-  }, [userState.transcript.student]);
+  }, [transcript]);
 
-  const renderForAchievement = () => {
-    const _data = userState.transcript.achievements;
+  const renderForAchievement = useMemo(() => {
+    const _data = transcript?.achievements;
+    const _dataId = transcript?.achievements[0]?.id;
     return (
       <>
-        {userState.transcript.achievements.length > 0 ? (
+        {_dataId ? (
           <DataTable style={styles.cotent_Achiev}>
             <DataTable.Header>
               <DataTable.Title textStyle={styles._titleCol_Ar}>
@@ -102,7 +107,7 @@ const EvaluationScreen: React.FC<data> = ({}) => {
                 Điểm
               </DataTable.Title>
             </DataTable.Header>
-            {_data.map((item, key) => {
+            {_data?.map((item, key) => {
               return (
                 <DataTable.Row key={key}>
                   <DataTable.Cell textStyle={styles._total_Ar} numeric>
@@ -126,7 +131,7 @@ const EvaluationScreen: React.FC<data> = ({}) => {
         )}
       </>
     );
-  };
+  }, [transcript]);
 
   return (
     <View style={GlobalStyles.container}>
@@ -160,7 +165,7 @@ const EvaluationScreen: React.FC<data> = ({}) => {
 
                 {_data.map(item => {
                   if (item.key === 4) {
-                    return <>{renderForAchievement()}</>;
+                    return <>{renderForAchievement}</>;
                   }
 
                   if (item.key === 5) {

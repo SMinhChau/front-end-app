@@ -116,7 +116,7 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
 
     if (selectedAvatar) {
       formData.append('avatar', selectedAvatar[0]);
-      formData.append('avatar', selectedAvatar[0]);
+
       console.log('selectedAvatar', selectedAvatar[0]);
     } else {
       formData.append('avatar', basicInfo?.avatar);

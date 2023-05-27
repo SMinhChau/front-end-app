@@ -9,7 +9,7 @@ interface StateType {
   is_login: boolean;
   updated: boolean;
   updateError: boolean;
-  transcript: Transcript;
+  notify: number;
   allow: boolean;
 }
 
@@ -34,31 +34,7 @@ const initialState = {
   is_login: false,
   updated: false,
   updateError: false,
-  transcript: {
-    student: {},
-    gradeSummary: NaN,
-    missings: {},
-    achievements: [
-      {
-        id: NaN,
-        name: '',
-        bonusGrade: NaN,
-        student: {},
-      },
-    ],
-    ADVISOR: {
-      avgGrader: NaN,
-      details: {},
-    },
-    REVIEWER: {
-      avgGrader: NaN,
-      details: {},
-    },
-    SESSION_HOST: {
-      avgGrader: NaN,
-      details: {},
-    },
-  },
+  notify: NaN,
   allow: true,
 } as StateType;
 
@@ -76,8 +52,9 @@ export const userSlice = createSlice({
       console.log('-======> setAllow', action);
       state.allow = action.payload;
     },
-    setTranscript: (state, action: PayloadAction<Transcript>) => {
-      state.transcript = action.payload;
+    setNotySlice: (state, action) => {
+      console.log('-======> noty', action);
+      state.notify = action.payload;
     },
   },
   extraReducers: builder => {
@@ -94,11 +71,7 @@ export const userSlice = createSlice({
     builder.addCase(authAPI.getInfo().fulfilled, (state, action) => {
       state.user = action.payload;
     });
-    builder.addCase(authAPI.getTranscripts().fulfilled, (state, action) => {
-      console.log('======transcript  action', action);
-      state.transcript = action.payload;
-    });
   },
 });
 
-export const {updateUser, setUser, setAllow, setTranscript} = userSlice.actions;
+export const {updateUser, setUser, setAllow, setNotySlice} = userSlice.actions;

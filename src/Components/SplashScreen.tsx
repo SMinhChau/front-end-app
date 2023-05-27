@@ -37,10 +37,10 @@ const SplashScreen = () => {
 
   const getInfoUser = async () => {
     const token = await tokenService.getRefreshToken();
-    console.log('token -> ', token);
-    console.log('userState -> ', userState);
 
-    if (token !== null && userState.id === '') {
+    console.log(' getRefreshToken token -> ', token);
+
+    if (token !== null) {
       await authService
         .getInfo()
         .then(result => {

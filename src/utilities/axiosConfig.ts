@@ -30,18 +30,18 @@ axiosAuth.interceptors.response.use(
   async error => {
     const config = error.config;
     // Access Token was expired
-    if (error.response && error.response.status === 401 && !config._retry) {
+    if (error.response && error.response.status === 422 && !config._retry) {
       config._retry = true;
       try {
         const refresh_token = await tokenService.getRefreshToken();
-        console.log('refresh_token', refresh_token);
+        console.log('refresh_token ->', refresh_token);
 
         if (refresh_token) {
           const res = await axios({
-            url: URL + '/api/student/auth/Refresh-token',
+            url: Config.API_URL + 'api/student/auth/Refresh-token',
             method: 'post',
             data: {
-              refreshToken: tokenService.getRefreshToken(),
+              refreshToken: refresh_token,
             },
           });
           if (res.data.accessToken) {
@@ -63,8 +63,6 @@ const axiosNotAuth = axios.create();
 axiosNotAuth.interceptors.request.use(
   async config => {
     config.baseURL = Config.API_URL;
-    console.log(' Config.API_URL', Config.API_URL);
-    console.log('config', config);
     return config;
   },
   error => Promise.reject(error),
@@ -83,8 +81,6 @@ axiosFormData.interceptors.request.use(
     const access_token = await tokenService.getAccessToken();
     (config.headers as AxiosRequestHeaders).Authorization =
       'Bearer ' + access_token;
-    console.log('axiosFormData', config);
-
     return config;
   },
   error => Promise.reject(error),

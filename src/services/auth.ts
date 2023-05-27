@@ -50,6 +50,26 @@ class AuthService {
       data,
     });
   }
+  getAllMotify() {
+    return axiosAuth({
+      url: 'api/student/me/notifications',
+      method: 'get',
+    });
+  }
+
+  readNotify(id: number) {
+    return axiosAuth({
+      url: `api/student/me/notification/${id}/read`,
+      method: 'post',
+    });
+  }
+
+  readAllNotify() {
+    return axiosAuth({
+      url: `api/student/me/notification/read-all`,
+      method: 'post',
+    });
+  }
 }
 
 const authService = new AuthService();

@@ -24,8 +24,6 @@ const EvaluationMenu = () => {
 
   const [transcript, setTranscript] = useState<Transcript>();
 
-  console.log('transcript', transcript);
-
   useEffect(() => {
     getTranscript();
   }, [termState]);

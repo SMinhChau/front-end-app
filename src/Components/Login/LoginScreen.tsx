@@ -230,7 +230,7 @@ const Login: React.FC<{}> = () => {
 
   return (
     <View style={[GlobalStyles.container, {backgroundColor: Colors.white}]}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.white} />
+      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.black} />
       <AlertNotificationRoot>
         <Header title="Đăng nhập"></Header>
 

@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, StatusBar} from 'react-native';
 
 import Lottie from 'lottie-react-native';
 import Header from '../../common/Header';
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   iconRight: {},
   icon: {
     position: 'relative',
-    right: responsiveWidth(-65),
+    right: responsiveWidth(-58),
     top: responsiveHeight(25),
     zIndex: 99999,
   },

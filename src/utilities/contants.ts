@@ -1,3 +1,5 @@
+import RouteNames from '../Components/RouteNames';
+
 export default interface User {
   id: string;
   username: string;
@@ -104,4 +106,24 @@ export const removeAccents = (str: string) => {
     str = str.replace(re, char);
   }
   return str;
+};
+
+export type ITypeNotificationLecturer =
+  | 'UPDATE_STATUS_COMMENT_MY_TOPIC'
+  | 'ASSIGN_REVIEW'
+  | 'ASSIGN_SESSION_HOST'
+  | 'ASSIGN_ADVISOR'
+  | 'LECTURER'
+  | 'GROUP_STUDENT';
+
+export const TypeNotificationPath: Record<
+  ITypeNotificationLecturer | string,
+  string
+> = {
+  UPDATE_STATUS_COMMENT_MY_TOPIC: RouteNames.AccountStack,
+  ASSIGN_REVIEW: RouteNames.AccountStack,
+  ASSIGN_SESSION_HOST: RouteNames.AccountStack,
+  ASSIGN_ADVISOR: RouteNames.AccountStack,
+  LECTURER: RouteNames.AccountStack,
+  GROUP_STUDENT: RouteNames.AccountStack,
 };
