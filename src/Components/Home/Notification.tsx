@@ -31,14 +31,10 @@ const Notification = () => {
     getNotifyApi();
   }, []);
 
-  console.log('userState', userState);
-
   const getNotifyApi = async () => {
     authService
       .getAllMotify()
       .then(result => {
-        console.log('result -> noty', result.data);
-
         setNotify(result.data);
 
         let ary = [];
@@ -62,10 +58,8 @@ const Notification = () => {
     await authService
       .readNotify(id)
       .then(result => {
-        console.log('result.data.message', result.data.message);
-
         showMessageSuccess(`Đã đọc thông báo:  ${result.data.message}`);
-        // navigation.navigate(RouteNames.AccountStack);
+        navigation.navigate(`${path}`);
         getNotifyApi();
       })
       .catch(error => console.log('errr', error));

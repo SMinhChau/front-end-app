@@ -109,21 +109,21 @@ export const removeAccents = (str: string) => {
 };
 
 export type ITypeNotificationLecturer =
-  | 'UPDATE_STATUS_COMMENT_MY_TOPIC'
-  | 'ASSIGN_REVIEW'
-  | 'ASSIGN_SESSION_HOST'
-  | 'ASSIGN_ADVISOR'
-  | 'LECTURER'
-  | 'GROUP_STUDENT';
+  | 'ACHIEVEMENT'
+  | 'STUDENT'
+  | 'GROUP_MEMBER'
+  | 'CHOOSE_TOPIC'
+  | 'NEW_GROUP_MEMBER'
+  | 'REQUEST_JOIN_GROUP';
 
 export const TypeNotificationPath: Record<
   ITypeNotificationLecturer | string,
   string
 > = {
-  UPDATE_STATUS_COMMENT_MY_TOPIC: RouteNames.AccountStack,
-  ASSIGN_REVIEW: RouteNames.AccountStack,
-  ASSIGN_SESSION_HOST: RouteNames.AccountStack,
-  ASSIGN_ADVISOR: RouteNames.AccountStack,
-  LECTURER: RouteNames.AccountStack,
-  GROUP_STUDENT: RouteNames.AccountStack,
+  ACHIEVEMENT: RouteNames.EvaluationTab,
+  STUDENT: RouteNames.AccountTab,
+  GROUP_MEMBER: RouteNames.GroupTab,
+  CHOOSE_TOPIC: RouteNames.TopicMenu,
+  NEW_GROUP_MEMBER: RouteNames.GroupTab,
+  REQUEST_JOIN_GROUP: RouteNames.InviteJoinGroup,
 };
