@@ -18,7 +18,7 @@ import {TypeNotificationPath} from '../../utilities/contants';
 import {useNavigation} from '@react-navigation/native';
 import {setNotySlice} from '../../redux/slices/UserSlices';
 import {useAppDispatch, useAppSelector} from '../../redux/hooks';
-import RouteNames from '../RouteNames';
+
 import {AlertNotificationRoot} from 'react-native-alert-notification';
 
 const Notification = () => {
@@ -50,15 +50,14 @@ const Notification = () => {
 
   const handleClickItem = async (id: number) => {
     const m = notify.filter(item => id === item.id)[0];
-    console.log('m-> ', m.type);
+
 
     const path = TypeNotificationPath[m.type];
-    console.log('path', path);
+   
 
     await authService
       .readNotify(id)
       .then(result => {
-        showMessageSuccess(`Đã đọc thông báo:  ${result.data.message}`);
         navigation.navigate(`${path}`);
         getNotifyApi();
       })

@@ -6,6 +6,7 @@ export default interface Group {
   term: {
     id: number;
   };
+  status: string;
   topic: Topic;
   members: [
     {

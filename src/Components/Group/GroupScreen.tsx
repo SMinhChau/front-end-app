@@ -61,7 +61,7 @@ const Group: React.FC<{}> = () => {
   const GroupView = useMemo(() => {
     return (
       <>
-        {groupState?.group?.name ? (
+        {groupState?.group?.id ? (
           <>
             <TouchableOpacity
               onPress={() => {
@@ -96,7 +96,7 @@ const Group: React.FC<{}> = () => {
         )}
       </>
     );
-  }, [groupState, topic]);
+  }, [groupState, topic, setShowModalCreateGroup]);
 
   const getInfoGroup = () => {
     topicService

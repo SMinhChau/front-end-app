@@ -31,4 +31,5 @@ export default interface Topic {
     id: number;
   };
   totalGroupChoose: number;
+  level: string;
 }

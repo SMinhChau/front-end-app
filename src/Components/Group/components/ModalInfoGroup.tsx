@@ -45,6 +45,7 @@ import {
 } from '../../../utilities/utils';
 import {Images} from '../../../assets/images/Images';
 import GlobalStyles from '../../../common/styles/GlobalStyles';
+import {getStatusGroup, getStatusGroupColor} from '../../../utilities/contants';
 
 interface Props {
   title?: string;
@@ -260,6 +261,19 @@ const ModalInfoGroup: React.FC<Props> = ({
           </Text>
         </View>
 
+        <View style={styles.contentStatus}>
+          <Text style={[styles.titleGroup]}>Tình trạng: </Text>
+
+          <Text
+            numberOfLines={1}
+            style={[
+              styles.titleGroup,
+              {color: getStatusGroupColor(String(infoGroup?.status))},
+            ]}>
+            {getStatusGroup(String(infoGroup?.status))}
+          </Text>
+        </View>
+
         <Text style={[styles.titleGroup, {marginTop: 5}]}>
           Thông tin sinh viên
         </Text>
@@ -365,6 +379,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 3,
     borderBottomStartRadius: 10,
     borderTopRightRadius: 10,
+    paddingVertical: responsiveHeight(10),
+    flexDirection: 'row',
+  },
+  contentStatus: {
+    justifyContent: 'center',
+    alignItems: 'center',
+
     paddingVertical: responsiveHeight(10),
     flexDirection: 'row',
   },

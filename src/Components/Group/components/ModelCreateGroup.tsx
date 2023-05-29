@@ -8,7 +8,7 @@ import {
   responsiveHeight,
   responsiveWidth,
 } from '../../../utilities/sizeScreen';
-import {useAppDispatch} from '../../../redux/hooks';
+import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import languages from '../../../languages';
 import ButtonHandle from '../../../common/ButtonHandle';
 import groupAPI from '../../../redux/apis/group';
@@ -40,14 +40,15 @@ const ModelCreateGroup: React.FC<Props> = ({
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const [term, setTerm] = useState<Term>();
+  const user = useAppSelector(state => state.user.user);
 
   useEffect(() => {
     setTerm(termCreateGroup);
   }, [term]);
 
-  const onChangeText = (text: string) => {
-    setNameGroupInput(text);
-  };
+  useEffect(() => {
+    setNameGroupInput(`SV - ${user.username}`);
+  }, [nameGroupInput]);
 
   const handleCreatgroup = () => {
     if (nameGroupInput !== '') {
@@ -62,6 +63,7 @@ const ModelCreateGroup: React.FC<Props> = ({
           .then(result => {
             setLoading(false);
             modalClose(false);
+
             showMessageSuccess('Tạo nhóm thành công!');
           })
           .catch(error => {
@@ -94,7 +96,7 @@ const ModelCreateGroup: React.FC<Props> = ({
                 <Text style={styles.titleGroup}>Tên nhóm:</Text>
                 <TextInput
                   style={[styles.lable]}
-                  placeholder={'Tên nhóm'}
+                  placeholder={`SV - ${user.username}`}
                   onChangeText={text => onChangeText(text)}
                   value={nameGroupInput}
                 />
