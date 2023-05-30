@@ -12,7 +12,7 @@ import {
 } from '../../utilities/sizeScreen';
 import {useEffect, useMemo, useState} from 'react';
 
-import {checkGenger} from '../../utilities/contants';
+import {checkGenger, getStatusFinal} from '../../utilities/contants';
 import NoneData from '../Section/NoneData';
 import {isEmpty} from '../../utilities/utils';
 import Transcript from '../../utilities/Contant/Transcript';
@@ -23,6 +23,8 @@ interface data {
 }
 const EvaluationScreen: React.FC<data> = ({}) => {
   const userState = useAppSelector(state => state.user);
+  const groupState = useAppSelector(state => state.group.group);
+
   const termState = useAppSelector(state => state.term.term);
   const [transcript, setTranscript] = useState<Transcript>();
 
@@ -201,6 +203,13 @@ const EvaluationScreen: React.FC<data> = ({}) => {
                 })}
               </DataTable>
             </View>
+            <View style={styles.contentStstus}>
+              <Text style={styles.titleFinal}>
+                {getStatusFinal(String(groupState.status))
+                  ? getStatusFinal(String(groupState.status))
+                  : null}
+              </Text>
+            </View>
           </ScrollView>
         </View>
       ) : (
@@ -222,6 +231,16 @@ const styles = StyleSheet.create({
   cotent_Achiev: {
     marginVertical: responsiveHeight(15),
     borderColor: '#588157',
+  },
+  contentStstus: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  titleFinal: {
+    color: '#e79291',
+    fontWeight: '400',
+    textTransform: 'uppercase',
   },
   title: {
     textAlign: 'center',

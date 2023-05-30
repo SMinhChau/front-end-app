@@ -165,6 +165,15 @@ export const getStatusGroup = (status: string) => {
       return 'Đậu hội dồng';
   }
 };
+export const getStatusFinal = (status: string) => {
+  switch (status) {
+    case 'FAIL_SESSION_HOST':
+      return 'Rớt hội đồng';
+
+    case 'PASS_SESSION_HOST':
+      return 'Đậu hội dồng';
+  }
+};
 
 export const getLevelTopic = (text: string) => {
   switch (text) {

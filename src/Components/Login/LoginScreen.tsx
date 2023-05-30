@@ -90,7 +90,7 @@ const Login: React.FC<{}> = () => {
   };
 
   const handleSubmit = async () => {
-    if (inputUsername !== '') {
+    if (inputUsername.length > 5 && inputUsername != '') {
       if (inputPassword.length < 6) {
         showMessageWarning('Mật khẩu phải lớn hơn 5 ký tự!');
         setResetPass(false);
@@ -110,13 +110,13 @@ const Login: React.FC<{}> = () => {
         }
       }
     } else {
-      showMessageWarning('Vui lòng nhập tên!');
+      showMessageWarning('Tên phải lớn hơn 5 ký tự!');
     }
     setLoading(false);
   };
 
   const handleResetPassword = () => {
-    if (inputUserName !== '' && inputUserName.length > 5) {
+    if (inputUserName !== '' && inputUserName.length >= 6) {
       setResetPass(true);
       setTimeout(async () => {
         await authService
