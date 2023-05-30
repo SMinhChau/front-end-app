@@ -189,3 +189,19 @@ export const getLevelColorTopic = (text: string) => {
       return 'bule';
   }
 };
+
+export const getNameStatus = (value: string) => {
+  if (value === 'REFUSE') return 'Không được duyệt';
+  if (value === 'PEDING') return 'Đang chờ';
+  if (value === 'ACCEPT') return 'Đã duyệt';
+};
+export const getNameColorStatus = (value: string) => {
+  switch (value) {
+    case 'REFUSE':
+      return 'red';
+    case 'PEDING':
+      return 'green';
+    case 'ACCEPT':
+      return 'blue';
+  }
+};

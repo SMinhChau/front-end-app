@@ -65,6 +65,9 @@ export const GroupSlices = createSlice({
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
+    setGroup: (state, action: PayloadAction<Group>) => {
+      state.group = action.payload;
+    },
   },
   extraReducers: builder => {
     builder.addCase(groupAPI.getMyGroup().pending, state => {
@@ -122,4 +125,4 @@ export const GroupSlices = createSlice({
   },
 });
 
-export const {setLoading} = GroupSlices.actions;
+export const {setLoading, setGroup} = GroupSlices.actions;

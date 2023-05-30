@@ -103,7 +103,6 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
     setBasicInfo({
       ...basicInfo,
     });
-    console.log('updateUserInfo basicInfo', {...basicInfo});
 
     const formData = new FormData();
     formData.append('username', basicInfo.username);
@@ -116,27 +115,29 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
 
     if (selectedAvatar) {
       formData.append('avatar', selectedAvatar[0]);
-
-      console.log('selectedAvatar', selectedAvatar[0]);
     } else {
       formData.append('avatar', basicInfo?.avatar);
-      console.log('avtar ', basicInfo?.avatar);
     }
 
     await authService
       .updateUserInfo(formData)
       .then(result => {
-        console.log('updateUserInfo  ==== result', result);
         showMessageSuccess('Cập nhật thành công!');
         setLoading(false);
         dispatch(updateUser(result.data));
         onPressClose(false);
       })
       .catch(er => {
-        console.log('er', er);
-        setLoading(false);
-        showMessageEror('Cập nhật không thành công!');
-        onPressClose(false);
+        if (er.response.data.code === 'DUPLICATE_EMAIL') {
+          setLoading(false);
+          showMessageEror('Email này đã tồn tại!');
+          showMessageEror('Cập nhật không thành công!');
+          onPressClose(false);
+        } else {
+          setLoading(false);
+          showMessageEror('Cập nhật không thành công!');
+          onPressClose(false);
+        }
       });
   };
 
@@ -217,6 +218,7 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
 
   return (
     <>
+      {/* <AlertNotificationRoot > */}
       <Portal>
         <Modal
           visible={visible}
@@ -278,7 +280,7 @@ const ModalAccount: React.FC<Props> = ({title, onPressClose, visible}) => {
           </ScrollView>
         </Modal>
       </Portal>
-
+      {/* </AlertNotificationRoot> */}
       {isLoading && <LoadingScreen />}
     </>
   );

@@ -14,7 +14,11 @@ import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import groupService from '../../../services/group';
 import User, {TypeRequestGroup} from '../../../utilities/contants';
 
-import {isEmpty, showMessageSuccess} from '../../../utilities/utils';
+import {
+  isEmpty,
+  showMessageEror,
+  showMessageSuccess,
+} from '../../../utilities/utils';
 import ContentItemInvite from '../components/content/ContentItemInvite';
 import LoadingScreen from '../../../common/LoadingScreen';
 import groupAPI from '../../../redux/apis/group';
@@ -94,7 +98,10 @@ const InviteJoinGroup = () => {
         setLoading(false);
         showMessageSuccess('Đã hủy yêu cầu');
       })
-      .catch(() => {});
+      .catch(er => {
+        setLoading(false);
+        showMessageEror(er.response.data.error);
+      });
   };
 
   const handleAccpect = async (id: number) => {
@@ -105,7 +112,10 @@ const InviteJoinGroup = () => {
         setLoading(false);
         showMessageSuccess('Đã duyệt tham gia nhóm');
       })
-      .catch(() => {});
+      .catch(er => {
+        showMessageEror(er.response.data.error);
+        setLoading(false);
+      });
     dispatch(groupAPI.getMyGroup()(termState?.term?.id));
   };
 

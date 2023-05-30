@@ -41,6 +41,8 @@ class GroupAPI {
         const result = await groupService.createGroup(data);
 
         if (result.status === 200) {
+          console.log('result.data', result.data);
+
           return result.data;
         }
         return thunkAP.rejectWithValue('Tạo nhóm không thành công');

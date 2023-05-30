@@ -102,7 +102,7 @@ const StudentOfList: React.FC<Props> = ({
           icon
           colorIcon={isStudentInvited === true ? 'gray' : '#FFF'}
           iconName={'ios-person-add'}
-          title={'Mời tham gia nhóm'}
+          title={isStudentInvited === true ? ' Đã gửi' : 'Mời tham gia nhóm'}
         />
       </>
     );

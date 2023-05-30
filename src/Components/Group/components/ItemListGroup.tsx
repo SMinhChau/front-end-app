@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   },
   flatList: {
     width: '100%',
-    height: '75%',
+    height: '85%',
   },
   amination: {
     right: responsiveWidth(-150),

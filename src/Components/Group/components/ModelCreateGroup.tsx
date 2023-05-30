@@ -21,6 +21,8 @@ import {
   showMessageWarning,
 } from '../../../utilities/utils';
 import LoadingScreen from '../../../common/LoadingScreen';
+import groupService from '../../../services/group';
+import {setGroup} from '../../../redux/slices/GroupSlices';
 
 interface Props {
   title?: string;
@@ -50,27 +52,25 @@ const ModelCreateGroup: React.FC<Props> = ({
     setNameGroupInput(`SV - ${user.username}`);
   }, [nameGroupInput]);
 
-  const handleCreatgroup = () => {
+  const handleCreatgroup = async () => {
     if (nameGroupInput !== '') {
       if (!isEmpty(term?.id)) {
         setLoading(true);
-        dispatch(
-          groupAPI.createGroup()({
-            termId: term?.id as number,
-            name: nameGroupInput,
-          }),
-        )
-          .then(result => {
+        groupService
+          .createGroup({termId: term?.id as number, name: nameGroupInput})
+          .then(re => {
             setLoading(false);
             modalClose(false);
-
+            dispatch(setGroup(re.data));
             showMessageSuccess('Tạo nhóm thành công!');
           })
-          .catch(error => {
+          .catch(er => {
+            console.log('er', er);
             setLoading(false);
             modalClose(false);
-            showMessageEror('Tạo nhóm không thành công!');
+            showMessageEror(er.response.data.error);
           });
+
         setNameGroupInput('');
       }
     } else {

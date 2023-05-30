@@ -24,7 +24,11 @@ import {useAppSelector} from '../../../redux/hooks';
 import {Images} from '../../../assets/images/Images';
 import {AlertNotificationRoot} from 'react-native-alert-notification';
 import {isEmpty} from '../../../utilities/utils';
-import {getLevelColorTopic, getLevelTopic} from '../../../utilities/contants';
+import {
+  getLevelColorTopic,
+  getLevelTopic,
+  getNameStatus,
+} from '../../../utilities/contants';
 
 interface Props {
   topicInfo?: Topic;
@@ -50,12 +54,16 @@ const ItemTopic = ({
 
   const TOPIC_DATA = [
     {name: topicInfo?.quantityGroupMax, key: 'Số lượng nhóm tối đa'},
+    {
+      name: topicInfo?.totalGroupChoose ? topicInfo?.totalGroupChoose : '0',
+      key: 'Số lượng nhóm đã chọn',
+    },
     {name: topicInfo?.description, key: 'Mô tả'},
     {name: topicInfo?.note, key: 'Ghi chú'},
     {name: topicInfo?.target, key: 'Mục tiêu'},
     {name: topicInfo?.standradOutput, key: 'Mục đích'},
     {name: topicInfo?.requireInput, key: 'Yêu cầu đầu vào'},
-    {name: topicInfo?.status, key: 'Tình trạng'},
+    {name: getNameStatus(String(topicInfo?.status)), key: 'Tình trạng'},
   ];
   const LECTURER_DATA = [
     {name: topicInfo?.lecturer?.avatar, key: ''},

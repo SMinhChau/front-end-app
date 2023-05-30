@@ -229,6 +229,7 @@ const ModalInfoGroup: React.FC<Props> = ({
       <View style={styles.contentBtn}>
         {groupState?.group?.id === infoGroup?.id ? (
           <ButtonHandle
+            disabled={infoGroup?.status === 'OPEN' ? false : true}
             icon
             onPress={() => handleOutGroup(termInfoGroup?.id)}
             title="Rời nhóm"
@@ -238,6 +239,7 @@ const ModalInfoGroup: React.FC<Props> = ({
           <>
             {groupState?.group?.id ? null : (
               <ButtonHandle
+                disabled={infoGroup?.status === 'OPEN' ? false : true}
                 onPress={() => handleSentRequestJoinGroup()}
                 icon
                 title="Tham gia nhón"
