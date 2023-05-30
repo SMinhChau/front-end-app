@@ -24,7 +24,7 @@ import NoneData from '../../Section/NoneData';
 import {isEmpty} from 'lodash';
 import groupAPI from '../../../redux/apis/group';
 import ContentItemInvite from '../components/content/ContentItemInvite';
-import {showMessageSuccess} from '../../../utilities/utils';
+import {showMessageEror, showMessageSuccess} from '../../../utilities/utils';
 import {AlertNotificationRoot} from 'react-native-alert-notification';
 
 const JoinGroupToOrther = () => {
@@ -91,11 +91,18 @@ const JoinGroupToOrther = () => {
 
   const handleAccpect = async (id: number) => {
     setLoading(true);
-    dispatch(groupAPI.accpectJoinGroup()(id)).then(() => {
-      showMessageSuccess('Đã tham gia nhóm');
-      setLoading(false);
-      dispatch(groupAPI.getMyGroup()(termState?.term?.id));
-    });
+
+    groupService
+      .acceptRequest(id)
+      .then(() => {
+        showMessageSuccess('Đã tham gia nhóm');
+        setLoading(false);
+        dispatch(groupAPI.getMyGroup()(termState?.term?.id));
+      })
+      .catch(er => {
+        setLoading(false);
+        showMessageEror(er.response.data.error);
+      });
   };
 
   const renderListInvite = (item: any) => {
