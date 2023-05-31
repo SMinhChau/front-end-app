@@ -96,7 +96,7 @@ const Group: React.FC<{}> = () => {
         )}
       </>
     );
-  }, [groupState, topic, setShowModalCreateGroup]);
+  }, [groupState?.group, topic, setShowModalCreateGroup]);
 
   const getInfoGroup = () => {
     topicService

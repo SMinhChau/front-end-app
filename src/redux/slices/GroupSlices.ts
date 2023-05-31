@@ -15,6 +15,7 @@ interface StateType {
 const initialState = {
   group: {
     id: NaN,
+    status: '',
     name: '',
     term: {
       id: NaN,

@@ -29,14 +29,10 @@ const EvaluationScreen: React.FC<data> = ({}) => {
   const [transcript, setTranscript] = useState<Transcript>();
 
   useEffect(() => {
-    getTranscript();
-  }, [termState]);
-
-  const getTranscript = () => {
     authService.getTranscripts(termState?.id).then(result => {
       setTranscript(result.data);
     });
-  };
+  }, [transcript]);
 
   const _data = [
     {
@@ -96,7 +92,7 @@ const EvaluationScreen: React.FC<data> = ({}) => {
 
   const renderForAchievement = useMemo(() => {
     const _data = transcript?.achievements;
-    const _dataId = transcript?.achievements[0]?.id;
+    const _dataId = transcript?.achievements;
     return (
       <>
         {_dataId ? (
@@ -205,8 +201,8 @@ const EvaluationScreen: React.FC<data> = ({}) => {
             </View>
             <View style={styles.contentStstus}>
               <Text style={styles.titleFinal}>
-                {getStatusFinal(String(groupState.status))
-                  ? getStatusFinal(String(groupState.status))
+                {getStatusFinal(String(groupState?.status))
+                  ? getStatusFinal(String(groupState?.status))
                   : null}
               </Text>
             </View>
